@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panda's Chinese Quest 🐼 | RPG Typing Quiz</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- AOS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          mint: '#B8F2D4',
+          mintDeep: '#6FE3A8',
+          sky: '#BEE7F5',
+          skyDeep: '#6FCBE8',
+          pink: '#FFD6E8',
+          pinkDeep: '#FF9FC3',
+          yellow: '#FFF3B0',
+          yellowDeep: '#FFD34D',
+          bamboo: '#E9F7D8',
+          ink: '#3A3355',
+          plum: '#5C4B8A',
+        },
+        fontFamily: {
+          display: ['Fredoka', 'Mali', 'sans-serif'],
+          thai: ['Mali', 'sans-serif'],
+        },
+        borderRadius: {
+          '3xl': '1.75rem',
+          '4xl': '2.5rem',
+        },
+        boxShadow: {
+          soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
+          card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
+          btn: '0 6px 0 0 rgba(0,0,0,0.15)',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  body {
+    font-family: 'Mali', sans-serif;
+    background-color: #FBFBF6;
+    color: #3A3355;
+    overflow-x: hidden;
+  }
+  .font-display { font-family: 'Fredoka', 'Mali', sans-serif; }
+
+  /* Floating title */
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-16px) rotate(1deg); }
+  }
+  .float-title { animation: floaty 4s ease-in-out infinite; }
+
+  @keyframes floaty-slow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .float-slow { animation: floaty-slow 5s ease-in-out infinite; }
+
+  /* Cloud drift */
+  @keyframes drift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(40px); }
+  }
+  .drift { animation: drift 6s ease-in-out infinite alternate; }
+
+  /* Bamboo sway for decorative bits */
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  .sway { transform-origin: bottom center; animation: sway 3.5s ease-in-out infinite; }
+
+  /* Difficulty buttons */
+  .quest-btn {
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .quest-btn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0px 0 0 rgba(0,0,0,0.15) !important;
+  }
+  .quest-btn:hover {
+    transform: translateY(-4px) scale(1.04);
+  }
+
+  /* HP bar decorative header rule */
+  .hp-rule {
+    height: 14px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(90deg, #FF9FC3 0 18px, #FFD6E8 18px 36px);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 3px 0 rgba(58,51,85,0.1);
+  }
+
+  .paper-scroll {
+    background: #FEFCF3;
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(255,211,77,0.15), transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(111,203,232,0.15), transparent 40%);
+    border: 3px dashed #E4DABE;
+  }
+
+  ::selection { background: #FFD34D; color: #3A3355; }
+
+  .step-number {
+    font-family: 'Fredoka', sans-serif;
+    -webkit-text-stroke: 2px #3A3355;
+    paint-order: stroke fill;
+  }
+
+  .scroll-cloud path { fill: white; }
+
+  /* subtle bounce loop for CTA hint */
+  @keyframes bounce-hint {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .bounce-hint { animation: bounce-hint 1.6s ease-in-out infinite; }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- =========================================
+     HERO SECTION
+========================================= -->
+<header class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-sky via-mint to-bamboo pb-16 pt-10 px-4">
+
+  <!-- decorative clouds -->
+  <div class="absolute top-10 left-6 w-24 md:w-36 opacity-90 drift">
+    <svg viewBox="0 0 100 60" class="scroll-cloud"><path d="M20 45 Q5 45 5 32 Q5 20 18 20 Q20 8 35 8 Q50 8 53 20 Q68 18 70 32 Q72 45 58 45 Z"/></svg>
+  </div>
+  <div class="absolute top-24 right-8 w-20 md:w-32 opacity-80 drift" style="animation-delay:1s;">
+    <svg viewBox="0 0 100 60" class="scroll-cloud"><path d="M20 45 Q5 45 5 32 Q5 20 18 20 Q20 8 35 8 Q50 8 53 20 Q68 18 70 32 Q72 45 58 45 Z"/></svg>
+  </div>
+
+  <!-- bamboo decorations -->
+  <div class="absolute bottom-0 left-2 md:left-10 w-16 md:w-24 sway opacity-80">
+    <i class="fa-solid fa-leaf text-mintDeep text-6xl md:text-8xl"></i>
+  </div>
+  <div class="absolute bottom-0 right-2 md:right-10 w-16 md:w-24 sway opacity-80" style="animation-delay:1.5s;">
+    <i class="fa-solid fa-leaf text-mintDeep text-6xl md:text-8xl scale-x-[-1] inline-block"></i>
+  </div>
+
+  <div class="relative z-10 flex flex-col items-center text-center max-w-4xl">
+
+    <!-- Panda mascot -->
+    <div class="text-7xl md:text-8xl mb-4 float-slow">🐼</div>
+
+    <p class="font-thai text-plum bg-white/70 px-5 py-1.5 rounded-full text-sm md:text-base font-medium mb-4 shadow-sm">
+      เกมทายศัพท์จีน สไตล์ RPG ✨
+    </p>
+
+    <h1 class="float-title font-display font-700 text-5xl sm:text-6xl md:text-7xl leading-tight text-ink drop-shadow-[0_6px_0_rgba(255,255,255,0.8)]">
+      Panda's <span class="text-pinkDeep">Chinese</span> Quest
+    </h1>
+
+    <p class="font-thai text-lg md:text-xl text-plum mt-5 max-w-xl">
+      พิมพ์คำศัพท์ให้ถูก ปราบมอนสเตอร์ให้ราบ 🗡️ พร้อมเลเวลอัพภาษาจีนไปกับคุณแพนด้า!
+    </p>
+
+    <!-- 3 Difficulty Buttons -->
+    <div class="flex flex-col sm:flex-row gap-5 mt-10 w-full sm:w-auto justify-center">
+      <button data-level="ง่าย (Easy)"
+        class="quest-btn font-display font-600 text-xl md:text-2xl text-white bg-mintDeep hover:bg-emerald-400 px-8 md:px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower">
+        <i class="fa-solid fa-seedling mr-2"></i>Easy <span class="font-thai text-base md:text-lg">(ง่าย)</span>
+      </button>
+
+      <button data-level="ปานกลาง (Medium)"
+        class="quest-btn font-display font-600 text-xl md:text-2xl text-white bg-yellowDeep hover:bg-amber-400 px-8 md:px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay:.2s;">
+        <i class="fa-solid fa-dragon mr-2"></i>Medium <span class="font-thai text-base md:text-lg">(ปานกลาง)</span>
+      </button>
+
+      <button data-level="ยาก (Hard)"
+        class="quest-btn font-display font-600 text-xl md:text-2xl text-white bg-pinkDeep hover:bg-rose-500 px-8 md:px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay:.4s;">
+        <i class="fa-solid fa-fire mr-2"></i>Hard <span class="font-thai text-base md:text-lg">(ยาก)</span>
+      </button>
+    </div>
+
+    <div class="mt-10 text-plum/70 bounce-hint">
+      <i class="fa-solid fa-chevron-down text-2xl"></i>
+      <p class="font-thai text-sm mt-1">เลื่อนลงเพื่อดูวิธีเล่น</p>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================
+     ABOUT & GAME DESCRIPTION
+========================================= -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-4xl mx-auto" data-aos="fade-up">
+    <div class="bg-pink/40 rounded-4xl p-8 md:p-12 shadow-card border-4 border-white relative">
+
+      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-pinkDeep text-white font-display font-600 px-6 py-2 rounded-full shadow-btn text-sm md:text-base whitespace-nowrap">
+        <i class="fa-solid fa-scroll mr-1"></i> เนื้อเรื่องเกม
+      </div>
+
+      <h2 class="font-display font-700 text-3xl md:text-4xl text-center text-ink mt-6 mb-6">
+        ผจญภัยไปกับคุณแพนด้า!
+      </h2>
+
+      <div class="hp-rule w-40 mx-auto mb-8"></div>
+
+      <p class="font-thai text-lg md:text-xl text-plum text-center leading-relaxed max-w-2xl mx-auto">
+        Panda's Chinese Quest คือเกมพิมพ์ศัพท์แนว RPG ที่จะพาคุณไปปราบ
+        <span class="font-semibold text-pinkDeep">มอนสเตอร์ทั้งหมด 10 ตัว</span>
+        ด้วยพลังคำศัพท์ภาษาจีน! ทุกครั้งที่ตอบถูก คุณจะโจมตีมอนสเตอร์ได้เต็มแรง
+        แต่ถ้าตอบผิด... <span class="font-semibold text-pinkDeep">เลือด (HP) ของคุณจะลดลง!</span>
+        ฝึกฝนศัพท์ให้แม่น แล้วมาดูกันว่าใครจะรอดถึงบอสตัวสุดท้าย 🐉
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4 mt-10">
+        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="100">
+          <i class="fa-solid fa-heart text-pinkDeep text-xl"></i>
+          <span class="font-thai text-plum">ระบบ HP สุดตื่นเต้น</span>
+        </div>
+        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="200">
+          <i class="fa-solid fa-dragon text-yellowDeep text-xl"></i>
+          <span class="font-thai text-plum">บอส 10 ด่าน</span>
+        </div>
+        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="300">
+          <i class="fa-solid fa-keyboard text-skyDeep text-xl"></i>
+          <span class="font-thai text-plum">ฝึกพิมพ์พินอิน/จีน</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     HOW TO PLAY
+========================================= -->
+<section class="py-20 px-4 bg-gradient-to-b from-bamboo to-white">
+  <div class="max-w-5xl mx-auto text-center mb-14" data-aos="fade-up">
+    <h2 class="font-display font-700 text-3xl md:text-4xl text-ink">วิธีเล่นเกม</h2>
+    <p class="font-thai text-plum mt-2">แค่ 3 ขั้นตอนง่าย ๆ ก็ออกไปผจญภัยได้เลย!</p>
+  </div>
+
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Step 1 -->
+    <div class="bg-white rounded-3xl p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="0">
+      <div class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-mintDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn">1</div>
+      <div class="text-5xl mt-6 mb-4 text-mintDeep">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+      <h3 class="font-display font-600 text-xl text-ink mb-2">ฟังและอ่าน</h3>
+      <p class="font-thai text-plum">ฟังเสียงและอ่านคำศัพท์จีนที่ปรากฏบนหน้าจอ</p>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="bg-white rounded-3xl p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="150">
+      <div class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-yellowDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn">2</div>
+      <div class="text-5xl mt-6 mb-4 text-yellowDeep">
+        <i class="fa-solid fa-keyboard"></i>
+      </div>
+      <h3 class="font-display font-600 text-xl text-ink mb-2">พิมพ์พินอินหรือตัวอักษร</h3>
+      <p class="font-thai text-plum">พิมพ์คำตอบเป็นพินอินหรือตัวอักษรจีนให้ถูกต้อง</p>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="bg-white rounded-3xl p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="300">
+      <div class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-pinkDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn">3</div>
+      <div class="text-5xl mt-6 mb-4 text-pinkDeep">
+        <i class="fa-solid fa-explosion"></i>
+      </div>
+      <h3 class="font-display font-600 text-xl text-ink mb-2">โจมตีมอนสเตอร์!</h3>
+      <p class="font-thai text-plum">ตอบถูก = โจมตีเต็มแรง! ตอบผิด = เสีย HP ระวังด้วยนะ!</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     KEYBOARD INSTALLATION GUIDE
+========================================= -->
+<section class="py-20 px-4 bg-sky/30">
+  <div class="max-w-5xl mx-auto text-center mb-14" data-aos="fade-up">
+    <h2 class="font-display font-700 text-3xl md:text-4xl text-ink">
+      <i class="fa-solid fa-language text-skyDeep"></i> เตรียมคีย์บอร์ดภาษาจีน
+    </h2>
+    <p class="font-thai text-plum mt-2">ก่อนออกไปผจญภัย อย่าลืมติดตั้งคีย์บอร์ดพินอินกันก่อนนะ!</p>
+  </div>
+
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+
+    <!-- Computer -->
+    <div class="paper-scroll rounded-3xl p-8 shadow-card" data-aos="fade-right">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-14 h-14 rounded-2xl bg-skyDeep text-white flex items-center justify-center text-2xl shadow-btn">
+          <i class="fa-solid fa-computer"></i>
+        </div>
+        <h3 class="font-display font-600 text-2xl text-ink">คอมพิวเตอร์ (PC/Mac)</h3>
+      </div>
+      <ol class="font-thai text-plum space-y-3 list-decimal list-inside text-left">
+        <li>เปิด <span class="font-semibold">Settings</span> (การตั้งค่า) ของเครื่อง</li>
+        <li>ไปที่หมวด <span class="font-semibold">Language & Region</span> หรือ <span class="font-semibold">Keyboard</span></li>
+        <li>เลือก <span class="font-semibold">Add Input Method / Keyboard</span></li>
+        <li>ค้นหาและเพิ่ม <span class="font-semibold text-skyDeep">Chinese (Simplified) - Pinyin</span></li>
+        <li>สลับคีย์บอร์ดด้วย <span class="font-semibold">Win + Space</span> (Windows) หรือ <span class="font-semibold">Ctrl + Space</span> (Mac)</li>
+      </ol>
+    </div>
+
+    <!-- Mobile -->
+    <div class="paper-scroll rounded-3xl p-8 shadow-card" data-aos="fade-left">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-14 h-14 rounded-2xl bg-pinkDeep text-white flex items-center justify-center text-2xl shadow-btn">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </div>
+        <h3 class="font-display font-600 text-2xl text-ink">มือถือ (iOS/Android)</h3>
+      </div>
+      <ol class="font-thai text-plum space-y-3 list-decimal list-inside text-left">
+        <li>เปิด <span class="font-semibold">Settings</span> (การตั้งค่า) บนมือถือ</li>
+        <li>ไปที่ <span class="font-semibold">General → Keyboard</span> (iOS) หรือ <span class="font-semibold">System → Languages & Input</span> (Android)</li>
+        <li>เลือก <span class="font-semibold">Add New Keyboard</span></li>
+        <li>ค้นหาและเพิ่ม <span class="font-semibold text-pinkDeep">Chinese - Pinyin</span></li>
+        <li>กดปุ่ม 🌐 บนคีย์บอร์ดเพื่อสลับไปใช้พินอินตอนเล่นเกม</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     FINAL CTA
+========================================= -->
+<section class="py-24 px-4 bg-gradient-to-b from-white to-mint text-center">
+  <div class="max-w-2xl mx-auto" data-aos="zoom-in">
+    <div class="text-6xl mb-4 float-slow">⚔️🐼</div>
+    <h2 class="font-display font-700 text-3xl md:text-4xl text-ink mb-4">พร้อมออกผจญภัยหรือยัง?</h2>
+    <p class="font-thai text-plum mb-8">เลือกระดับความยากด้านบน แล้วเริ่มพิชิตศัพท์จีนไปด้วยกัน!</p>
+    <a href="#top" onclick="document.querySelector('header').scrollIntoView({behavior:'smooth'}); return false;"
+      class="quest-btn inline-block font-display font-600 text-xl text-white bg-plum hover:bg-ink px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower">
+      <i class="fa-solid fa-arrow-up mr-2"></i>กลับไปเลือกด่าน
+    </a>
+  </div>
+</section>
+
+<footer class="bg-ink text-white/80 text-center py-6 font-thai text-sm">
+  <p>Made with 🐼🎋 for Chinese vocabulary adventurers · Panda's Chinese Quest</p>
+</footer>
+
+<!-- AOS JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+<script>
+  AOS.init({
+    duration: 700,
+    once: true,
+    easing: 'ease-out-cubic',
+  });
+
+  const levelLabels = {
+    'ง่าย (Easy)': { th: 'ง่าย', color: '#6FE3A8', icon: '🌱' },
+    'ปานกลาง (Medium)': { th: 'ปานกลาง', color: '#FFD34D', icon: '🐉' },
+    'ยาก (Hard)': { th: 'ยาก', color: '#FF9FC3', icon: '🔥' },
+  };
+
+  document.querySelectorAll('.quest-btn[data-level]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const level = btn.getAttribute('data-level');
+      const info = levelLabels[level] || { th: level, color: '#BEE7F5', icon: '✨' };
+
+      // Route to appropriate game mode
+      const routes = {
+        'ง่าย (Easy)': 'Mode_ez.html',
+        'ปานกลาง (Medium)': 'Mode_Normal.html',
+        'ยาก (Hard)': 'Mode_Hardcore.html'
+      };
+
+      const targetPage = routes[level];
+
+      Swal.fire({
+        title: `${info.icon} Starting ${level} Mode!`,
+        text: 'Get Ready! เตรียมตัวให้พร้อม แล้วออกไปผจญภัยกันเลย!',
+        confirmButtonText: 'ลุยเลย!',
+        confirmButtonColor: info.color,
+        background: '#FEFCF3',
+        color: '#3A3355',
+        customClass: {
+          popup: 'rounded-3xl',
+        }
+      }).then((result) => {
+        if (result.isConfirmed && targetPage) {
+          window.location.href = targetPage;
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
