@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Mode | Panda's Chinese Quest</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          mint: '#B8F2D4', mintDeep: '#6FE3A8',
+          sky: '#BEE7F5', skyDeep: '#6FCBE8',
+          pink: '#FFD6E8', pinkDeep: '#FF9FC3',
+          yellow: '#FFF3B0', yellowDeep: '#FFD34D',
+          bamboo: '#E9F7D8', ink: '#3A3355', plum: '#5C4B8A',
+        },
+        fontFamily: { display: ['Fredoka','Mali','sans-serif'], thai: ['Mali','sans-serif'], hanzi: ["'Noto Sans SC'",'sans-serif'] },
+        boxShadow: {
+          soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
+          card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
+          btn: '0 6px 0 0 rgba(0,0,0,0.15)',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  body { font-family:'Mali',sans-serif; background-color:#FBFBF6; color:#3A3355; }
+  .font-display { font-family:'Fredoka','Mali',sans-serif; }
+  .font-hanzi { font-family:"'Noto Sans SC'",sans-serif; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-14px) rotate(-1deg); }
+    40% { transform: translateX(12px) rotate(1deg); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+  }
+  .shake { animation: shake 0.4s ease; }
+
+  @keyframes hit {
+    0% { transform: scale(1); filter: brightness(1); }
+    30% { transform: scale(0.92); filter: brightness(1.6) saturate(2); }
+    100% { transform: scale(1); filter: brightness(1); }
+  }
+  .hit { animation: hit 0.35s ease; }
+
+  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  .float-slow { animation: floaty 3.5s ease-in-out infinite; }
+
+  .choice-btn { transition: transform .12s ease, box-shadow .12s ease; }
+  .choice-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); }
+  .choice-btn:active:not(:disabled) { transform: translateY(2px); }
+  .choice-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .choice-correct { background-color:#6FE3A8 !important; color:white !important; }
+  .choice-wrong { background-color:#FF9FC3 !important; color:white !important; }
+
+  .icon-btn { transition: transform .12s ease; }
+  .icon-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.05); }
+  .icon-btn:active:not(:disabled) { transform: translateY(1px) scale(.97); }
+  .icon-btn:disabled { opacity:.35; cursor:not-allowed; transform:none !important; }
+
+  #timer-bar { transition: width 0.1s linear, background-color .3s; }
+  #boss-hp-bar, #player-hp-bar { transition: width .35s ease; }
+
+  /* Speech bubble pointing up toward the boss */
+  .speech-bubble { position: relative; }
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 16px solid white;
+  }
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-sky via-mint to-bamboo">
+
+<div id="game-container" class="max-w-2xl mx-auto p-4 md:p-6">
+
+  <!-- Status row -->
+  <div class="flex justify-between items-center mb-3">
+    <div class="bg-white/80 rounded-full px-4 py-1.5 shadow-card font-display text-ink text-sm">
+      <i class="fa-solid fa-dragon text-pinkDeep mr-1"></i>
+      Boss <span id="boss-progress">1</span>/10
+    </div>
+    <div class="bg-mintDeep text-white rounded-full px-3 py-1.5 shadow-card font-display text-xs">
+      <i class="fa-solid fa-star mr-1"></i>EASY
+    </div>
+  </div>
+
+  <!-- ===================== TOP SECTION: BOSS ===================== -->
+  <div class="text-center mb-2">
+    <h2 id="boss-name" class="font-display font-700 text-xl md:text-2xl text-ink drop-shadow-sm">จอมเวลา ปีศาจนาฬิกา</h2>
+  </div>
+
+  <div class="relative w-full h-10 md:h-11 bg-gray-200 border-4 border-gray-800 rounded-full overflow-hidden mb-3">
+    <div id="boss-hp-bar" class="h-full bg-pinkDeep" style="width:100%"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span id="boss-hp-text" class="font-display font-700 text-white text-sm md:text-base" style="text-shadow:1px 1.5px 2px rgba(0,0,0,.55)">100/100</span>
+    </div>
+  </div>
+
+  <div class="flex justify-center mb-1">
+    <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss"
+      class="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-xl float-slow">
+  </div>
+
+  <!-- ===================== MIDDLE SECTION: QUESTION (speech bubble) ===================== -->
+  <div class="speech-bubble bg-white rounded-3xl p-5 md:p-6 shadow-card text-center mt-5 mb-4">
+    <img id="question-image" src="https://placehold.co/400x400/png?text=Birthday" alt="question hint"
+      class="w-32 h-32 object-contain mx-auto mb-4 rounded-lg shadow-sm">
+    <p id="question-hanzi" class="font-hanzi text-4xl md:text-5xl text-ink mb-2">生日</p>
+    <p id="question-pinyin" class="text-base md:text-lg font-thai text-plum mb-3">shēngrì</p>
+
+    <button id="play-sound-btn" aria-label="ฟังเสียง"
+      class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-skyDeep hover:bg-sky-400 text-white shadow-btn flex items-center justify-center mx-auto">
+      <i class="fa-solid fa-volume-high text-lg md:text-xl"></i>
+    </button>
+  </div>
+
+  <!-- Timer -->
+  <div class="w-full h-2.5 bg-white/70 rounded-full overflow-hidden mb-4">
+    <div id="timer-bar" class="h-full bg-yellowDeep" style="width:100%"></div>
+  </div>
+
+  <!-- Choices -->
+  <div id="choices-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"></div>
+
+  <!-- ===================== BOTTOM SECTION: PLAYER ===================== -->
+  <div class="bg-white/70 rounded-3xl p-4 md:p-5 shadow-card mb-4">
+    <div class="flex items-center gap-3 mb-2">
+      <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1" alt="player avatar"
+        class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-yellow border-4 border-gray-800 object-cover">
+      <span class="font-display font-600 text-ink text-sm md:text-base">ผู้เล่น</span>
+    </div>
+    <div class="relative w-full h-9 md:h-10 bg-gray-200 border-4 border-gray-800 rounded-full overflow-hidden">
+      <div id="player-hp-bar" class="h-full bg-mintDeep" style="width:100%"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span id="player-hp-text" class="font-display font-700 text-white text-xs md:text-sm" style="text-shadow:1px 1.5px 2px rgba(0,0,0,.55)">100/100</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Helper items (icon-only) -->
+  <div class="flex justify-center gap-4 md:gap-5">
+    <div class="relative">
+      <button data-item="heal" aria-label="ฮีล" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center">
+        <i class="fa-solid fa-heart text-pinkDeep text-lg md:text-xl"></i>
+      </button>
+      <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-xs bg-mintDeep text-white rounded-full w-5 h-5 flex items-center justify-center">1</span>
+    </div>
+    <div class="relative">
+      <button data-item="fifty" aria-label="50/50" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center">
+        <i class="fa-solid fa-code-branch text-skyDeep text-lg md:text-xl"></i>
+      </button>
+      <span id="item-fifty-count" class="absolute -top-1 -right-1 font-display text-xs bg-skyDeep text-white rounded-full w-5 h-5 flex items-center justify-center">1</span>
+    </div>
+    <div class="relative">
+      <button data-item="skip" aria-label="ข้าม" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center">
+        <i class="fa-solid fa-forward text-yellowDeep text-lg md:text-xl"></i>
+      </button>
+      <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-xs bg-yellowDeep text-white rounded-full w-5 h-5 flex items-center justify-center">1</span>
+    </div>
+    <button id="stop-btn" aria-label="หยุด" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center hover:bg-gray-100">
+      <i class="fa-solid fa-stop text-red-500 text-lg md:text-xl"></i>
+    </button>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   BOSS & QUESTION DATA
+   Full data provided for Boss 1-3 (time & date vocabulary,
+   featuring 点 / 分 / 号 / 日). Boss 4-10 currently reuse the
+   same vocab pools as placeholders — replace bossData[3..9]
+   with unique content later.
+========================================================= */
+
+const bossData = [
+  {
+    id: 1,
+    name: "จอมเวลา ปีศาจนาฬิกา",
+    questions: [
+      { hanzi: "一点",       pinyin: "yī diǎn",                  meaning: "หนึ่งนาฬิกา (ตีหนึ่ง)", questionImage: "https://placehold.co/400x400/png?text=1:00" },
+      { hanzi: "两点",       pinyin: "liǎng diǎn",               meaning: "สองนาฬิกา",             questionImage: "https://placehold.co/400x400/png?text=2:00" },
+      { hanzi: "三点半",     pinyin: "sān diǎn bàn",             meaning: "สามโมงครึ่ง",           questionImage: "https://placehold.co/400x400/png?text=3:30" },
+      { hanzi: "十分",       pinyin: "shí fēn",                  meaning: "สิบนาที",               questionImage: "https://placehold.co/400x400/png?text=10+Minutes" },
+      { hanzi: "五点十分",   pinyin: "wǔ diǎn shí fēn",          meaning: "ห้าโมงสิบนาที",         questionImage: "https://placehold.co/400x400/png?text=5:10" },
+      { hanzi: "现在几点",   pinyin: "xiànzài jǐ diǎn",          meaning: "ตอนนี้กี่โมง",           questionImage: "https://placehold.co/400x400/png?text=What+Time%3F" },
+      { hanzi: "中午十二点", pinyin: "zhōngwǔ shí\u2019èr diǎn", meaning: "เที่ยงวัน",             questionImage: "https://placehold.co/400x400/png?text=12:00+PM" },
+      { hanzi: "晚上八点",   pinyin: "wǎnshang bā diǎn",         meaning: "สองทุ่ม (20:00)",       questionImage: "https://placehold.co/400x400/png?text=8:00+PM" },
+      { hanzi: "早上七点",   pinyin: "zǎoshang qī diǎn",         meaning: "เจ็ดโมงเช้า",           questionImage: "https://placehold.co/400x400/png?text=7:00+AM" },
+      { hanzi: "半夜十二点", pinyin: "bànyè shí\u2019èr diǎn",   meaning: "เที่ยงคืน",             questionImage: "https://placehold.co/400x400/png?text=12:00+AM" },
+    ]
+  },
+  {
+    id: 2,
+    name: "อสูรปฏิทิน",
+    questions: [
+      { hanzi: "一月一号", pinyin: "yī yuè yī hào",  meaning: "วันที่ 1 มกราคม",       questionImage: "https://placehold.co/400x400/png?text=Jan+1" },
+      { hanzi: "星期一",   pinyin: "xīngqīyī",       meaning: "วันจันทร์",             questionImage: "https://placehold.co/400x400/png?text=Monday" },
+      { hanzi: "星期天",   pinyin: "xīngqītiān",     meaning: "วันอาทิตย์",           questionImage: "https://placehold.co/400x400/png?text=Sunday" },
+      { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "https://placehold.co/400x400/png?text=What+Date%3F" },
+      { hanzi: "昨天",     pinyin: "zuótiān",        meaning: "เมื่อวาน",             questionImage: "https://placehold.co/400x400/png?text=Yesterday" },
+      { hanzi: "明天",     pinyin: "míngtiān",       meaning: "พรุ่งนี้",             questionImage: "https://placehold.co/400x400/png?text=Tomorrow" },
+      { hanzi: "五月四日", pinyin: "wǔ yuè sì rì",   meaning: "วันที่ 4 พฤษภาคม",     questionImage: "https://placehold.co/400x400/png?text=May+4" },
+      { hanzi: "星期六",   pinyin: "xīngqīliù",      meaning: "วันเสาร์",             questionImage: "https://placehold.co/400x400/png?text=Saturday" },
+      { hanzi: "生日",     pinyin: "shēngrì",        meaning: "วันเกิด",              questionImage: "https://placehold.co/400x400/png?text=Birthday" },
+      { hanzi: "假日",     pinyin: "jiàrì",          meaning: "วันหยุด",              questionImage: "https://placehold.co/400x400/png?text=Holiday" },
+    ]
+  },
+  {
+    id: 3,
+    name: "เทพเจ้าฤดูกาล",
+    questions: [
+      { hanzi: "一月",   pinyin: "yī yuè",    meaning: "เดือนมกราคม",           questionImage: "https://placehold.co/400x400/png?text=January" },
+      { hanzi: "二月",   pinyin: "èr yuè",    meaning: "เดือนกุมภาพันธ์",       questionImage: "https://placehold.co/400x400/png?text=February" },
+      { hanzi: "星期几", pinyin: "xīngqī jǐ", meaning: "วันอะไร (ของสัปดาห์)", questionImage: "https://placehold.co/400x400/png?text=Which+Day%3F" },
+      { hanzi: "下午",   pinyin: "xiàwǔ",     meaning: "ตอนบ่าย",               questionImage: "https://placehold.co/400x400/png?text=Afternoon" },
+      { hanzi: "晚上",   pinyin: "wǎnshang",  meaning: "ตอนกลางคืน/ตอนเย็น",   questionImage: "https://placehold.co/400x400/png?text=Evening" },
+      { hanzi: "早上",   pinyin: "zǎoshang",  meaning: "ตอนเช้า",               questionImage: "https://placehold.co/400x400/png?text=Morning" },
+      { hanzi: "现在",   pinyin: "xiànzài",   meaning: "ตอนนี้",                 questionImage: "https://placehold.co/400x400/png?text=Now" },
+      { hanzi: "时间",   pinyin: "shíjiān",   meaning: "เวลา",                   questionImage: "https://placehold.co/400x400/png?text=Time" },
+      { hanzi: "分钟",   pinyin: "fēnzhōng",  meaning: "นาที",                   questionImage: "https://placehold.co/400x400/png?text=Minutes" },
+      { hanzi: "小时",   pinyin: "xiǎoshí",   meaning: "ชั่วโมง",                 questionImage: "https://placehold.co/400x400/png?text=Hour" },
+    ]
+  },
+];
+
+// TODO: replace bosses 4-10 with unique vocabulary sets.
+// Placeholder: reuse boss 1-3 pools so the full 10-boss rush is playable for testing.
+for (let i = 4; i <= 10; i++) {
+  const sourcePool = bossData[(i - 4) % 3].questions;
+  bossData.push({
+    id: i,
+    name: `บอสด่าน ${i} (ข้อมูลตัวอย่าง)`,
+    questions: sourcePool,
+  });
+}
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+const TOTAL_BOSSES = 10;
+const QUESTION_TIME = 12; // seconds
+const WRONG_DAMAGE = 15;
+const HEAL_AMOUNT = 20;
+
+let state = {
+  bossIndex: 0,
+  playerHP: 100,
+  bossHP: 100,
+  currentQuestions: [],
+  questionIndex: 0,
+  damagePerHit: 0,
+  timer: null,
+  timeLeft: QUESTION_TIME,
+  items: { heal: 1, fifty: 1, skip: 1 },
+  answered: false,
+  bossesDefeated: 0,
+  score: 0,
+  paused: false,
+};
+
+const allVocab = bossData.slice(0, 3).flatMap(b => b.questions);
+
+/* =========================================================
+   DOM refs
+========================================================= */
+const el = {
+  container: document.getElementById('game-container'),
+  bossProgress: document.getElementById('boss-progress'),
+  bossName: document.getElementById('boss-name'),
+  bossImage: document.getElementById('boss-image'),
+  bossHpBar: document.getElementById('boss-hp-bar'),
+  bossHpText: document.getElementById('boss-hp-text'),
+  playerHpBar: document.getElementById('player-hp-bar'),
+  playerHpText: document.getElementById('player-hp-text'),
+  timerBar: document.getElementById('timer-bar'),
+  questionImage: document.getElementById('question-image'),
+  questionHanzi: document.getElementById('question-hanzi'),
+  questionPinyin: document.getElementById('question-pinyin'),
+  playSoundBtn: document.getElementById('play-sound-btn'),
+  choicesGrid: document.getElementById('choices-grid'),
+  itemHealCount: document.getElementById('item-heal-count'),
+  itemFiftyCount: document.getElementById('item-fifty-count'),
+  itemSkipCount: document.getElementById('item-skip-count'),
+};
+
+/* =========================================================
+   HELPERS
+========================================================= */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildChoices(correctQuestion) {
+  const distractors = shuffle(
+    allVocab.filter(v => v.meaning !== correctQuestion.meaning)
+  ).slice(0, 3).map(v => v.meaning);
+  return shuffle([correctQuestion.meaning, ...distractors]);
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'zh-CN';
+  utter.rate = 0.85;
+  speechSynthesis.speak(utter);
+}
+
+function updatePlayerHP() {
+  const hp = Math.max(state.playerHP, 0);
+  el.playerHpBar.style.width = hp + '%';
+  el.playerHpText.textContent = `${hp}/100`;
+}
+
+function updateBossHP() {
+  const hp = Math.max(state.bossHP, 0);
+  el.bossHpBar.style.width = hp + '%';
+  el.bossHpText.textContent = `${hp}/100`;
+}
+
+function updateItemUI() {
+  el.itemHealCount.textContent = state.items.heal;
+  el.itemFiftyCount.textContent = state.items.fifty;
+  el.itemSkipCount.textContent = state.items.skip;
+  document.querySelectorAll('[data-item]').forEach(btn => {
+    const type = btn.getAttribute('data-item');
+    btn.disabled = state.items[type] <= 0 || state.answered;
+  });
+}
+
+function shakeScreen() {
+  el.container.classList.add('shake');
+  setTimeout(() => el.container.classList.remove('shake'), 400);
+}
+
+function hitBoss() {
+  el.bossImage.classList.add('hit');
+  setTimeout(() => el.bossImage.classList.remove('hit'), 350);
+}
+
+/* =========================================================
+   GAME FLOW
+========================================================= */
+function loadBoss(index) {
+  state.bossIndex = index;
+  const boss = bossData[index];
+
+  state.bossHP = 100;
+  state.answered = false;
+
+  const count = Math.floor(Math.random() * 3) + 3; // 3-5 questions
+  state.currentQuestions = shuffle(boss.questions).slice(0, count);
+  state.questionIndex = 0;
+  state.damagePerHit = Math.ceil(100 / count);
+
+  el.bossProgress.textContent = index + 1;
+  el.bossName.textContent = boss.name;
+  el.bossImage.src = `https://robohash.org/${boss.id}?set=set3`;
+  el.bossImage.onerror = () => {
+    el.bossImage.onerror = null;
+    el.bossImage.src = `https://robohash.org/${boss.id}${Date.now()}?set=set3`;
+  };
+  updateBossHP();
+
+  loadQuestion();
+}
+
+function loadQuestion() {
+  state.answered = false;
+  const q = state.currentQuestions[state.questionIndex];
+
+  el.questionImage.src = q.questionImage;
+  el.questionImage.alt = q.meaning;
+  el.questionHanzi.textContent = q.hanzi;
+  el.questionPinyin.textContent = q.pinyin;
+
+  const choices = buildChoices(q);
+  el.choicesGrid.innerHTML = '';
+  choices.forEach(choiceText => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn bg-white rounded-2xl px-5 py-4 shadow-card font-thai text-plum text-base md:text-lg';
+    btn.textContent = choiceText;
+    btn.addEventListener('click', () => selectAnswer(btn, choiceText, q.meaning));
+    el.choicesGrid.appendChild(btn);
+  });
+
+  updateItemUI();
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(state.timer);
+  state.timeLeft = QUESTION_TIME;
+  el.timerBar.style.width = '100%';
+  el.timerBar.classList.remove('bg-pinkDeep');
+  el.timerBar.classList.add('bg-yellowDeep');
+
+  state.timer = setInterval(() => {
+    if (state.paused) return;
+    state.timeLeft -= 0.1;
+    const pct = Math.max((state.timeLeft / QUESTION_TIME) * 100, 0);
+    el.timerBar.style.width = pct + '%';
+    if (pct < 25) {
+      el.timerBar.classList.remove('bg-yellowDeep');
+      el.timerBar.classList.add('bg-pinkDeep');
+    }
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timer);
+      if (!state.answered) handleTimeout();
+    }
+  }, 100);
+}
+
+function handleTimeout() {
+  state.answered = true;
+  disableChoices();
+  state.playerHP -= WRONG_DAMAGE;
+  updatePlayerHP();
+  shakeScreen();
+  updateItemUI();
+  checkOutcomeThenNext();
+}
+
+function disableChoices() {
+  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+}
+
+function selectAnswer(btn, chosen, correctMeaning) {
+  if (state.answered) return;
+  state.answered = true;
+  clearInterval(state.timer);
+  disableChoices();
+
+  const isCorrect = chosen === correctMeaning;
+
+  if (isCorrect) {
+    btn.classList.add('choice-correct');
+    state.bossHP -= state.damagePerHit;
+    updateBossHP();
+    hitBoss();
+  } else {
+    btn.classList.add('choice-wrong');
+    document.querySelectorAll('.choice-btn').forEach(b => {
+      if (b.textContent === correctMeaning) b.classList.add('choice-correct');
+    });
+    state.playerHP -= WRONG_DAMAGE;
+    updatePlayerHP();
+    shakeScreen();
+  }
+
+  updateItemUI();
+  checkOutcomeThenNext();
+}
+
+function checkOutcomeThenNext() {
+  setTimeout(() => {
+    if (state.playerHP <= 0) return gameOver();
+    if (state.bossHP <= 0) return bossDefeated();
+
+    state.questionIndex++;
+    if (state.questionIndex >= state.currentQuestions.length) {
+      // ran out of questions but boss survived — refill a fresh set
+      const boss = bossData[state.bossIndex];
+      const count = Math.floor(Math.random() * 3) + 3;
+      state.currentQuestions = shuffle(boss.questions).slice(0, count);
+      state.questionIndex = 0;
+      state.damagePerHit = Math.ceil(state.bossHP / count);
+    }
+    loadQuestion();
+  }, 900);
+}
+
+function bossDefeated() {
+  state.bossesDefeated++;
+  state.score += (state.playerHP * 10); // bonus based on remaining HP
+  Swal.fire({
+    title: '⚔️ ปราบบอสสำเร็จ!',
+    text: 'ไปลุยบอสตัวต่อไปกันเลย!',
+    confirmButtonText: 'ไปต่อ',
+    confirmButtonColor: '#6FE3A8',
+    background: '#FEFCF3',
+    color: '#3A3355',
+  }).then(() => {
+    const next = state.bossIndex + 1;
+    if (next >= TOTAL_BOSSES) {
+      victory();
+    } else {
+      loadBoss(next);
+    }
+  });
+}
+
+function gameOver() {
+  clearInterval(state.timer);
+  Swal.fire({
+    title: '💔 พ่ายแพ้!',
+    html: `<p>พลังชีวิตหมดแล้ว</p>
+           <p style="font-size: 18px; margin-top: 10px;">ปราบบอสได้: <strong>${state.bossesDefeated}</strong>/10</p>
+           <p style="font-size: 16px; margin-top: 5px;">คะแนน: <strong>${state.score}</strong></p>`,
+    confirmButtonText: 'เริ่มใหม่',
+    denyButtonText: 'กลับหน้าแรก',
+    confirmButtonColor: '#FF9FC3',
+    denyButtonColor: '#6FCBE8',
+    background: '#FEFCF3',
+    color: '#3A3355',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      location.reload();
+    } else if (result.isDenied) {
+      window.location.href = 'index.html';
+    }
+  });
+}
+
+function victory() {
+  state.score += (state.playerHP * 10); // final bonus
+  Swal.fire({
+    title: '🏆 ชนะครบ 10 บอส!',
+    html: `<p>สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน</p>
+           <div style="margin-top: 20px; padding: 15px; background: rgba(111, 227, 168, 0.2); border-radius: 10px;">
+             <p style="font-size: 18px; margin: 5px 0;">🎯 ปราบบอสได้: <strong>${state.bossesDefeated}</strong>/10</p>
+             <p style="font-size: 18px; margin: 5px 0;">⭐ คะแนนรวม: <strong>${state.score}</strong></p>
+           </div>`,
+    confirmButtonText: 'เล่นอีกครั้ง',
+    denyButtonText: 'กลับหน้าแรก',
+    confirmButtonColor: '#FFD34D',
+    denyButtonColor: '#6FCBE8',
+    background: '#FEFCF3',
+    color: '#3A3355',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      location.reload();
+    } else if (result.isDenied) {
+      window.location.href = 'index.html';
+    }
+  });
+}
+
+function pauseGame() {
+  if (state.gameOver || state.victory) return;
+  state.paused = true;
+  clearInterval(state.timer);
+  disableChoices();
+
+  Swal.fire({
+    title: '⏸️ หยุดเล่น',
+    html: '<p>เลือกสิ่งที่คุณต้องการ</p>',
+    showDenyButton: true,
+    confirmButtonText: 'ต่อเล่น',
+    denyButtonText: 'กลับหน้าแรก',
+    confirmButtonColor: '#6FE3A8',
+    denyButtonColor: '#FF9FC3',
+    background: '#FEFCF3',
+    color: '#3A3355',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      state.paused = false;
+      updateItemUI();
+      startTimer();
+    } else if (result.isDenied) {
+      window.location.href = 'index.html';
+    }
+  });
+}
+
+/* =========================================================
+   ITEMS
+========================================================= */
+document.getElementById('stop-btn').addEventListener('click', pauseGame);
+
+document.querySelectorAll('[data-item]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.getAttribute('data-item');
+    if (state.items[type] <= 0 || state.answered) return;
+
+    if (type === 'heal') {
+      state.items.heal--;
+      state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
+      updatePlayerHP();
+    }
+
+    if (type === 'fifty') {
+      state.items.fifty--;
+      const q = state.currentQuestions[state.questionIndex];
+      const wrongButtons = [...document.querySelectorAll('.choice-btn')]
+        .filter(b => b.textContent !== q.meaning);
+      shuffle(wrongButtons).slice(0, 2).forEach(b => {
+        b.disabled = true;
+        b.style.visibility = 'hidden';
+      });
+    }
+
+    if (type === 'skip') {
+      state.items.skip--;
+      state.answered = true;
+      clearInterval(state.timer);
+      disableChoices();
+      checkOutcomeThenNext();
+    }
+
+    updateItemUI();
+  });
+});
+
+/* =========================================================
+   SOUND BUTTON
+========================================================= */
+el.playSoundBtn.addEventListener('click', () => {
+  speak(el.questionHanzi.textContent);
+});
+
+/* =========================================================
+   INIT
+========================================================= */
+updatePlayerHP();
+updateItemUI();
+loadBoss(0);
+</script>
+
+</body>
+</html>
