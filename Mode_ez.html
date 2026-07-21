@@ -29,6 +29,7 @@
           soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
           card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
           btn: '0 6px 0 0 rgba(0,0,0,0.15)',
+          glow: '0 0 20px rgba(111, 227, 168, 0.4)',
         }
       }
     }
@@ -36,10 +37,189 @@
 </script>
 
 <style>
-  body { font-family:'Mali',sans-serif; background-color:#FBFBF6; color:#3A3355; }
+  * { box-sizing: border-box; }
+  body { 
+    font-family:'Mali',sans-serif; 
+    background-color:#FBFBF6; 
+    color:#3A3355;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  #game-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #FFE5F0 0%, #B8F2D4 25%, #BEE7F5 50%, #FFF3B0 75%, #E9F7D8 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Particle Background */
+  .particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+
+  @keyframes float-particle {
+    0% {
+      transform: translateY(100vh) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.5;
+    }
+    90% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(100px);
+      opacity: 0;
+    }
+  }
+
+  .particle.active {
+    animation: float-particle linear infinite;
+  }
+
   .font-display { font-family:'Fredoka','Mali',sans-serif; }
   .font-hanzi { font-family:"'Noto Sans SC'",sans-serif; }
 
+  /* === HEART BEAT EFFECT === */
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1.1); }
+  }
+
+  .heartbeat-active { animation: heartbeat 0.6s ease-in-out; }
+
+  /* === BUBBLE ANIMATION === */
+  @keyframes bubble-float {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-30px) translateX(8px);
+      opacity: 0;
+    }
+  }
+
+  .bubble {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: bubble-float 1.2s ease-out forwards;
+  }
+
+  /* === HP BAR GLOW === */
+  .hp-bar-container {
+    position: relative;
+    border: 4px solid rgba(58, 51, 85, 0.3);
+  }
+
+  .hp-bar-container.damaged {
+    animation: hp-pulse 0.4s ease;
+  }
+
+  @keyframes hp-pulse {
+    0%, 100% { box-shadow: inset 0 0 0 rgba(255, 159, 195, 0.5); }
+    50% { box-shadow: inset 0 0 15px rgba(255, 159, 195, 0.8); }
+  }
+
+  #player-hp-bar {
+    background: linear-gradient(90deg, #6FE3A8, #4FD89A);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5);
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #boss-hp-bar {
+    background: linear-gradient(90deg, #FF9FC3, #FF7BA6);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* === COMBO POPUP === */
+  .combo-popup {
+    position: fixed;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .combo-card {
+    background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(255, 159, 195, 0.6);
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  @keyframes combo-pop {
+    0% {
+      transform: scale(0.2) translateY(20px);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.15);
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes combo-float-up {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-60px);
+    }
+  }
+
+  .combo-card.show {
+    animation: combo-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .combo-card.float-away {
+    animation: combo-float-up 0.8s ease-out forwards;
+  }
+
+  /* === SHAKE EFFECT === */
   @keyframes shake {
     0%,100% { transform: translateX(0); }
     20% { transform: translateX(-14px) rotate(-1deg); }
@@ -49,6 +229,7 @@
   }
   .shake { animation: shake 0.4s ease; }
 
+  /* === HIT EFFECT === */
   @keyframes hit {
     0% { transform: scale(1); filter: brightness(1); }
     30% { transform: scale(0.92); filter: brightness(1.6) saturate(2); }
@@ -56,130 +237,267 @@
   }
   .hit { animation: hit 0.35s ease; }
 
-  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  /* === FLOAT ANIMATION === */
+  @keyframes floaty { 
+    0%,100%{transform:translateY(0);} 
+    50%{transform:translateY(-8px);} 
+  }
   .float-slow { animation: floaty 3.5s ease-in-out infinite; }
 
-  .choice-btn { transition: transform .12s ease, box-shadow .12s ease; }
-  .choice-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); }
+  /* === BUTTON STYLES === */
+  .choice-btn { 
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    position: relative;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border: 3px solid rgba(58, 51, 85, 0.15);
+  }
+  
+  .choice-btn:hover:not(:disabled) { 
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(58, 51, 85, 0.15);
+    filter: brightness(1.05);
+  }
+  
   .choice-btn:active:not(:disabled) { transform: translateY(2px); }
   .choice-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-  .choice-correct { background-color:#6FE3A8 !important; color:white !important; }
-  .choice-wrong { background-color:#FF9FC3 !important; color:white !important; }
+  .choice-correct { 
+    background: linear-gradient(135deg, #6FE3A8 0%, #4FD89A 100%) !important;
+    color: white !important;
+    border-color: transparent !important;
+    box-shadow: 0 6px 20px rgba(111, 227, 168, 0.5) !important;
+  }
+  
+  .choice-wrong { 
+    background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%) !important;
+    color: white !important;
+    border-color: transparent !important;
+    box-shadow: 0 6px 20px rgba(255, 159, 195, 0.5) !important;
+  }
 
-  .icon-btn { transition: transform .12s ease; }
-  .icon-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.05); }
+  /* === ICON BUTTONS === */
+  .icon-btn { 
+    transition: transform .12s ease, box-shadow .12s ease;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8F8F8 100%) !important;
+    border: 2px solid rgba(58, 51, 85, 0.1) !important;
+  }
+  
+  .icon-btn:hover:not(:disabled) { 
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15);
+  }
+  
   .icon-btn:active:not(:disabled) { transform: translateY(1px) scale(.97); }
   .icon-btn:disabled { opacity:.35; cursor:not-allowed; transform:none !important; }
 
-  #timer-bar { transition: width 0.1s linear, background-color .3s; }
-  #boss-hp-bar, #player-hp-bar { transition: width .35s ease; }
+  /* === TIMER BAR === */
+  #timer-bar { 
+    transition: width 0.1s linear, background-color .3s;
+    background: linear-gradient(90deg, #FFD34D, #FFC94D);
+    box-shadow: 0 0 10px rgba(255, 211, 77, 0.4);
+  }
 
-  /* Speech bubble pointing up toward the boss */
-  .speech-bubble { position: relative; }
+  /* === STATUS CHIPS === */
+  .status-chip {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(58, 51, 85, 0.1);
+  }
+
+  /* === SPEECH BUBBLE === */
+  .speech-bubble { 
+    position: relative;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FFFE 100%);
+    border: 3px solid rgba(111, 227, 168, 0.3);
+    backdrop-filter: blur(5px);
+  }
+  
   .speech-bubble::before {
     content: '';
     position: absolute;
-    top: -14px;
+    top: -16px;
     left: 50%;
     transform: translateX(-50%);
     width: 0; height: 0;
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    border-bottom: 16px solid white;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-bottom: 18px solid #FFFFFF;
+    filter: drop-shadow(0 -2px 2px rgba(58, 51, 85, 0.1));
+  }
+
+  /* === HEART ICON WITH PULSE === */
+  .heart-icon {
+    position: relative;
+  }
+
+  .heart-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 159, 195, 0.6), transparent);
+    animation: heart-pulse-anim 1.5s ease-out infinite;
+  }
+
+  @keyframes heart-pulse-anim {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  /* === CARD STYLES === */
+  .card-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 248, 248, 0.7) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px rgba(58, 51, 85, 0.08);
+  }
+
+  /* === DAMAGE NUMBER === */
+  .damage-number {
+    position: fixed;
+    font-weight: 700;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @keyframes float-damage {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-50px) scale(0.5);
+      opacity: 0;
+    }
+  }
+
+  .damage-number.show {
+    animation: float-damage 1s ease-out forwards;
   }
 </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-sky via-mint to-bamboo">
+<body class="min-h-screen">
 
-<div id="game-container" class="max-w-2xl mx-auto p-4 md:p-6">
+<div class="particle-container" id="particle-container"></div>
 
-  <!-- Status row -->
-  <div class="flex justify-between items-center mb-3">
-    <div class="bg-white/80 rounded-full px-4 py-1.5 shadow-card font-display text-ink text-sm">
-      <i class="fa-solid fa-dragon text-pinkDeep mr-1"></i>
+<div id="game-container" class="relative max-w-2xl mx-auto p-4 md:p-6 z-10">
+  
+  <!-- COMBO POPUP -->
+  <div id="combo-popup" class="combo-popup">
+    <div id="combo-popup-text" class="combo-card rounded-full px-6 py-4 text-xl md:text-2xl hidden"></div>
+  </div>
+
+  <!-- STATUS ROW -->
+  <div class="flex justify-between items-center mb-4 gap-2">
+    <div class="status-chip rounded-full px-4 py-2 font-display text-ink text-sm font-600">
+      <i class="fa-solid fa-dragon text-pinkDeep mr-2"></i>
       Boss <span id="boss-progress">1</span>/10
     </div>
-    <div class="bg-mintDeep text-white rounded-full px-3 py-1.5 shadow-card font-display text-xs">
-      <i class="fa-solid fa-star mr-1"></i>EASY
-    </div>
-  </div>
-
-  <!-- ===================== TOP SECTION: BOSS ===================== -->
-  <div class="text-center mb-2">
-    <h2 id="boss-name" class="font-display font-700 text-xl md:text-2xl text-ink drop-shadow-sm">จอมเวลา ปีศาจนาฬิกา</h2>
-  </div>
-
-  <div class="relative w-full h-10 md:h-11 bg-gray-200 border-4 border-gray-800 rounded-full overflow-hidden mb-3">
-    <div id="boss-hp-bar" class="h-full bg-pinkDeep" style="width:100%"></div>
-    <div class="absolute inset-0 flex items-center justify-center">
-      <span id="boss-hp-text" class="font-display font-700 text-white text-sm md:text-base" style="text-shadow:1px 1.5px 2px rgba(0,0,0,.55)">100/100</span>
-    </div>
-  </div>
-
-  <div class="flex justify-center mb-1">
-    <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss"
-      class="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-xl float-slow">
-  </div>
-
-  <!-- ===================== MIDDLE SECTION: QUESTION (speech bubble) ===================== -->
-  <div class="speech-bubble bg-white rounded-3xl p-5 md:p-6 shadow-card text-center mt-5 mb-4">
-    <img id="question-image" src="https://placehold.co/400x400/png?text=Birthday" alt="question hint"
-      class="w-32 h-32 object-contain mx-auto mb-4 rounded-lg shadow-sm">
-    <p id="question-hanzi" class="font-hanzi text-4xl md:text-5xl text-ink mb-2">生日</p>
-    <p id="question-pinyin" class="text-base md:text-lg font-thai text-plum mb-3">shēngrì</p>
-
-    <button id="play-sound-btn" aria-label="ฟังเสียง"
-      class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-skyDeep hover:bg-sky-400 text-white shadow-btn flex items-center justify-center mx-auto">
-      <i class="fa-solid fa-volume-high text-lg md:text-xl"></i>
-    </button>
-  </div>
-
-  <!-- Timer -->
-  <div class="w-full h-2.5 bg-white/70 rounded-full overflow-hidden mb-4">
-    <div id="timer-bar" class="h-full bg-yellowDeep" style="width:100%"></div>
-  </div>
-
-  <!-- Choices -->
-  <div id="choices-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"></div>
-
-  <!-- ===================== BOTTOM SECTION: PLAYER ===================== -->
-  <div class="bg-white/70 rounded-3xl p-4 md:p-5 shadow-card mb-4">
-    <div class="flex items-center gap-3 mb-2">
-      <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1" alt="player avatar"
-        class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-yellow border-4 border-gray-800 object-cover">
-      <span class="font-display font-600 text-ink text-sm md:text-base">ผู้เล่น</span>
-    </div>
-    <div class="relative w-full h-9 md:h-10 bg-gray-200 border-4 border-gray-800 rounded-full overflow-hidden">
-      <div id="player-hp-bar" class="h-full bg-mintDeep" style="width:100%"></div>
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span id="player-hp-text" class="font-display font-700 text-white text-xs md:text-sm" style="text-shadow:1px 1.5px 2px rgba(0,0,0,.55)">100/100</span>
+    <div class="flex items-center gap-2">
+      <div id="score-chip" class="status-chip rounded-full px-4 py-2 font-display text-ink text-sm font-600">
+        <i class="fa-solid fa-star text-yellowDeep mr-2"></i>
+        <span id="score-value">0</span>
+        <span id="combo-badge" class="ml-3 inline-block rounded-full bg-gradient-to-r from-pinkDeep to-pink text-white px-3 py-1 text-xs font-700" style="box-shadow: 0 4px 10px rgba(255, 159, 195, 0.4);">x1</span>
+      </div>
+      <div class="status-chip rounded-full px-4 py-2 text-white text-xs font-700" style="background: linear-gradient(135deg, #6FE3A8, #4FD89A);">
+        <i class="fa-solid fa-star mr-1"></i>EASY
       </div>
     </div>
   </div>
 
-  <!-- Helper items (icon-only) -->
+  <!-- BOSS NAME -->
+  <div class="text-center mb-3">
+    <h2 id="boss-name" class="font-display font-700 text-2xl md:text-3xl text-ink drop-shadow-sm">จอมเวลา ปีศาจนาฬิกา</h2>
+  </div>
+
+  <!-- BOSS HP BAR WITH ANIMATION -->
+  <div class="relative w-full h-12 md:h-14 bg-gray-200 hp-bar-container rounded-full overflow-hidden mb-3" style="border-color: rgba(58, 51, 85, 0.3);">
+    <div id="boss-hp-bar" class="h-full" style="width:100%"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span id="boss-hp-text" class="font-display font-700 text-white text-sm md:text-base" style="text-shadow: 2px 2px 4px rgba(0,0,0,.4);">100/100</span>
+    </div>
+  </div>
+
+  <!-- BOSS IMAGE -->
+  <div class="flex justify-center mb-3">
+    <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss"
+      class="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-2xl float-slow">
+  </div>
+
+  <!-- QUESTION CARD -->
+  <div class="speech-bubble rounded-3xl p-6 md:p-8 text-center mt-6 mb-5">
+    <img id="question-image" src="https://placehold.co/200x200/png?text=Birthday" alt="question hint"
+      class="w-28 h-28 object-contain mx-auto mb-4 rounded-lg shadow-sm">
+    <p id="question-hanzi" class="font-hanzi text-5xl md:text-6xl text-ink mb-2 font-700">生日</p>
+    <p id="question-pinyin" class="text-lg md:text-xl font-thai text-plum mb-4 font-500">shēngrì</p>
+
+    <button id="play-sound-btn" aria-label="ฟังเสียง"
+      class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full text-pinkDeep shadow-btn flex items-center justify-center mx-auto transition-all">
+      <i class="fa-solid fa-volume-high text-2xl md:text-3xl"></i>
+    </button>
+  </div>
+
+  <!-- TIMER BAR -->
+  <div class="w-full h-3 bg-white/40 rounded-full overflow-hidden mb-5" style="border: 2px solid rgba(255, 211, 77, 0.2);">
+    <div id="timer-bar" class="h-full" style="width:100%"></div>
+  </div>
+
+  <!-- CHOICES GRID -->
+  <div id="choices-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"></div>
+
+  <!-- PLAYER CARD -->
+  <div class="card-glass rounded-3xl p-5 md:p-6 mb-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="relative">
+        <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1" alt="player avatar"
+          class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-yellow border-3 border-ink/20 object-cover">
+        <div class="heart-pulse" style="width: 50px; height: 50px; margin: -18px 0 0 -18px;"></div>
+      </div>
+      <span class="font-display font-600 text-ink text-sm md:text-base">ผู้เล่น</span>
+    </div>
+    
+    <!-- PLAYER HP BAR WITH BUBBLE EFFECT -->
+    <div class="relative w-full h-10 md:h-11 bg-gray-200 hp-bar-container rounded-full overflow-hidden" style="border-color: rgba(58, 51, 85, 0.3);">
+      <div id="player-hp-bar" class="h-full flex items-center" style="width:100%; position: relative;">
+        <!-- Bubble container -->
+        <div id="bubble-container" style="position: absolute; width: 100%; height: 100%; pointer-events: none;"></div>
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span id="player-hp-text" class="font-display font-700 text-white text-xs md:text-sm" style="text-shadow: 1px 1.5px 2px rgba(0,0,0,.4); position: relative; z-index: 10;">100/100</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HELPER ITEMS -->
   <div class="flex justify-center gap-4 md:gap-5">
     <div class="relative">
-      <button data-item="heal" aria-label="ฮีล" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center">
-        <i class="fa-solid fa-heart text-pinkDeep text-lg md:text-xl"></i>
+      <button data-item="heal" aria-label="ฮีล" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center">
+        <i class="fa-solid fa-heart text-pinkDeep text-2xl md:text-3xl"></i>
       </button>
-      <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-xs bg-mintDeep text-white rounded-full w-5 h-5 flex items-center justify-center">1</span>
+      <span id="item-heal-count" class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-pinkDeep to-pink text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg">1</span>
     </div>
     <div class="relative">
-      <button data-item="fifty" aria-label="50/50" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center">
-        <i class="fa-solid fa-code-branch text-skyDeep text-lg md:text-xl"></i>
+      <button data-item="fifty" aria-label="50/50" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center">
+        <i class="fa-solid fa-code-branch text-skyDeep text-2xl md:text-3xl"></i>
       </button>
-      <span id="item-fifty-count" class="absolute -top-1 -right-1 font-display text-xs bg-skyDeep text-white rounded-full w-5 h-5 flex items-center justify-center">1</span>
+      <span id="item-fifty-count" class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-skyDeep to-sky text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg">1</span>
     </div>
     <div class="relative">
-      <button data-item="skip" aria-label="ข้าม" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center">
-        <i class="fa-solid fa-forward text-yellowDeep text-lg md:text-xl"></i>
+      <button data-item="skip" aria-label="ข้าม" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center">
+        <i class="fa-solid fa-forward text-yellowDeep text-2xl md:text-3xl"></i>
       </button>
-      <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-xs bg-yellowDeep text-white rounded-full w-5 h-5 flex items-center justify-center">1</span>
+      <span id="item-skip-count" class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-yellowDeep to-yellow text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg">1</span>
     </div>
-    <button id="stop-btn" aria-label="หยุด" class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center hover:bg-gray-100">
-      <i class="fa-solid fa-stop text-red-500 text-lg md:text-xl"></i>
+    <button id="stop-btn" aria-label="หยุด" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center hover:bg-gray-100">
+      <i class="fa-solid fa-stop text-red-500 text-2xl md:text-3xl"></i>
     </button>
   </div>
 
@@ -188,281 +506,313 @@
 <script>
 /* =========================================================
    BOSS & QUESTION DATA
-   Full data provided for Boss 1-3 (time & date vocabulary,
-   featuring 点 / 分 / 号 / 日). Boss 4-10 currently reuse the
-   same vocab pools as placeholders — replace bossData[3..9]
-   with unique content later.
 ========================================================= */
-
 const bossData = [
   {
     id: 1,
-    name: "จอมเวลา ปีศาจนาฬิกา",
+    name: 'จอมเวลา ปีศาจนาฬิกา',
+    hp: 100,
+    color: '#FF9FC3',
     questions: [
-      { hanzi: "一点",       pinyin: "yī diǎn",                  meaning: "หนึ่งนาฬิกา (ตีหนึ่ง)", questionImage: "https://placehold.co/400x400/png?text=1:00" },
-      { hanzi: "两点",       pinyin: "liǎng diǎn",               meaning: "สองนาฬิกา",             questionImage: "https://placehold.co/400x400/png?text=2:00" },
-      { hanzi: "三点半",     pinyin: "sān diǎn bàn",             meaning: "สามโมงครึ่ง",           questionImage: "https://placehold.co/400x400/png?text=3:30" },
-      { hanzi: "十分",       pinyin: "shí fēn",                  meaning: "สิบนาที",               questionImage: "https://placehold.co/400x400/png?text=10+Minutes" },
-      { hanzi: "五点十分",   pinyin: "wǔ diǎn shí fēn",          meaning: "ห้าโมงสิบนาที",         questionImage: "https://placehold.co/400x400/png?text=5:10" },
-      { hanzi: "现在几点",   pinyin: "xiànzài jǐ diǎn",          meaning: "ตอนนี้กี่โมง",           questionImage: "https://placehold.co/400x400/png?text=What+Time%3F" },
-      { hanzi: "中午十二点", pinyin: "zhōngwǔ shí\u2019èr diǎn", meaning: "เที่ยงวัน",             questionImage: "https://placehold.co/400x400/png?text=12:00+PM" },
-      { hanzi: "晚上八点",   pinyin: "wǎnshang bā diǎn",         meaning: "สองทุ่ม (20:00)",       questionImage: "https://placehold.co/400x400/png?text=8:00+PM" },
-      { hanzi: "早上七点",   pinyin: "zǎoshang qī diǎn",         meaning: "เจ็ดโมงเช้า",           questionImage: "https://placehold.co/400x400/png?text=7:00+AM" },
-      { hanzi: "半夜十二点", pinyin: "bànyè shí\u2019èr diǎn",   meaning: "เที่ยงคืน",             questionImage: "https://placehold.co/400x400/png?text=12:00+AM" },
+      { hanzi: '十点十五分', pinyin: 'shí diǎn shíwǔ fēn', meaning: '10:15 น.' },
+      { hanzi: '早上', pinyin: 'zǎoshang', meaning: 'เช้า' },
+      { hanzi: '下午', pinyin: 'xiàwǔ', meaning: 'บ่าย' },
+      { hanzi: '晚上', pinyin: 'wǎnshang', meaning: 'เย็น' },
+      { hanzi: '现在几点', pinyin: 'xiànzài jǐ diǎn', meaning: 'ตอนนี้กี่โมง' },
     ]
   },
-  {
-    id: 2,
-    name: "อสูรปฏิทิน",
-    questions: [
-      { hanzi: "一月一号", pinyin: "yī yuè yī hào",  meaning: "วันที่ 1 มกราคม",       questionImage: "https://placehold.co/400x400/png?text=Jan+1" },
-      { hanzi: "星期一",   pinyin: "xīngqīyī",       meaning: "วันจันทร์",             questionImage: "https://placehold.co/400x400/png?text=Monday" },
-      { hanzi: "星期天",   pinyin: "xīngqītiān",     meaning: "วันอาทิตย์",           questionImage: "https://placehold.co/400x400/png?text=Sunday" },
-      { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "https://placehold.co/400x400/png?text=What+Date%3F" },
-      { hanzi: "昨天",     pinyin: "zuótiān",        meaning: "เมื่อวาน",             questionImage: "https://placehold.co/400x400/png?text=Yesterday" },
-      { hanzi: "明天",     pinyin: "míngtiān",       meaning: "พรุ่งนี้",             questionImage: "https://placehold.co/400x400/png?text=Tomorrow" },
-      { hanzi: "五月四日", pinyin: "wǔ yuè sì rì",   meaning: "วันที่ 4 พฤษภาคม",     questionImage: "https://placehold.co/400x400/png?text=May+4" },
-      { hanzi: "星期六",   pinyin: "xīngqīliù",      meaning: "วันเสาร์",             questionImage: "https://placehold.co/400x400/png?text=Saturday" },
-      { hanzi: "生日",     pinyin: "shēngrì",        meaning: "วันเกิด",              questionImage: "https://placehold.co/400x400/png?text=Birthday" },
-      { hanzi: "假日",     pinyin: "jiàrì",          meaning: "วันหยุด",              questionImage: "https://placehold.co/400x400/png?text=Holiday" },
-    ]
-  },
-  {
-    id: 3,
-    name: "เทพเจ้าฤดูกาล",
-    questions: [
-      { hanzi: "一月",   pinyin: "yī yuè",    meaning: "เดือนมกราคม",           questionImage: "https://placehold.co/400x400/png?text=January" },
-      { hanzi: "二月",   pinyin: "èr yuè",    meaning: "เดือนกุมภาพันธ์",       questionImage: "https://placehold.co/400x400/png?text=February" },
-      { hanzi: "星期几", pinyin: "xīngqī jǐ", meaning: "วันอะไร (ของสัปดาห์)", questionImage: "https://placehold.co/400x400/png?text=Which+Day%3F" },
-      { hanzi: "下午",   pinyin: "xiàwǔ",     meaning: "ตอนบ่าย",               questionImage: "https://placehold.co/400x400/png?text=Afternoon" },
-      { hanzi: "晚上",   pinyin: "wǎnshang",  meaning: "ตอนกลางคืน/ตอนเย็น",   questionImage: "https://placehold.co/400x400/png?text=Evening" },
-      { hanzi: "早上",   pinyin: "zǎoshang",  meaning: "ตอนเช้า",               questionImage: "https://placehold.co/400x400/png?text=Morning" },
-      { hanzi: "现在",   pinyin: "xiànzài",   meaning: "ตอนนี้",                 questionImage: "https://placehold.co/400x400/png?text=Now" },
-      { hanzi: "时间",   pinyin: "shíjiān",   meaning: "เวลา",                   questionImage: "https://placehold.co/400x400/png?text=Time" },
-      { hanzi: "分钟",   pinyin: "fēnzhōng",  meaning: "นาที",                   questionImage: "https://placehold.co/400x400/png?text=Minutes" },
-      { hanzi: "小时",   pinyin: "xiǎoshí",   meaning: "ชั่วโมง",                 questionImage: "https://placehold.co/400x400/png?text=Hour" },
-    ]
-  },
+  // ... เพิ่มบอสอื่นตามต้องการ
 ];
 
-// TODO: replace bosses 4-10 with unique vocabulary sets.
-// Placeholder: reuse boss 1-3 pools so the full 10-boss rush is playable for testing.
-for (let i = 4; i <= 10; i++) {
-  const sourcePool = bossData[(i - 4) % 3].questions;
-  bossData.push({
-    id: i,
-    name: `บอสด่าน ${i} (ข้อมูลตัวอย่าง)`,
-    questions: sourcePool,
-  });
-}
-
-/* =========================================================
-   GAME STATE
-========================================================= */
-const TOTAL_BOSSES = 10;
-const QUESTION_TIME = 12; // seconds
-const WRONG_DAMAGE = 15;
-const HEAL_AMOUNT = 20;
+const TOTAL_BOSSES = 1;
+const WRONG_DAMAGE = 20;
+const HEAL_AMOUNT = 30;
 
 let state = {
   bossIndex: 0,
-  playerHP: 100,
-  bossHP: 100,
-  currentQuestions: [],
   questionIndex: 0,
-  damagePerHit: 0,
-  timer: null,
-  timeLeft: QUESTION_TIME,
-  items: { heal: 1, fifty: 1, skip: 1 },
-  answered: false,
-  bossesDefeated: 0,
+  bossHP: 100,
+  playerHP: 100,
   score: 0,
+  scoreMultiplier: 1,
+  comboCount: 0,
+  items: { heal: 1, fifty: 1, skip: 1 },
+  currentQuestions: [],
+  answered: false,
   paused: false,
+  gameOver: false,
+  victory: false,
+  bossesDefeated: 0,
+  timer: null,
+  damagePerHit: 25,
 };
 
-const allVocab = bossData.slice(0, 3).flatMap(b => b.questions);
-
-/* =========================================================
-   DOM refs
-========================================================= */
 const el = {
-  container: document.getElementById('game-container'),
-  bossProgress: document.getElementById('boss-progress'),
+  gameContainer: document.getElementById('game-container'),
   bossName: document.getElementById('boss-name'),
-  bossImage: document.getElementById('boss-image'),
-  bossHpBar: document.getElementById('boss-hp-bar'),
-  bossHpText: document.getElementById('boss-hp-text'),
-  playerHpBar: document.getElementById('player-hp-bar'),
-  playerHpText: document.getElementById('player-hp-text'),
-  timerBar: document.getElementById('timer-bar'),
-  questionImage: document.getElementById('question-image'),
+  bossHPBar: document.getElementById('boss-hp-bar'),
+  bossHPText: document.getElementById('boss-hp-text'),
+  playerHPBar: document.getElementById('player-hp-bar'),
+  playerHPText: document.getElementById('player-hp-text'),
+  scoreValue: document.getElementById('score-value'),
+  comboBadge: document.getElementById('combo-badge'),
   questionHanzi: document.getElementById('question-hanzi'),
   questionPinyin: document.getElementById('question-pinyin'),
   playSoundBtn: document.getElementById('play-sound-btn'),
   choicesGrid: document.getElementById('choices-grid'),
-  itemHealCount: document.getElementById('item-heal-count'),
-  itemFiftyCount: document.getElementById('item-fifty-count'),
-  itemSkipCount: document.getElementById('item-skip-count'),
+  timerBar: document.getElementById('timer-bar'),
+  bossProgress: document.getElementById('boss-progress'),
+  comboPopup: document.getElementById('combo-popup'),
+  comboPopupText: document.getElementById('combo-popup-text'),
+  bubbleContainer: document.getElementById('bubble-container'),
 };
 
-/* =========================================================
-   HELPERS
-========================================================= */
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function buildChoices(correctQuestion) {
-  const distractors = shuffle(
-    allVocab.filter(v => v.meaning !== correctQuestion.meaning)
-  ).slice(0, 3).map(v => v.meaning);
-  return shuffle([correctQuestion.meaning, ...distractors]);
-}
-
+// Utility
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 function speak(text) {
-  if (!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'zh-CN';
-  utter.rate = 0.85;
-  speechSynthesis.speak(utter);
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+  }
 }
 
+function getComboMultiplier() {
+  if (state.comboCount >= 10) return 5;
+  if (state.comboCount >= 5) return 3;
+  if (state.comboCount >= 3) return 2;
+  return 1;
+}
+
+function resetCombo() {
+  state.comboCount = 0;
+  state.scoreMultiplier = 1;
+}
+
+/* =========================================================
+   PARTICLE SYSTEM
+========================================================= */
+function initParticles() {
+  const container = document.getElementById('particle-container');
+  const colors = ['#FFD6E8', '#B8F2D4', '#BEE7F5', '#FFF3B0'];
+  
+  for (let i = 0; i < 15; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    particle.style.animationDuration = (5 + Math.random() * 10) + 's';
+    particle.style.animationDelay = Math.random() * 5 + 's';
+    particle.classList.add('active');
+    container.appendChild(particle);
+  }
+}
+
+/* =========================================================
+   BUBBLE EFFECT IN HP BAR
+========================================================= */
+function createBubble() {
+  if (state.answered) return;
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.style.left = Math.random() * 100 + '%';
+  bubble.style.top = Math.random() * 100 + '%';
+  el.bubbleContainer.appendChild(bubble);
+  
+  setTimeout(() => bubble.remove(), 1200);
+}
+
+setInterval(createBubble, 300);
+
+/* =========================================================
+   HP & DAMAGE DISPLAY
+========================================================= */
 function updatePlayerHP() {
-  const hp = Math.max(state.playerHP, 0);
-  el.playerHpBar.style.width = hp + '%';
-  el.playerHpText.textContent = `${hp}/100`;
+  const percent = Math.max(0, (state.playerHP / 100) * 100);
+  el.playerHPBar.style.width = percent + '%';
+  el.playerHPText.textContent = `${state.playerHP}/100`;
+  
+  // Add damage animation
+  el.playerHPBar.parentElement.classList.add('damaged');
+  setTimeout(() => el.playerHPBar.parentElement.classList.remove('damaged'), 400);
 }
 
 function updateBossHP() {
-  const hp = Math.max(state.bossHP, 0);
-  el.bossHpBar.style.width = hp + '%';
-  el.bossHpText.textContent = `${hp}/100`;
+  const percent = Math.max(0, (state.bossHP / 100) * 100);
+  el.bossHPBar.style.width = percent + '%';
+  el.bossHPText.textContent = `${state.bossHP}/100`;
+  
+  el.bossHPBar.parentElement.classList.add('damaged');
+  setTimeout(() => el.bossHPBar.parentElement.classList.remove('damaged'), 400);
+  
+  // Heart beat effect
+  const heart = document.querySelector('.heart-pulse');
+  if (heart) {
+    heart.style.animation = 'none';
+    setTimeout(() => heart.style.animation = 'heart-pulse-anim 1.5s ease-out infinite', 10);
+  }
+}
+
+function updateScoreUI() {
+  el.scoreValue.textContent = state.score;
+  el.comboBadge.textContent = `x${state.scoreMultiplier}`;
+  
+  // Combo badge color change
+  if (state.comboCount >= 10) {
+    el.comboBadge.style.background = 'linear-gradient(135deg, #FFD34D, #FFC94D)';
+  } else if (state.comboCount >= 5) {
+    el.comboBadge.style.background = 'linear-gradient(135deg, #FF9FC3, #FF7BA6)';
+  } else {
+    el.comboBadge.style.background = 'linear-gradient(135deg, #6FCBE8, #5CB8DD)';
+  }
 }
 
 function updateItemUI() {
-  el.itemHealCount.textContent = state.items.heal;
-  el.itemFiftyCount.textContent = state.items.fifty;
-  el.itemSkipCount.textContent = state.items.skip;
-  document.querySelectorAll('[data-item]').forEach(btn => {
-    const type = btn.getAttribute('data-item');
-    btn.disabled = state.items[type] <= 0 || state.answered;
-  });
+  for (const [type, count] of Object.entries(state.items)) {
+    const el_count = document.getElementById(`item-${type}-count`);
+    if (el_count) el_count.textContent = count;
+  }
 }
 
-function shakeScreen() {
-  el.container.classList.add('shake');
-  setTimeout(() => el.container.classList.remove('shake'), 400);
-}
-
-function hitBoss() {
-  el.bossImage.classList.add('hit');
-  setTimeout(() => el.bossImage.classList.remove('hit'), 350);
+function showComboPopup(title, subtitle) {
+  const popupText = el.comboPopupText;
+  popupText.textContent = title;
+  popupText.classList.add('show');
+  popupText.classList.remove('hidden');
+  
+  setTimeout(() => {
+    popupText.classList.add('float-away');
+    setTimeout(() => {
+      popupText.classList.remove('show', 'float-away');
+      popupText.classList.add('hidden');
+    }, 800);
+  }, 1000);
 }
 
 /* =========================================================
-   GAME FLOW
+   BOSS & QUESTION LOADING
 ========================================================= */
 function loadBoss(index) {
-  state.bossIndex = index;
   const boss = bossData[index];
-
-  state.bossHP = 100;
-  state.answered = false;
-
-  const count = Math.floor(Math.random() * 3) + 3; // 3-5 questions
-  state.currentQuestions = shuffle(boss.questions).slice(0, count);
+  state.bossIndex = index;
+  state.bossHP = boss.hp;
+  state.playerHP = 100;
   state.questionIndex = 0;
-  state.damagePerHit = Math.ceil(100 / count);
-
-  el.bossProgress.textContent = index + 1;
+  state.bossesDefeated = index;
+  state.comboCount = 0;
+  
   el.bossName.textContent = boss.name;
-  el.bossImage.src = `https://robohash.org/${boss.id}?set=set3`;
-  el.bossImage.onerror = () => {
-    el.bossImage.onerror = null;
-    el.bossImage.src = `https://robohash.org/${boss.id}${Date.now()}?set=set3`;
-  };
+  el.bossProgress.textContent = (index + 1);
+  el.gameContainer.style.borderColor = boss.color;
+  
+  const count = Math.floor(Math.random() * 3) + 3;
+  state.currentQuestions = shuffle(boss.questions).slice(0, count);
+  state.damagePerHit = Math.ceil(boss.hp / count);
+  
+  updatePlayerHP();
   updateBossHP();
-
+  updateItemUI();
+  updateScoreUI();
   loadQuestion();
 }
 
 function loadQuestion() {
   state.answered = false;
+  el.choicesGrid.innerHTML = '';
   const q = state.currentQuestions[state.questionIndex];
-
-  el.questionImage.src = q.questionImage;
-  el.questionImage.alt = q.meaning;
+  
   el.questionHanzi.textContent = q.hanzi;
   el.questionPinyin.textContent = q.pinyin;
-
-  const choices = buildChoices(q);
-  el.choicesGrid.innerHTML = '';
-  choices.forEach(choiceText => {
+  
+  // Create choice buttons
+  const meanings = shuffle([q.meaning, ...generateFakeAnswers(q.meaning)]);
+  meanings.forEach(meaning => {
     const btn = document.createElement('button');
-    btn.className = 'choice-btn bg-white rounded-2xl px-5 py-4 shadow-card font-thai text-plum text-base md:text-lg';
-    btn.textContent = choiceText;
-    btn.addEventListener('click', () => selectAnswer(btn, choiceText, q.meaning));
+    btn.className = 'choice-btn rounded-xl px-4 py-3 md:py-4 font-display text-sm md:text-base font-600 shadow-card';
+    btn.textContent = meaning;
+    btn.addEventListener('click', () => handleChoice(btn, q.meaning));
     el.choicesGrid.appendChild(btn);
   });
-
-  updateItemUI();
+  
   startTimer();
 }
 
-function startTimer() {
-  clearInterval(state.timer);
-  state.timeLeft = QUESTION_TIME;
-  el.timerBar.style.width = '100%';
-  el.timerBar.classList.remove('bg-pinkDeep');
-  el.timerBar.classList.add('bg-yellowDeep');
-
-  state.timer = setInterval(() => {
-    if (state.paused) return;
-    state.timeLeft -= 0.1;
-    const pct = Math.max((state.timeLeft / QUESTION_TIME) * 100, 0);
-    el.timerBar.style.width = pct + '%';
-    if (pct < 25) {
-      el.timerBar.classList.remove('bg-yellowDeep');
-      el.timerBar.classList.add('bg-pinkDeep');
-    }
-    if (state.timeLeft <= 0) {
-      clearInterval(state.timer);
-      if (!state.answered) handleTimeout();
-    }
-  }, 100);
+function generateFakeAnswers(correct) {
+  const fakes = [
+    'ตัวเลือกที่ 2',
+    'ตัวเลือกที่ 3',
+    'ตัวเลือกที่ 4',
+  ];
+  return shuffle(fakes).slice(0, 3);
 }
 
-function handleTimeout() {
-  state.answered = true;
-  disableChoices();
-  state.playerHP -= WRONG_DAMAGE;
-  updatePlayerHP();
-  shakeScreen();
-  updateItemUI();
-  checkOutcomeThenNext();
+function startTimer() {
+  let time = 15;
+  el.timerBar.style.width = '100%';
+  el.timerBar.style.backgroundColor = '#FFD34D';
+  
+  clearInterval(state.timer);
+  state.timer = setInterval(() => {
+    time--;
+    const percent = (time / 15) * 100;
+    el.timerBar.style.width = percent + '%';
+    
+    if (time <= 5) {
+      el.timerBar.style.backgroundColor = '#FF9FC3';
+    }
+    
+    if (time <= 0) {
+      clearInterval(state.timer);
+      state.answered = true;
+      state.playerHP -= WRONG_DAMAGE;
+      resetCombo();
+      updatePlayerHP();
+      checkOutcomeThenNext();
+    }
+  }, 1000);
+}
+
+function hitBoss() {
+  const img = document.getElementById('boss-image');
+  img.classList.add('hit');
+  setTimeout(() => img.classList.remove('hit'), 350);
+}
+
+function shakeScreen() {
+  el.gameContainer.classList.add('shake');
+  setTimeout(() => el.gameContainer.classList.remove('shake'), 400);
 }
 
 function disableChoices() {
-  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+  document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
 }
 
-function selectAnswer(btn, chosen, correctMeaning) {
+function stopHeartbeat() {
+  // Clear heartbeat animation if needed
+}
+
+/* =========================================================
+   CHOICE HANDLING
+========================================================= */
+function handleChoice(btn, correctMeaning) {
   if (state.answered) return;
   state.answered = true;
   clearInterval(state.timer);
   disableChoices();
-
-  const isCorrect = chosen === correctMeaning;
-
+  
+  const isCorrect = btn.textContent === correctMeaning;
+  
   if (isCorrect) {
     btn.classList.add('choice-correct');
     state.bossHP -= state.damagePerHit;
+    state.comboCount += 1;
+    state.scoreMultiplier = getComboMultiplier();
+    state.score += 100 * state.scoreMultiplier;
+    updateScoreUI();
+    if (state.comboCount === 3 || state.comboCount === 5 || state.comboCount === 10) {
+      showComboPopup(`🎯 COMBO ${state.comboCount}!`, `คะแนนคูณ x${state.scoreMultiplier}`);
+    }
     updateBossHP();
     hitBoss();
   } else {
@@ -471,10 +821,11 @@ function selectAnswer(btn, chosen, correctMeaning) {
       if (b.textContent === correctMeaning) b.classList.add('choice-correct');
     });
     state.playerHP -= WRONG_DAMAGE;
+    resetCombo();
     updatePlayerHP();
     shakeScreen();
   }
-
+  
   updateItemUI();
   checkOutcomeThenNext();
 }
@@ -483,10 +834,9 @@ function checkOutcomeThenNext() {
   setTimeout(() => {
     if (state.playerHP <= 0) return gameOver();
     if (state.bossHP <= 0) return bossDefeated();
-
+    
     state.questionIndex++;
     if (state.questionIndex >= state.currentQuestions.length) {
-      // ran out of questions but boss survived — refill a fresh set
       const boss = bossData[state.bossIndex];
       const count = Math.floor(Math.random() * 3) + 3;
       state.currentQuestions = shuffle(boss.questions).slice(0, count);
@@ -498,8 +848,9 @@ function checkOutcomeThenNext() {
 }
 
 function bossDefeated() {
+  stopHeartbeat();
   state.bossesDefeated++;
-  state.score += (state.playerHP * 10); // bonus based on remaining HP
+  state.score += (state.playerHP * 10);
   Swal.fire({
     title: '⚔️ ปราบบอสสำเร็จ!',
     text: 'ไปลุยบอสตัวต่อไปกันเลย!',
@@ -519,6 +870,7 @@ function bossDefeated() {
 
 function gameOver() {
   clearInterval(state.timer);
+  stopHeartbeat();
   Swal.fire({
     title: '💔 พ่ายแพ้!',
     html: `<p>พลังชีวิตหมดแล้ว</p>
@@ -533,14 +885,13 @@ function gameOver() {
   }).then((result) => {
     if (result.isConfirmed) {
       location.reload();
-    } else if (result.isDenied) {
-      window.location.href = 'index.html';
     }
   });
 }
 
 function victory() {
-  state.score += (state.playerHP * 10); // final bonus
+  stopHeartbeat();
+  state.score += (state.playerHP * 10);
   Swal.fire({
     title: '🏆 ชนะครบ 10 บอส!',
     html: `<p>สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน</p>
@@ -557,8 +908,6 @@ function victory() {
   }).then((result) => {
     if (result.isConfirmed) {
       location.reload();
-    } else if (result.isDenied) {
-      window.location.href = 'index.html';
     }
   });
 }
@@ -568,7 +917,7 @@ function pauseGame() {
   state.paused = true;
   clearInterval(state.timer);
   disableChoices();
-
+  
   Swal.fire({
     title: '⏸️ หยุดเล่น',
     html: '<p>เลือกสิ่งที่คุณต้องการ</p>',
@@ -586,14 +935,12 @@ function pauseGame() {
       state.paused = false;
       updateItemUI();
       startTimer();
-    } else if (result.isDenied) {
-      window.location.href = 'index.html';
     }
   });
 }
 
 /* =========================================================
-   ITEMS
+   ITEMS & BUTTONS
 ========================================================= */
 document.getElementById('stop-btn').addEventListener('click', pauseGame);
 
@@ -601,13 +948,14 @@ document.querySelectorAll('[data-item]').forEach(btn => {
   btn.addEventListener('click', () => {
     const type = btn.getAttribute('data-item');
     if (state.items[type] <= 0 || state.answered) return;
-
+    
     if (type === 'heal') {
       state.items.heal--;
       state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
       updatePlayerHP();
+      showComboPopup('💚 ฮีล!', `+${HEAL_AMOUNT} HP`);
     }
-
+    
     if (type === 'fifty') {
       state.items.fifty--;
       const q = state.currentQuestions[state.questionIndex];
@@ -618,7 +966,7 @@ document.querySelectorAll('[data-item]').forEach(btn => {
         b.style.visibility = 'hidden';
       });
     }
-
+    
     if (type === 'skip') {
       state.items.skip--;
       state.answered = true;
@@ -626,23 +974,23 @@ document.querySelectorAll('[data-item]').forEach(btn => {
       disableChoices();
       checkOutcomeThenNext();
     }
-
+    
     updateItemUI();
   });
 });
 
-/* =========================================================
-   SOUND BUTTON
-========================================================= */
 el.playSoundBtn.addEventListener('click', () => {
   speak(el.questionHanzi.textContent);
 });
 
-/* =========================================================
-   INIT
+/* =========================================================ข
+   INITIALIZE
 ========================================================= */
+initParticles();
 updatePlayerHP();
+updateBossHP();
 updateItemUI();
+updateScoreUI();
 loadBoss(0);
 </script>
 
