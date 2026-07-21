@@ -63,6 +63,43 @@
   @keyframes popIn { 0%{ opacity:0; transform:translateY(6px) scale(.96); } 100%{ opacity:1; transform:translateY(0) scale(1); } }
   .pop-in { animation: popIn .25s ease; }
 
+  @keyframes heartbeatPulse { 0%,100%{ transform:scale(1); } 40%{ transform:scale(1.03); } 60%{ transform:scale(.97); } }
+  body.low-health {
+    background: linear-gradient(135deg, #120d24 0%, #2c1233 45%, #0f1424 100%);
+    color: #fdf2f8;
+    transition: background .35s ease;
+  }
+  body.low-health #game-container {
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 20px 45px rgba(0,0,0,.3);
+  }
+  body.low-health .speech-bubble,
+  body.low-health .bg-white\/70,
+  body.low-health .bg-white\/80 {
+    background-color: rgba(255,255,255,.92) !important;
+    color: #3A3355;
+  }
+  body.low-health .float-slow { animation: heartbeatPulse .55s ease-in-out infinite; }
+
+  .combo-popup {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translate(-50%, -30px) scale(.92);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+    transition: all .35s cubic-bezier(.22,1,.36,1);
+  }
+  .combo-popup.show {
+    opacity: 1;
+    transform: translate(-50%, -70px) scale(1);
+  }
+  .combo-popup .combo-card {
+    background: linear-gradient(135deg, #ff8dbb 0%, #ffd34d 100%);
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,.2);
+  }
+
   .icon-btn { transition: transform .12s ease; }
   .icon-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.05); }
   .icon-btn:active:not(:disabled) { transform: translateY(1px) scale(.97); }
@@ -93,16 +130,26 @@
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky via-mint to-bamboo">
 
-<div id="game-container" class="max-w-2xl mx-auto p-4 md:p-6">
+<div id="game-container" class="relative max-w-2xl mx-auto p-4 md:p-6">
+  <div id="combo-popup" class="combo-popup">
+    <div id="combo-popup-text" class="combo-card rounded-full px-5 py-3 shadow-2xl font-display text-lg md:text-2xl font-700"></div>
+  </div>
 
   <!-- Status row -->
-  <div class="flex justify-between items-center mb-3">
+  <div class="flex justify-between items-center mb-3 gap-2">
     <div class="bg-white/80 rounded-full px-4 py-1.5 shadow-card font-display text-ink text-sm">
       <i class="fa-solid fa-dragon text-pinkDeep mr-1"></i>
       Boss <span id="boss-progress">1</span>/5
     </div>
-    <div class="bg-amberDeep text-white rounded-full px-3 py-1.5 shadow-card font-display text-xs">
-      <i class="fa-solid fa-keyboard mr-1"></i>MEDIUM
+    <div class="flex items-center gap-2">
+      <div id="score-chip" class="bg-white/80 rounded-full px-3 py-1.5 shadow-card font-display text-ink text-xs md:text-sm">
+        <i class="fa-solid fa-star text-yellowDeep mr-1"></i>
+        Score <span id="score-value">0</span>
+        <span id="combo-badge" class="ml-2 rounded-full bg-pinkDeep text-white px-2 py-0.5">x1</span>
+      </div>
+      <div class="bg-amberDeep text-white rounded-full px-3 py-1.5 shadow-card font-display text-xs">
+        <i class="fa-solid fa-keyboard mr-1"></i>MEDIUM
+      </div>
     </div>
   </div>
 
@@ -292,6 +339,12 @@ let state = {
   answered: false,
   hintUsedThisQuestion: false,
   paused: false,
+  comboCount: 0,
+  score: 0,
+  scoreMultiplier: 1,
+  comboPopupTimer: null,
+  heartbeatInterval: null,
+  audioContext: null,
 };
 
 /* =========================================================
@@ -314,6 +367,10 @@ const el = {
   answerForm: document.getElementById('answer-form'),
   answerInput: document.getElementById('answer-input'),
   feedbackBox: document.getElementById('feedback-box'),
+  scoreValue: document.getElementById('score-value'),
+  comboBadge: document.getElementById('combo-badge'),
+  comboPopup: document.getElementById('combo-popup'),
+  comboPopupText: document.getElementById('combo-popup-text'),
   itemHealCount: document.getElementById('item-heal-count'),
   itemHintCount: document.getElementById('item-hint-count'),
   itemSkipCount: document.getElementById('item-skip-count'),
@@ -348,6 +405,7 @@ function updatePlayerHP() {
   const hp = Math.max(state.playerHP, 0);
   el.playerHpBar.style.width = hp + '%';
   el.playerHpText.textContent = `${hp}/100`;
+  updateVisualState();
 }
 
 function updateBossHP() {
@@ -364,6 +422,85 @@ function updateItemUI() {
     const type = btn.getAttribute('data-item');
     btn.disabled = state.items[type] <= 0 || state.answered;
   });
+}
+
+function getComboMultiplier() {
+  if (state.comboCount >= 5) return 3;
+  if (state.comboCount >= 3) return 2;
+  return 1;
+}
+
+function updateScoreUI() {
+  el.scoreValue.textContent = state.score;
+  const multiplier = getComboMultiplier();
+  el.comboBadge.textContent = `x${multiplier}`;
+  el.comboBadge.className = `ml-2 rounded-full px-2 py-0.5 text-white ${multiplier > 1 ? 'bg-amberDeep' : 'bg-pinkDeep'}`;
+}
+
+function showComboPopup(label, subLabel) {
+  el.comboPopupText.innerHTML = `<div>${label}</div><div class="text-sm md:text-base font-thai mt-1 opacity-90">${subLabel}</div>`;
+  el.comboPopup.classList.add('show');
+  clearTimeout(state.comboPopupTimer);
+  state.comboPopupTimer = setTimeout(() => {
+    el.comboPopup.classList.remove('show');
+  }, 900);
+}
+
+function resetCombo() {
+  state.comboCount = 0;
+  state.scoreMultiplier = 1;
+  updateScoreUI();
+}
+
+function ensureAudioContext() {
+  if (!window.AudioContext && !window.webkitAudioContext) return null;
+  if (!state.audioContext) {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    state.audioContext = new AudioCtx();
+  }
+  if (state.audioContext.state === 'suspended') {
+    state.audioContext.resume();
+  }
+  return state.audioContext;
+}
+
+function startHeartbeat() {
+  const ctx = ensureAudioContext();
+  if (!ctx || state.heartbeatInterval) return;
+
+  const playBeat = () => {
+    if (state.playerHP > 20) return;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(90, now + 0.14);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.06, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.18);
+  };
+
+  playBeat();
+  state.heartbeatInterval = setInterval(playBeat, 700);
+}
+
+function stopHeartbeat() {
+  clearInterval(state.heartbeatInterval);
+  state.heartbeatInterval = null;
+}
+
+function updateVisualState() {
+  const lowHP = state.playerHP <= 20;
+  document.body.classList.toggle('low-health', lowHP);
+  if (lowHP) {
+    startHeartbeat();
+  } else {
+    stopHeartbeat();
+  }
 }
 
 function shakeScreen() {
@@ -400,6 +537,7 @@ function loadBoss(index) {
 
   state.bossHP = 100;
   state.answered = false;
+  resetCombo();
 
   // Play through all 5 assigned questions for this boss, in order — no random sampling.
   state.currentQuestions = boss.questions;
@@ -474,6 +612,7 @@ function handleTimeout() {
   el.answerInput.disabled = true;
   el.answerInput.classList.add('ring-wrong');
   state.playerHP -= WRONG_DAMAGE;
+  resetCombo();
   updatePlayerHP();
   shakeScreen();
   showFeedback(false, q.meaning);
@@ -493,12 +632,20 @@ function submitAnswer(typed) {
   if (isCorrect) {
     el.answerInput.classList.add('ring-correct');
     state.bossHP -= DAMAGE_PER_HIT;
+    state.comboCount += 1;
+    state.scoreMultiplier = getComboMultiplier();
+    state.score += 100 * state.scoreMultiplier;
+    updateScoreUI();
+    if (state.comboCount === 3 || state.comboCount === 5) {
+      showComboPopup(`COMBO ${state.comboCount}`, `คะแนนคูณ x${state.scoreMultiplier}`);
+    }
     updateBossHP();
     hitBoss();
     showFeedback(true, q.meaning);
   } else {
     el.answerInput.classList.add('ring-wrong');
     state.playerHP -= WRONG_DAMAGE;
+    resetCombo();
     updatePlayerHP();
     shakeScreen();
     showFeedback(false, q.meaning);
@@ -529,6 +676,7 @@ function checkOutcomeThenNext() {
 }
 
 function bossDefeated() {
+  stopHeartbeat();
   Swal.fire({
     title: '⚔️ ปราบบอสสำเร็จ!',
     text: 'ไปลุยบอสตัวต่อไปกันเลย!',
@@ -548,6 +696,7 @@ function bossDefeated() {
 
 function gameOver() {
   clearInterval(state.timer);
+  stopHeartbeat();
   Swal.fire({
     title: '💔 พ่ายแพ้!',
     text: 'พลังชีวิตหมดแล้ว',
@@ -567,6 +716,7 @@ function gameOver() {
 }
 
 function victory() {
+  stopHeartbeat();
   Swal.fire({
     title: '🏆 ชนะครบ 5 บอส!',
     text: 'สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน (Medium Mode)',
@@ -669,6 +819,7 @@ el.playSoundBtn.addEventListener('click', () => {
 ========================================================= */
 updatePlayerHP();
 updateItemUI();
+updateScoreUI();
 loadBoss(0);
 </script>
 

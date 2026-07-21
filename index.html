@@ -2,413 +2,1158 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panda's Chinese Quest 🐼 | RPG Typing Quiz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Easy Mode | Panda's Chinese Quest</title>
 
-<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- FontAwesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- AOS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-
-<!-- Animate.css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script>
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          mint: '#B8F2D4',
-          mintDeep: '#6FE3A8',
-          sky: '#BEE7F5',
-          skyDeep: '#6FCBE8',
-          pink: '#FFD6E8',
-          pinkDeep: '#FF9FC3',
-          yellow: '#FFF3B0',
-          yellowDeep: '#FFD34D',
-          bamboo: '#E9F7D8',
-          ink: '#3A3355',
-          plum: '#5C4B8A',
+          mint: '#B8F2D4', mintDeep: '#6FE3A8',
+          sky: '#BEE7F5', skyDeep: '#6FCBE8',
+          pink: '#FFD6E8', pinkDeep: '#FF9FC3',
+          yellow: '#FFF3B0', yellowDeep: '#FFD34D',
+          bamboo: '#E9F7D8', ink: '#3A3355', plum: '#5C4B8A',
+          blood: '#FF4D6D', bloodDeep: '#E0184A', vein: '#3A1622',
         },
-        fontFamily: {
-          display: ['Fredoka', 'Mali', 'sans-serif'],
-          thai: ['Mali', 'sans-serif'],
-        },
-        borderRadius: {
-          '3xl': '1.75rem',
-          '4xl': '2.5rem',
-        },
-        boxShadow: {
-          soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
-          card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
-          btn: '0 6px 0 0 rgba(0,0,0,0.15)',
-        }
+        fontFamily: { display: ['Fredoka','Mali','sans-serif'], thai: ['Mali','sans-serif'], hanzi: ["'Noto Sans SC'",'sans-serif'] },
       }
     }
   }
 </script>
 
 <style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
   body {
-    font-family: 'Mali', sans-serif;
-    background-color: #FBFBF6;
-    color: #3A3355;
-    overflow-x: hidden;
+    font-family:'Mali',sans-serif;
+    color:#3A3355;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #201830;
   }
-  .font-display { font-family: 'Fredoka', 'Mali', sans-serif; }
+  .font-display { font-family:'Fredoka','Mali',sans-serif; }
+  .font-hanzi { font-family:"'Noto Sans SC'",sans-serif; }
+  button { font-family: inherit; }
+  button:focus-visible, a:focus-visible { outline: 3px solid #FFD34D; outline-offset: 2px; }
 
-  /* Floating title */
-  @keyframes floaty {
-    0%, 100% { transform: translateY(0px) rotate(-1deg); }
-    50% { transform: translateY(-16px) rotate(1deg); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
   }
-  .float-title { animation: floaty 4s ease-in-out infinite; }
 
-  @keyframes floaty-slow {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+  /* =========================================================
+     AMBIENT BACKGROUND (fills viewport behind the game frame)
+  ========================================================= */
+  .ambient-bg {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    background: radial-gradient(circle at 20% 15%, #2c2145 0%, #201830 55%, #170f24 100%);
   }
-  .float-slow { animation: floaty-slow 5s ease-in-out infinite; }
-
-  /* Cloud drift */
-  @keyframes drift {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(40px); }
+  .aurora-blob {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55;
+    animation: aurora-drift 18s ease-in-out infinite alternate;
   }
-  .drift { animation: drift 6s ease-in-out infinite alternate; }
-
-  /* Bamboo sway for decorative bits */
-  @keyframes sway {
-    0%, 100% { transform: rotate(-3deg); }
-    50% { transform: rotate(3deg); }
+  .blob1 { width: 46vh; height: 46vh; background: radial-gradient(circle, #6FE3A8, transparent 70%); top: -10%; left: -12%; animation-delay: 0s; }
+  .blob2 { width: 40vh; height: 40vh; background: radial-gradient(circle, #FF9FC3, transparent 70%); bottom: -14%; right: -10%; animation-delay: 3s; }
+  .blob3 { width: 34vh; height: 34vh; background: radial-gradient(circle, #6FCBE8, transparent 70%); top: 45%; left: 55%; animation-delay: 6s; }
+  @keyframes aurora-drift {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(4%, 6%) scale(1.15); }
   }
-  .sway { transform-origin: bottom center; animation: sway 3.5s ease-in-out infinite; }
+  .sparkle {
+    position: absolute; color: #FFF3B0; opacity: 0; pointer-events: none;
+    animation: sparkle-twinkle linear infinite;
+    text-shadow: 0 0 8px rgba(255,243,176,.9);
+  }
+  @keyframes sparkle-twinkle {
+    0%, 100% { opacity: 0; transform: scale(.4) rotate(0deg); }
+    50% { opacity: .9; transform: scale(1) rotate(90deg); }
+  }
+  .bamboo-drift {
+    position: absolute; color: rgba(184, 242, 212, .18); pointer-events: none;
+    animation: bamboo-fall linear infinite;
+  }
+  @keyframes bamboo-fall {
+    0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(110vh) translateX(20px) rotate(180deg); opacity: 0; }
+  }
 
-  /* Difficulty buttons */
-  .quest-btn {
+  /* =========================================================
+     GAME FRAME — everything fits inside, no page scroll
+  ========================================================= */
+  .app-frame {
     position: relative;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .quest-btn:active {
-    transform: translateY(6px);
-    box-shadow: 0 0px 0 0 rgba(0,0,0,0.15) !important;
-  }
-  .quest-btn:hover {
-    transform: translateY(-4px) scale(1.04);
-  }
-
-  /* HP bar decorative header rule */
-  .hp-rule {
-    height: 14px;
-    border-radius: 999px;
-    background: repeating-linear-gradient(90deg, #FF9FC3 0 18px, #FFD6E8 18px 36px);
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 3px 0 rgba(58,51,85,0.1);
-  }
-
-  .paper-scroll {
-    background: #FEFCF3;
+    z-index: 1;
+    width: 100%;
+    height: 100dvh;
+    max-width: 480px;
+    max-height: 900px;
+    margin: auto;
+    background: #FBFBF6;
     background-image:
-      radial-gradient(circle at 100% 0%, rgba(255,211,77,0.15), transparent 40%),
-      radial-gradient(circle at 0% 100%, rgba(111,203,232,0.15), transparent 40%);
-    border: 3px dashed #E4DABE;
+      radial-gradient(circle at 100% 0%, rgba(255,211,77,0.12), transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(111,203,232,0.12), transparent 40%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: border-color .3s;
+  }
+  @media (min-width: 640px) {
+    .app-frame {
+      height: min(94dvh, 900px);
+      border-radius: 2.75rem;
+      border: 12px solid #3A3355;
+      box-shadow: 0 35px 70px -15px rgba(0,0,0,.55), 0 0 0 3px rgba(255,255,255,.06) inset;
+    }
+    .app-frame::before {
+      content: '';
+      position: absolute;
+      top: 10px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 6px; border-radius: 999px;
+      background: rgba(0,0,0,.25);
+      z-index: 30;
+    }
+  }
+  .app-frame.shake-once { animation: frame-shake .5s ease; }
+  @keyframes frame-shake {
+    0%,100% { transform: translateX(0); }
+    15% { transform: translateX(-10px) rotate(-1deg); }
+    30% { transform: translateX(9px) rotate(1deg); }
+    45% { transform: translateX(-7px); }
+    60% { transform: translateX(6px); }
+    75% { transform: translateX(-3px); }
   }
 
-  ::selection { background: #FFD34D; color: #3A3355; }
-
-  .step-number {
-    font-family: 'Fredoka', sans-serif;
-    -webkit-text-stroke: 2px #3A3355;
-    paint-order: stroke fill;
+  .danger-vignette {
+    position: absolute; inset: 0; z-index: 25; pointer-events: none;
+    box-shadow: inset 0 0 0 0 rgba(224,24,74,0);
+    transition: box-shadow .4s ease;
+  }
+  .danger-vignette.active {
+    animation: danger-pulse 1.1s ease-in-out infinite;
+  }
+  @keyframes danger-pulse {
+    0%, 100% { box-shadow: inset 0 0 40px 6px rgba(224,24,74,.15); }
+    50% { box-shadow: inset 0 0 70px 14px rgba(224,24,74,.4); }
   }
 
-  .scroll-cloud path { fill: white; }
-
-  /* subtle bounce loop for CTA hint */
-  @keyframes bounce-hint {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
+  /* =========================================================
+     TOP BAR
+  ========================================================= */
+  .topbar { flex: 0 0 auto; padding: clamp(.4rem,1.8dvh,.75rem) clamp(.6rem,3vw,1rem) 0; }
+  .status-chip {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 2px solid rgba(58,51,85,.08) !important;
+    box-shadow: 0 4px 12px rgba(58, 51, 85, 0.1);
   }
-  .bounce-hint { animation: bounce-hint 1.6s ease-in-out infinite; }
+
+  /* =========================================================
+     BOSS ZONE
+  ========================================================= */
+  .boss-zone { flex: 0 0 auto; padding: clamp(.2rem,1dvh,.5rem) clamp(.6rem,3vw,1rem) 0; text-align: center; }
+  #boss-image { animation: floaty 3.5s ease-in-out infinite; }
+  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6%);} }
+
+  /* =========================================================
+     VESSEL (blood-vessel HP bar) — shared player/boss styling
+  ========================================================= */
+  .vessel-row { display: flex; align-items: center; gap: .5rem; }
+  .vessel-heart {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.25));
+    animation: heartbeat 1s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.18); }
+    35% { transform: scale(.94); }
+    50% { transform: scale(1.1); }
+  }
+  .vessel {
+    position: relative;
+    flex: 1 1 auto;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--vessel-wall, #3A1622);
+    border: 3px solid rgba(0,0,0,.35);
+    box-shadow: inset 0 3px 8px rgba(0,0,0,.5), inset 0 -2px 4px rgba(255,255,255,.05);
+  }
+  .vessel-fill {
+    position: relative;
+    height: 100%;
+    background: linear-gradient(90deg, var(--fluid-a,#FF4D6D) 0%, var(--fluid-b,#E0184A) 45%, var(--fluid-a,#FF4D6D) 90%);
+    background-size: 220% 100%;
+    animation: fluid-flow 2.4s linear infinite;
+    transition: width .45s cubic-bezier(.25,.46,.45,.94);
+  }
+  @keyframes fluid-flow { 0% { background-position: 0% 0; } 100% { background-position: -220% 0; } }
+  .vessel-fill::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,0) 45%);
+  }
+  .vessel-bubbles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .vessel-bubble {
+    position: absolute; bottom: -6px; border-radius: 50%;
+    background: rgba(255,255,255,.55);
+    animation: bubble-rise linear forwards;
+  }
+  @keyframes bubble-rise {
+    0% { transform: translateY(0) scale(1); opacity: .8; }
+    100% { transform: translateY(-140%) scale(.4); opacity: 0; }
+  }
+  .vessel-text {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif; font-weight: 700; color: #fff;
+    text-shadow: 1px 1.5px 3px rgba(0,0,0,.5); z-index: 5;
+  }
+  .vessel-wrap.damaged .vessel { animation: vessel-hit-flash .4s ease; }
+  @keyframes vessel-hit-flash {
+    0%, 100% { filter: brightness(1); }
+    30% { filter: brightness(1.9) saturate(1.6); }
+  }
+  .vessel-wrap.healed .vessel { animation: vessel-heal-flash .5s ease; }
+  @keyframes vessel-heal-flash {
+    0%, 100% { filter: brightness(1) hue-rotate(0deg); }
+    40% { filter: brightness(1.6) saturate(1.3); }
+  }
+  .vessel-wrap.low-hp .vessel-fill { --fluid-a: #B3123A; --fluid-b: #6E0A24; animation-duration: .9s; }
+
+  /* =========================================================
+     DAMAGE / HEAL NUMBERS
+  ========================================================= */
+  .float-number {
+    position: absolute; z-index: 40; font-family: 'Fredoka', sans-serif; font-weight: 700;
+    pointer-events: none; animation: float-up 1.1s ease-out forwards;
+    text-shadow: 0 2px 4px rgba(0,0,0,.35);
+  }
+  @keyframes float-up {
+    0% { transform: translate(-50%, 0) scale(.7); opacity: 0; }
+    15% { transform: translate(-50%, -6px) scale(1.15); opacity: 1; }
+    100% { transform: translate(-50%, -46px) scale(1); opacity: 0; }
+  }
+
+  /* =========================================================
+     COMBO POPUP + BURST PARTICLES
+  ========================================================= */
+  .combo-popup { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); z-index: 45; pointer-events: none; }
+  .combo-card {
+    background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%);
+    color: white; box-shadow: 0 8px 20px rgba(255, 159, 195, 0.6);
+    font-weight: 700; letter-spacing: 1px; white-space: nowrap;
+  }
+  @keyframes combo-pop {
+    0% { transform: scale(.2) translateY(15px); opacity: 0; }
+    55% { transform: scale(1.15); }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  @keyframes combo-float-up { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-40px); } }
+  .combo-card.show { animation: combo-pop .35s cubic-bezier(.34,1.56,.64,1) forwards; }
+  .combo-card.float-away { animation: combo-float-up .7s ease-out forwards; }
+
+  .burst-particle {
+    position: absolute; left: 50%; top: 50%; pointer-events: none; z-index: 44;
+    animation: burst-fly .8s ease-out forwards;
+  }
+  @keyframes burst-fly {
+    0% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(.3) rotate(var(--rot)); opacity: 0; }
+  }
+
+  /* =========================================================
+     QUESTION ZONE
+  ========================================================= */
+  .question-zone { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; padding: clamp(.2rem,1dvh,.5rem) clamp(.6rem,3vw,1rem); }
+  .speech-bubble {
+    position: relative;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FFFE 100%);
+    border: 3px solid rgba(111, 227, 168, 0.3);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex: 0 1 auto; min-height: 0;
+  }
+  .speech-bubble::before {
+    content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 16px solid #FFFFFF;
+    filter: drop-shadow(0 -2px 2px rgba(58, 51, 85, 0.1));
+  }
+  #question-image { width: clamp(3.2rem, 9dvh, 6rem); height: clamp(3.2rem, 9dvh, 6rem); object-fit: contain; border-radius: .6rem; }
+  #question-hanzi { font-size: clamp(1.9rem, 6.5dvh, 3.4rem); line-height: 1.05; }
+  #question-pinyin { font-size: clamp(.9rem, 2.6dvh, 1.15rem); }
+  .icon-btn {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8F8F8 100%) !important;
+    border: 2px solid rgba(58, 51, 85, 0.1) !important;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .icon-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.06); box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15); }
+  .icon-btn:active:not(:disabled) { transform: translateY(1px) scale(.97); }
+  .icon-btn:disabled { opacity:.35; cursor:not-allowed; transform:none !important; }
+  .icon-btn.speaking { animation: sound-pulse .5s ease; }
+  @keyframes sound-pulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(255,159,195,.6);} 50%{ box-shadow: 0 0 0 10px rgba(255,159,195,0);} }
+
+  #timer-bar { transition: width .1s linear, background-color .3s; background: linear-gradient(90deg, #FFD34D, #FFC94D); box-shadow: 0 0 8px rgba(255, 211, 77, 0.4); }
+
+  /* =========================================================
+     CHOICES
+  ========================================================= */
+  .choices-zone { flex: 0 0 auto; padding: 0 clamp(.6rem,3vw,1rem); }
+  .choice-btn {
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border: 3px solid rgba(58, 51, 85, 0.15);
+    font-size: clamp(.8rem, 2.1dvh, 1rem);
+  }
+  .choice-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 18px rgba(58, 51, 85, 0.15); filter: brightness(1.05); }
+  .choice-btn:active:not(:disabled) { transform: translateY(2px); }
+  .choice-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .choice-correct { background: linear-gradient(135deg, #6FE3A8 0%, #4FD89A 100%) !important; color: white !important; border-color: transparent !important; box-shadow: 0 6px 20px rgba(111, 227, 168, 0.5) !important; animation: choice-correct-pop .35s ease; }
+  .choice-wrong { background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%) !important; color: white !important; border-color: transparent !important; box-shadow: 0 6px 20px rgba(255, 159, 195, 0.5) !important; animation: choice-wrong-shake .35s ease; }
+  @keyframes choice-correct-pop { 0%{transform:scale(1);} 40%{transform:scale(1.06);} 100%{transform:scale(1);} }
+  @keyframes choice-wrong-shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+
+  /* =========================================================
+     PLAYER ZONE
+  ========================================================= */
+  .player-zone { flex: 0 0 auto; padding: clamp(.3rem,1.2dvh,.6rem) clamp(.6rem,3vw,1rem) clamp(.5rem,2dvh,1rem); }
+  .card-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 248, 248, 0.75) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 24px rgba(58, 51, 85, 0.08);
+  }
+
+  /* =========================================================
+     OVERLAY (pause / boss-clear / defeat / victory)
+  ========================================================= */
+  .overlay {
+    position: absolute; inset: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
+    padding: clamp(1rem,4vw,2rem);
+  }
+  .overlay.show { opacity: 1; pointer-events: auto; }
+  .overlay-backdrop { position: absolute; inset: 0; background: rgba(20, 10, 25, .6); backdrop-filter: blur(3px); }
+  .overlay-card {
+    position: relative; z-index: 2; width: 100%; max-width: 340px;
+    background: #FEFCF3; border-radius: 1.75rem; padding: clamp(1.2rem,4dvh,2rem) clamp(1.2rem,5vw,1.75rem);
+    text-align: center; transform: scale(.5) translateY(30px); opacity: 0;
+    box-shadow: 0 25px 50px rgba(0,0,0,.4);
+    border: 4px solid var(--overlay-accent, #6FE3A8);
+  }
+  .overlay.show .overlay-card { animation: overlay-in .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+  @keyframes overlay-in { to { transform: scale(1) translateY(0); opacity: 1; } }
+  .overlay-icon { font-size: clamp(2.2rem, 8dvh, 3.5rem); margin-bottom: .25rem; }
+  .overlay-title { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(1.2rem, 4dvh, 1.6rem); color: #3A3355; }
+  .overlay-message { font-family: 'Mali', sans-serif; color: #5C4B8A; margin-top: .35rem; font-size: clamp(.85rem, 2.4dvh, 1rem); }
+  .overlay-stats { margin-top: .85rem; background: rgba(111,227,168,.15); border-radius: 1rem; padding: .6rem .9rem; font-size: clamp(.8rem, 2.2dvh, .95rem); }
+  .overlay-buttons { margin-top: 1.1rem; display: flex; flex-direction: column; gap: .6rem; }
+  .overlay-btn {
+    font-family: 'Fredoka', sans-serif; font-weight: 600; padding: .7rem 1rem; border-radius: 999px; color: #fff;
+    transition: transform .12s ease;
+  }
+  .overlay-btn:active { transform: translateY(2px); }
+  .overlay-btn.primary { background: var(--overlay-accent, #6FE3A8); box-shadow: 0 6px 0 rgba(0,0,0,.15); }
+  .overlay-btn.secondary { background: #6FCBE8; box-shadow: 0 6px 0 rgba(0,0,0,.15); }
+
+  .confetti-piece {
+    position: absolute; top: -10%; z-index: 3; pointer-events: none;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(120dvh) rotate(540deg); opacity: .2; }
+  }
 </style>
 </head>
-<body class="antialiased">
+<body>
 
-<!-- =========================================
-     HERO SECTION
-========================================= -->
-<header class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-sky via-mint to-bamboo pb-16 pt-10 px-4">
+<div class="ambient-bg" aria-hidden="true">
+  <div class="aurora-blob blob1"></div>
+  <div class="aurora-blob blob2"></div>
+  <div class="aurora-blob blob3"></div>
+</div>
 
-  <!-- decorative clouds -->
-  <div class="absolute top-10 left-6 w-24 md:w-36 opacity-90 drift">
-    <svg viewBox="0 0 100 60" class="scroll-cloud"><path d="M20 45 Q5 45 5 32 Q5 20 18 20 Q20 8 35 8 Q50 8 53 20 Q68 18 70 32 Q72 45 58 45 Z"/></svg>
-  </div>
-  <div class="absolute top-24 right-8 w-20 md:w-32 opacity-80 drift" style="animation-delay:1s;">
-    <svg viewBox="0 0 100 60" class="scroll-cloud"><path d="M20 45 Q5 45 5 32 Q5 20 18 20 Q20 8 35 8 Q50 8 53 20 Q68 18 70 32 Q72 45 58 45 Z"/></svg>
-  </div>
+<div id="app-frame" class="app-frame">
 
-  <!-- bamboo decorations -->
-  <div class="absolute bottom-0 left-2 md:left-10 w-16 md:w-24 sway opacity-80">
-    <i class="fa-solid fa-leaf text-mintDeep text-6xl md:text-8xl"></i>
-  </div>
-  <div class="absolute bottom-0 right-2 md:right-10 w-16 md:w-24 sway opacity-80" style="animation-delay:1.5s;">
-    <i class="fa-solid fa-leaf text-mintDeep text-6xl md:text-8xl scale-x-[-1] inline-block"></i>
-  </div>
+  <div id="danger-vignette" class="danger-vignette"></div>
+  <div id="stars-container" aria-hidden="true" style="position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none;"></div>
 
-  <div class="relative z-10 flex flex-col items-center text-center max-w-4xl">
-
-    <!-- Panda mascot -->
-    <div class="text-7xl md:text-8xl mb-4 float-slow">🐼</div>
-
-    <p class="font-thai text-plum bg-white/70 px-5 py-1.5 rounded-full text-sm md:text-base font-medium mb-4 shadow-sm">
-      เกมทายศัพท์จีน สไตล์ RPG ✨
-    </p>
-
-    <h1 class="float-title font-display font-700 text-5xl sm:text-6xl md:text-7xl leading-tight text-ink drop-shadow-[0_6px_0_rgba(255,255,255,0.8)]">
-      Panda's <span class="text-pinkDeep">Chinese</span> Quest
-    </h1>
-
-    <p class="font-thai text-lg md:text-xl text-plum mt-5 max-w-xl">
-      พิมพ์คำศัพท์ให้ถูก ปราบมอนสเตอร์ให้ราบ 🗡️ พร้อมเลเวลอัพภาษาจีนไปกับคุณแพนด้า!
-    </p>
-
-    <!-- 3 Difficulty Buttons -->
-    <div class="flex flex-col sm:flex-row gap-5 mt-10 w-full sm:w-auto justify-center">
-      <button data-level="ง่าย (Easy)"
-        class="quest-btn font-display font-600 text-xl md:text-2xl text-white bg-mintDeep hover:bg-emerald-400 px-8 md:px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower">
-        <i class="fa-solid fa-seedling mr-2"></i>Easy <span class="font-thai text-base md:text-lg">(ง่าย)</span>
-      </button>
-
-      <button data-level="ปานกลาง (Medium)"
-        class="quest-btn font-display font-600 text-xl md:text-2xl text-white bg-yellowDeep hover:bg-amber-400 px-8 md:px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay:.2s;">
-        <i class="fa-solid fa-dragon mr-2"></i>Medium <span class="font-thai text-base md:text-lg">(ปานกลาง)</span>
-      </button>
-
-      <button data-level="ยาก (Hard)"
-        class="quest-btn font-display font-600 text-xl md:text-2xl text-white bg-pinkDeep hover:bg-rose-500 px-8 md:px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay:.4s;">
-        <i class="fa-solid fa-fire mr-2"></i>Hard <span class="font-thai text-base md:text-lg">(ยาก)</span>
+  <!-- TOP BAR -->
+  <div class="topbar relative z-10 flex justify-between items-center gap-2">
+    <div class="status-chip rounded-full px-3 py-1.5 font-display text-ink text-xs sm:text-sm font-600 flex items-center">
+      <i class="fa-solid fa-dragon text-pinkDeep mr-1.5"></i>
+      Boss <span id="boss-progress">1</span>/<span id="boss-total">10</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <div id="score-chip" class="status-chip rounded-full px-3 py-1.5 font-display text-ink text-xs sm:text-sm font-600 flex items-center">
+        <i class="fa-solid fa-star text-yellowDeep mr-1"></i>
+        <span id="score-value">0</span>
+        <span id="combo-badge" class="ml-2 inline-block rounded-full bg-gradient-to-r from-skyDeep to-sky text-white px-2 py-0.5 text-[10px] sm:text-xs font-700">x1</span>
+      </div>
+      <button id="stop-btn" aria-label="หยุดชั่วคราว" class="icon-btn w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-plum">
+        <i class="fa-solid fa-pause text-sm"></i>
       </button>
     </div>
-
-    <div class="mt-10 text-plum/70 bounce-hint">
-      <i class="fa-solid fa-chevron-down text-2xl"></i>
-      <p class="font-thai text-sm mt-1">เลื่อนลงเพื่อดูวิธีเล่น</p>
-    </div>
   </div>
-</header>
 
-<!-- =========================================
-     ABOUT & GAME DESCRIPTION
-========================================= -->
-<section class="py-20 px-4 bg-white">
-  <div class="max-w-4xl mx-auto" data-aos="fade-up">
-    <div class="bg-pink/40 rounded-4xl p-8 md:p-12 shadow-card border-4 border-white relative">
+  <!-- BOSS ZONE -->
+  <div class="boss-zone relative z-10">
+    <h2 id="boss-name" class="font-display font-700 text-ink drop-shadow-sm" style="font-size: clamp(1rem, 3.2dvh, 1.5rem);">จอมเวลา ปีศาจนาฬิกา</h2>
 
-      <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-pinkDeep text-white font-display font-600 px-6 py-2 rounded-full shadow-btn text-sm md:text-base whitespace-nowrap">
-        <i class="fa-solid fa-scroll mr-1"></i> เนื้อเรื่องเกม
-      </div>
-
-      <h2 class="font-display font-700 text-3xl md:text-4xl text-center text-ink mt-6 mb-6">
-        ผจญภัยไปกับคุณแพนด้า!
-      </h2>
-
-      <div class="hp-rule w-40 mx-auto mb-8"></div>
-
-      <p class="font-thai text-lg md:text-xl text-plum text-center leading-relaxed max-w-2xl mx-auto">
-        Panda's Chinese Quest คือเกมพิมพ์ศัพท์แนว RPG ที่จะพาคุณไปปราบ
-        <span class="font-semibold text-pinkDeep">มอนสเตอร์ทั้งหมด 10 ตัว</span>
-        ด้วยพลังคำศัพท์ภาษาจีน! ทุกครั้งที่ตอบถูก คุณจะโจมตีมอนสเตอร์ได้เต็มแรง
-        แต่ถ้าตอบผิด... <span class="font-semibold text-pinkDeep">เลือด (HP) ของคุณจะลดลง!</span>
-        ฝึกฝนศัพท์ให้แม่น แล้วมาดูกันว่าใครจะรอดถึงบอสตัวสุดท้าย 🐉
-      </p>
-
-      <div class="flex flex-wrap justify-center gap-4 mt-10">
-        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="100">
-          <i class="fa-solid fa-heart text-pinkDeep text-xl"></i>
-          <span class="font-thai text-plum">ระบบ HP สุดตื่นเต้น</span>
+    <div id="boss-vessel-wrap" class="vessel-wrap mt-1.5">
+      <div class="vessel-row">
+        <div class="vessel-heart" style="width: clamp(1.4rem,3.6dvh,2rem); height: clamp(1.4rem,3.6dvh,2rem); color:#5C4B8A;">
+          <i class="fa-solid fa-dragon" style="font-size: clamp(1rem,2.8dvh,1.4rem);"></i>
         </div>
-        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="200">
-          <i class="fa-solid fa-dragon text-yellowDeep text-xl"></i>
-          <span class="font-thai text-plum">บอส 10 ด่าน</span>
-        </div>
-        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="300">
-          <i class="fa-solid fa-keyboard text-skyDeep text-xl"></i>
-          <span class="font-thai text-plum">ฝึกพิมพ์พินอิน/จีน</span>
+        <div class="vessel" id="boss-vessel" style="height: clamp(1.3rem,3.4dvh,1.9rem); --vessel-wall:#2A1236; --fluid-a:#C86BF2; --fluid-b:#8B2FC9;">
+          <div id="boss-hp-bar" class="vessel-fill" style="width:100%">
+            <div class="vessel-bubbles" id="boss-bubbles"></div>
+          </div>
+          <div class="vessel-text"><span id="boss-hp-text" style="font-size: clamp(.65rem,1.9dvh,.9rem);">100/100</span></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- =========================================
-     HOW TO PLAY
-========================================= -->
-<section class="py-20 px-4 bg-gradient-to-b from-bamboo to-white">
-  <div class="max-w-5xl mx-auto text-center mb-14" data-aos="fade-up">
-    <h2 class="font-display font-700 text-3xl md:text-4xl text-ink">วิธีเล่นเกม</h2>
-    <p class="font-thai text-plum mt-2">แค่ 3 ขั้นตอนง่าย ๆ ก็ออกไปผจญภัยได้เลย!</p>
-  </div>
-
-  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-
-    <!-- Step 1 -->
-    <div class="bg-white rounded-3xl p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="0">
-      <div class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-mintDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn">1</div>
-      <div class="text-5xl mt-6 mb-4 text-mintDeep">
-        <i class="fa-solid fa-book-open"></i>
-      </div>
-      <h3 class="font-display font-600 text-xl text-ink mb-2">ฟังและอ่าน</h3>
-      <p class="font-thai text-plum">ฟังเสียงและอ่านคำศัพท์จีนที่ปรากฏบนหน้าจอ</p>
-    </div>
-
-    <!-- Step 2 -->
-    <div class="bg-white rounded-3xl p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="150">
-      <div class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-yellowDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn">2</div>
-      <div class="text-5xl mt-6 mb-4 text-yellowDeep">
-        <i class="fa-solid fa-keyboard"></i>
-      </div>
-      <h3 class="font-display font-600 text-xl text-ink mb-2">พิมพ์พินอินหรือตัวอักษร</h3>
-      <p class="font-thai text-plum">พิมพ์คำตอบเป็นพินอินหรือตัวอักษรจีนให้ถูกต้อง</p>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="bg-white rounded-3xl p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="300">
-      <div class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-pinkDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn">3</div>
-      <div class="text-5xl mt-6 mb-4 text-pinkDeep">
-        <i class="fa-solid fa-explosion"></i>
-      </div>
-      <h3 class="font-display font-600 text-xl text-ink mb-2">โจมตีมอนสเตอร์!</h3>
-      <p class="font-thai text-plum">ตอบถูก = โจมตีเต็มแรง! ตอบผิด = เสีย HP ระวังด้วยนะ!</p>
+    <div class="flex justify-center mt-1">
+      <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss"
+        style="width: clamp(3.6rem, 13dvh, 7rem); height: clamp(3.6rem, 13dvh, 7rem);"
+        class="object-contain drop-shadow-2xl">
     </div>
   </div>
-</section>
 
-<!-- =========================================
-     KEYBOARD INSTALLATION GUIDE
-========================================= -->
-<section class="py-20 px-4 bg-sky/30">
-  <div class="max-w-5xl mx-auto text-center mb-14" data-aos="fade-up">
-    <h2 class="font-display font-700 text-3xl md:text-4xl text-ink">
-      <i class="fa-solid fa-language text-skyDeep"></i> เตรียมคีย์บอร์ดภาษาจีน
-    </h2>
-    <p class="font-thai text-plum mt-2">ก่อนออกไปผจญภัย อย่าลืมติดตั้งคีย์บอร์ดพินอินกันก่อนนะ!</p>
+  <!-- COMBO POPUP -->
+  <div id="combo-popup" class="combo-popup">
+    <div id="combo-popup-text" class="combo-card rounded-full px-5 py-3 hidden" style="font-size: clamp(.9rem,2.6dvh,1.3rem);"></div>
   </div>
 
-  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+  <!-- QUESTION ZONE -->
+  <div class="question-zone relative z-10">
+    <div class="speech-bubble rounded-3xl w-full" style="padding: clamp(.6rem,2dvh,1.25rem);">
+      <img id="question-image" src="https://placehold.co/200x200/png?text=Birthday" alt="question hint" class="mb-2 shadow-sm">
+      <p id="question-hanzi" class="font-hanzi text-ink font-700">生日</p>
+      <p id="question-pinyin" class="font-thai text-plum font-500 mb-2">shēngrì</p>
 
-    <!-- Computer -->
-    <div class="paper-scroll rounded-3xl p-8 shadow-card" data-aos="fade-right">
-      <div class="flex items-center gap-3 mb-5">
-        <div class="w-14 h-14 rounded-2xl bg-skyDeep text-white flex items-center justify-center text-2xl shadow-btn">
-          <i class="fa-solid fa-computer"></i>
+      <button id="play-sound-btn" aria-label="ฟังเสียง"
+        class="icon-btn rounded-full text-pinkDeep shadow-btn flex items-center justify-center transition-all"
+        style="width: clamp(2.6rem,7dvh,3.5rem); height: clamp(2.6rem,7dvh,3.5rem);">
+        <i class="fa-solid fa-volume-high" style="font-size: clamp(1.1rem,3dvh,1.5rem);"></i>
+      </button>
+    </div>
+
+    <div class="w-full h-2.5 sm:h-3 bg-white/50 rounded-full overflow-hidden mt-2" style="border: 2px solid rgba(255, 211, 77, 0.25);">
+      <div id="timer-bar" class="h-full" style="width:100%"></div>
+    </div>
+  </div>
+
+  <!-- CHOICES -->
+  <div class="choices-zone relative z-10">
+    <div id="choices-grid" class="grid grid-cols-2 gap-2 sm:gap-3"></div>
+  </div>
+
+  <!-- PLAYER ZONE -->
+  <div class="player-zone relative z-10">
+    <div class="card-glass rounded-3xl" style="padding: clamp(.5rem,1.8dvh,.9rem) clamp(.7rem,3vw,1.1rem);">
+
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1" alt="player avatar"
+            style="width: clamp(1.8rem,4.6dvh,2.6rem); height: clamp(1.8rem,4.6dvh,2.6rem);"
+            class="rounded-full bg-yellow border-2 border-ink/20 object-cover">
+          <span class="font-display font-600 text-ink" style="font-size: clamp(.75rem,2.1dvh,.95rem);">ผู้เล่น</span>
         </div>
-        <h3 class="font-display font-600 text-2xl text-ink">คอมพิวเตอร์ (PC/Mac)</h3>
-      </div>
-      <ol class="font-thai text-plum space-y-3 list-decimal list-inside text-left">
-        <li>เปิด <span class="font-semibold">Settings</span> (การตั้งค่า) ของเครื่อง</li>
-        <li>ไปที่หมวด <span class="font-semibold">Language & Region</span> หรือ <span class="font-semibold">Keyboard</span></li>
-        <li>เลือก <span class="font-semibold">Add Input Method / Keyboard</span></li>
-        <li>ค้นหาและเพิ่ม <span class="font-semibold text-skyDeep">Chinese (Simplified) - Pinyin</span></li>
-        <li>สลับคีย์บอร์ดด้วย <span class="font-semibold">Win + Space</span> (Windows) หรือ <span class="font-semibold">Ctrl + Space</span> (Mac)</li>
-      </ol>
-    </div>
-
-    <!-- Mobile -->
-    <div class="paper-scroll rounded-3xl p-8 shadow-card" data-aos="fade-left">
-      <div class="flex items-center gap-3 mb-5">
-        <div class="w-14 h-14 rounded-2xl bg-pinkDeep text-white flex items-center justify-center text-2xl shadow-btn">
-          <i class="fa-solid fa-mobile-screen-button"></i>
+        <div class="flex gap-1.5 sm:gap-2">
+          <div class="relative">
+            <button data-item="heal" aria-label="ฮีล" class="icon-btn rounded-full flex items-center justify-center" style="width: clamp(2.1rem,5.6dvh,2.7rem); height: clamp(2.1rem,5.6dvh,2.7rem);">
+              <i class="fa-solid fa-flask text-mintDeep" style="font-size: clamp(.95rem,2.6dvh,1.3rem);"></i>
+            </button>
+            <span id="item-heal-count" class="absolute -top-1.5 -right-1.5 font-display text-[9px] sm:text-[10px] bg-gradient-to-r from-mintDeep to-mint text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-700 shadow">1</span>
+          </div>
+          <div class="relative">
+            <button data-item="fifty" aria-label="50/50" class="icon-btn rounded-full flex items-center justify-center" style="width: clamp(2.1rem,5.6dvh,2.7rem); height: clamp(2.1rem,5.6dvh,2.7rem);">
+              <i class="fa-solid fa-code-branch text-skyDeep" style="font-size: clamp(.95rem,2.6dvh,1.3rem);"></i>
+            </button>
+            <span id="item-fifty-count" class="absolute -top-1.5 -right-1.5 font-display text-[9px] sm:text-[10px] bg-gradient-to-r from-skyDeep to-sky text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-700 shadow">1</span>
+          </div>
+          <div class="relative">
+            <button data-item="skip" aria-label="ข้าม" class="icon-btn rounded-full flex items-center justify-center" style="width: clamp(2.1rem,5.6dvh,2.7rem); height: clamp(2.1rem,5.6dvh,2.7rem);">
+              <i class="fa-solid fa-forward text-yellowDeep" style="font-size: clamp(.95rem,2.6dvh,1.3rem);"></i>
+            </button>
+            <span id="item-skip-count" class="absolute -top-1.5 -right-1.5 font-display text-[9px] sm:text-[10px] bg-gradient-to-r from-yellowDeep to-yellow text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-700 shadow">1</span>
+          </div>
         </div>
-        <h3 class="font-display font-600 text-2xl text-ink">มือถือ (iOS/Android)</h3>
       </div>
-      <ol class="font-thai text-plum space-y-3 list-decimal list-inside text-left">
-        <li>เปิด <span class="font-semibold">Settings</span> (การตั้งค่า) บนมือถือ</li>
-        <li>ไปที่ <span class="font-semibold">General → Keyboard</span> (iOS) หรือ <span class="font-semibold">System → Languages & Input</span> (Android)</li>
-        <li>เลือก <span class="font-semibold">Add New Keyboard</span></li>
-        <li>ค้นหาและเพิ่ม <span class="font-semibold text-pinkDeep">Chinese - Pinyin</span></li>
-        <li>กดปุ่ม 🌐 บนคีย์บอร์ดเพื่อสลับไปใช้พินอินตอนเล่นเกม</li>
-      </ol>
+
+      <div id="player-vessel-wrap" class="vessel-wrap">
+        <div class="vessel-row">
+          <div class="vessel-heart" style="width: clamp(1.4rem,3.6dvh,2rem); height: clamp(1.4rem,3.6dvh,2rem); color:#FF4D6D;">
+            <i class="fa-solid fa-heart" style="font-size: clamp(1rem,2.8dvh,1.4rem);"></i>
+          </div>
+          <div class="vessel" id="player-vessel" style="height: clamp(1.5rem,3.8dvh,2.1rem);">
+            <div id="player-hp-bar" class="vessel-fill" style="width:100%">
+              <div class="vessel-bubbles" id="player-bubbles"></div>
+            </div>
+            <div class="vessel-text"><span id="player-hp-text" style="font-size: clamp(.7rem,2dvh,.95rem);">100/100</span></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</section>
 
-<!-- =========================================
-     FINAL CTA
-========================================= -->
-<section class="py-24 px-4 bg-gradient-to-b from-white to-mint text-center">
-  <div class="max-w-2xl mx-auto" data-aos="zoom-in">
-    <div class="text-6xl mb-4 float-slow">⚔️🐼</div>
-    <h2 class="font-display font-700 text-3xl md:text-4xl text-ink mb-4">พร้อมออกผจญภัยหรือยัง?</h2>
-    <p class="font-thai text-plum mb-8">เลือกระดับความยากด้านบน แล้วเริ่มพิชิตศัพท์จีนไปด้วยกัน!</p>
-    <a href="#top" onclick="document.querySelector('header').scrollIntoView({behavior:'smooth'}); return false;"
-      class="quest-btn inline-block font-display font-600 text-xl text-white bg-plum hover:bg-ink px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower">
-      <i class="fa-solid fa-arrow-up mr-2"></i>กลับไปเลือกด่าน
-    </a>
-  </div>
-</section>
-
-<footer class="bg-ink text-white/80 text-center py-6 font-thai text-sm">
-  <p>Made with 🐼🎋 for Chinese vocabulary adventurers · Panda's Chinese Quest</p>
-</footer>
-
-<!-- AOS JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+</div><!-- /app-frame -->
 
 <script>
-  AOS.init({
-    duration: 700,
-    once: true,
-    easing: 'ease-out-cubic',
+/* =========================================================
+   BOSS & QUESTION DATA
+========================================================= */
+const bossData = [
+  {
+    id: 1,
+    name: 'จอมเวลา ปีศาจนาฬิกา',
+    hp: 100,
+    color: '#FF9FC3',
+    questions: [
+      { hanzi: '十点十五分', pinyin: 'shí diǎn shíwǔ fēn', meaning: '10:15 น.' },
+      { hanzi: '早上', pinyin: 'zǎoshang', meaning: 'เช้า' },
+      { hanzi: '下午', pinyin: 'xiàwǔ', meaning: 'บ่าย' },
+      { hanzi: '晚上', pinyin: 'wǎnshang', meaning: 'เย็น' },
+      { hanzi: '现在几点', pinyin: 'xiànzài jǐ diǎn', meaning: 'ตอนนี้กี่โมง' },
+    ]
+  },
+  // ... เพิ่มบอสอื่นตามต้องการ
+];
+
+// Extra generic distractors so multiple-choice options never look like placeholders,
+// even if a boss has very few unique meanings.
+const FALLBACK_DISTRACTORS = ['เที่ยงคืน', 'พรุ่งนี้', 'เมื่อวาน', 'สัปดาห์หน้า', 'ปีที่แล้ว', 'ตอนเช้าตรู่'];
+
+const TOTAL_BOSSES = bossData.length;
+const WRONG_DAMAGE = 20;
+const HEAL_AMOUNT = 30;
+
+let state = {
+  bossIndex: 0,
+  questionIndex: 0,
+  bossHP: 100,
+  bossMaxHP: 100,
+  playerHP: 100,
+  score: 0,
+  scoreMultiplier: 1,
+  comboCount: 0,
+  items: { heal: 1, fifty: 1, skip: 1 },
+  currentQuestions: [],
+  answered: false,
+  paused: false,
+  gameOver: false,
+  victory: false,
+  bossesDefeated: 0,
+  timer: null,
+  damagePerHit: 25,
+};
+
+const el = {
+  appFrame: document.getElementById('app-frame'),
+  bossName: document.getElementById('boss-name'),
+  bossHPBar: document.getElementById('boss-hp-bar'),
+  bossHPText: document.getElementById('boss-hp-text'),
+  bossVesselWrap: document.getElementById('boss-vessel-wrap'),
+  bossBubbles: document.getElementById('boss-bubbles'),
+  playerHPBar: document.getElementById('player-hp-bar'),
+  playerHPText: document.getElementById('player-hp-text'),
+  playerVesselWrap: document.getElementById('player-vessel-wrap'),
+  playerBubbles: document.getElementById('player-bubbles'),
+  scoreValue: document.getElementById('score-value'),
+  comboBadge: document.getElementById('combo-badge'),
+  questionHanzi: document.getElementById('question-hanzi'),
+  questionPinyin: document.getElementById('question-pinyin'),
+  playSoundBtn: document.getElementById('play-sound-btn'),
+  choicesGrid: document.getElementById('choices-grid'),
+  timerBar: document.getElementById('timer-bar'),
+  bossProgress: document.getElementById('boss-progress'),
+  bossTotal: document.getElementById('boss-total'),
+  comboPopupText: document.getElementById('combo-popup-text'),
+  dangerVignette: document.getElementById('danger-vignette'),
+};
+
+el.bossTotal.textContent = TOTAL_BOSSES;
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+  }
+}
+
+function getComboMultiplier() {
+  if (state.comboCount >= 10) return 5;
+  if (state.comboCount >= 5) return 3;
+  if (state.comboCount >= 3) return 2;
+  return 1;
+}
+
+function resetCombo() {
+  state.comboCount = 0;
+  state.scoreMultiplier = 1;
+}
+
+/* =========================================================
+   AMBIENT BACKGROUND EFFECTS (sparkles + drifting bamboo leaves)
+========================================================= */
+function initAmbientEffects() {
+  const container = document.getElementById('stars-container');
+  const sparkleGlyphs = ['✦', '✧', '⋆'];
+  for (let i = 0; i < 10; i++) {
+    const s = document.createElement('span');
+    s.className = 'sparkle';
+    s.textContent = sparkleGlyphs[Math.floor(Math.random() * sparkleGlyphs.length)];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.fontSize = (10 + Math.random() * 14) + 'px';
+    s.style.animationDuration = (2.5 + Math.random() * 3) + 's';
+    s.style.animationDelay = Math.random() * 4 + 's';
+    container.appendChild(s);
+  }
+  for (let i = 0; i < 5; i++) {
+    const b = document.createElement('i');
+    b.className = 'fa-solid fa-leaf bamboo-drift';
+    b.style.left = Math.random() * 100 + '%';
+    b.style.fontSize = (14 + Math.random() * 16) + 'px';
+    b.style.animationDuration = (10 + Math.random() * 8) + 's';
+    b.style.animationDelay = (Math.random() * 10) + 's';
+    container.appendChild(b);
+  }
+}
+
+/* =========================================================
+   VESSEL BUBBLES
+========================================================= */
+function spawnVesselBubbles(containerEl) {
+  if (state.answered || state.paused) return;
+  const bubble = document.createElement('div');
+  const size = 3 + Math.random() * 5;
+  bubble.className = 'vessel-bubble';
+  bubble.style.width = size + 'px';
+  bubble.style.height = size + 'px';
+  bubble.style.left = Math.random() * 90 + '%';
+  bubble.style.animationDuration = (1 + Math.random() * 1) + 's';
+  containerEl.appendChild(bubble);
+  setTimeout(() => bubble.remove(), 2200);
+}
+setInterval(() => spawnVesselBubbles(el.playerBubbles), 350);
+setInterval(() => spawnVesselBubbles(el.bossBubbles), 420);
+
+/* =========================================================
+   FLOATING DAMAGE / HEAL NUMBERS
+========================================================= */
+function showFloatNumber(anchorEl, text, colorClass) {
+  const rect = anchorEl.getBoundingClientRect();
+  const frameRect = el.appFrame.getBoundingClientRect();
+  const num = document.createElement('div');
+  num.className = 'float-number ' + colorClass;
+  num.textContent = text;
+  num.style.left = (rect.left - frameRect.left + rect.width / 2) + 'px';
+  num.style.top = (rect.top - frameRect.top) + 'px';
+  num.style.fontSize = 'clamp(1rem, 3dvh, 1.4rem)';
+  el.appFrame.appendChild(num);
+  setTimeout(() => num.remove(), 1150);
+}
+
+/* =========================================================
+   PARTICLE BURST (combo celebrations + confetti)
+========================================================= */
+function spawnBurst(originEl, count, colors, shapes) {
+  const rect = originEl.getBoundingClientRect();
+  const frameRect = el.appFrame.getBoundingClientRect();
+  const originX = rect.left - frameRect.left + rect.width / 2;
+  const originY = rect.top - frameRect.top + rect.height / 2;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'burst-particle';
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 70;
+    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+    p.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+    p.style.left = originX + 'px';
+    p.style.top = originY + 'px';
+    p.style.color = colors[Math.floor(Math.random() * colors.length)];
+    p.style.fontSize = (10 + Math.random() * 8) + 'px';
+    p.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+    el.appFrame.appendChild(p);
+    setTimeout(() => p.remove(), 850);
+  }
+}
+
+function spawnConfetti() {
+  const colors = ['#FFD34D', '#FF9FC3', '#6FE3A8', '#6FCBE8', '#FFD6E8'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.width = (5 + Math.random() * 5) + 'px';
+    c.style.height = (8 + Math.random() * 8) + 'px';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.animationDuration = (2 + Math.random() * 2) + 's';
+    c.style.animationDelay = (Math.random() * 1.5) + 's';
+    el.appFrame.appendChild(c);
+    setTimeout(() => c.remove(), 4200);
+  }
+}
+
+/* =========================================================
+   HP & DAMAGE DISPLAY
+========================================================= */
+function updatePlayerHP(delta) {
+  const percent = Math.max(0, (state.playerHP / 100) * 100);
+  el.playerHPBar.style.width = percent + '%';
+  el.playerHPText.textContent = `${Math.max(0, state.playerHP)}/100`;
+
+  el.playerVesselWrap.classList.toggle('low-hp', state.playerHP <= 30 && state.playerHP > 0);
+  el.dangerVignette.classList.toggle('active', state.playerHP <= 30 && state.playerHP > 0);
+
+  const heart = el.playerVesselWrap.querySelector('.vessel-heart');
+  heart.style.animationDuration = state.playerHP <= 30 ? '.55s' : '1s';
+
+  if (delta) {
+    const cls = delta > 0 ? 'healed' : 'damaged';
+    el.playerVesselWrap.classList.remove('damaged', 'healed');
+    void el.playerVesselWrap.offsetWidth;
+    el.playerVesselWrap.classList.add(cls);
+    setTimeout(() => el.playerVesselWrap.classList.remove(cls), 500);
+    showFloatNumber(el.playerVesselWrap.querySelector('.vessel'), (delta > 0 ? '+' : '') + delta, delta > 0 ? 'text-mintDeep' : 'text-bloodDeep');
+  }
+}
+
+function updateBossHP(delta) {
+  const percent = Math.max(0, (state.bossHP / state.bossMaxHP) * 100);
+  el.bossHPBar.style.width = percent + '%';
+  el.bossHPText.textContent = `${Math.max(0, state.bossHP)}/${state.bossMaxHP}`;
+
+  if (delta) {
+    el.bossVesselWrap.classList.remove('damaged');
+    void el.bossVesselWrap.offsetWidth;
+    el.bossVesselWrap.classList.add('damaged');
+    setTimeout(() => el.bossVesselWrap.classList.remove('damaged'), 400);
+    showFloatNumber(el.bossVesselWrap.querySelector('.vessel'), '-' + delta, 'text-plum');
+  }
+}
+
+function updateScoreUI() {
+  el.scoreValue.textContent = state.score;
+  el.comboBadge.textContent = `x${state.scoreMultiplier}`;
+
+  if (state.comboCount >= 10) {
+    el.comboBadge.style.background = 'linear-gradient(135deg, #FFD34D, #FFC94D)';
+  } else if (state.comboCount >= 5) {
+    el.comboBadge.style.background = 'linear-gradient(135deg, #FF9FC3, #FF7BA6)';
+  } else {
+    el.comboBadge.style.background = 'linear-gradient(135deg, #6FCBE8, #5CB8DD)';
+  }
+}
+
+function updateItemUI() {
+  for (const [type, count] of Object.entries(state.items)) {
+    const countEl = document.getElementById(`item-${type}-count`);
+    if (countEl) countEl.textContent = count;
+    const btn = document.querySelector(`[data-item="${type}"]`);
+    if (btn) btn.disabled = count <= 0;
+  }
+}
+
+function showComboPopup(title) {
+  const popupText = el.comboPopupText;
+  popupText.textContent = title;
+  popupText.classList.remove('hidden', 'show', 'float-away');
+  void popupText.offsetWidth;
+  popupText.classList.add('show');
+
+  spawnBurst(el.comboPopupText, 14, ['#FFD34D', '#FF9FC3', '#6FE3A8', '#6FCBE8'], ['★', '✦', '●']);
+
+  setTimeout(() => {
+    popupText.classList.add('float-away');
+    setTimeout(() => {
+      popupText.classList.remove('show', 'float-away');
+      popupText.classList.add('hidden');
+    }, 700);
+  }, 900);
+}
+
+/* =========================================================
+   SCREEN SHAKE
+========================================================= */
+function shakeScreen() {
+  el.appFrame.classList.add('shake-once');
+  setTimeout(() => el.appFrame.classList.remove('shake-once'), 500);
+}
+
+function hitBoss() {
+  const img = document.getElementById('boss-image');
+  img.style.animation = 'none';
+  void img.offsetWidth;
+  img.style.animation = '';
+  img.classList.add('shake-once');
+  setTimeout(() => img.classList.remove('shake-once'), 350);
+}
+
+function disableChoices() {
+  document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+}
+
+/* =========================================================
+   BOSS & QUESTION LOADING
+========================================================= */
+function buildMeaningPool() {
+  const set = new Set();
+  bossData.forEach(b => b.questions.forEach(q => set.add(q.meaning)));
+  FALLBACK_DISTRACTORS.forEach(m => set.add(m));
+  return [...set];
+}
+const MEANING_POOL = buildMeaningPool();
+
+function generateFakeAnswers(correct) {
+  const pool = MEANING_POOL.filter(m => m !== correct);
+  return shuffle(pool).slice(0, 3);
+}
+
+function loadBoss(index) {
+  const boss = bossData[index];
+  state.bossIndex = index;
+  state.bossHP = boss.hp;
+  state.bossMaxHP = boss.hp;
+  state.playerHP = 100;
+  state.questionIndex = 0;
+  state.bossesDefeated = index;
+  state.comboCount = 0;
+  state.scoreMultiplier = 1;
+
+  el.bossName.textContent = boss.name;
+  el.bossProgress.textContent = (index + 1);
+  el.appFrame.style.borderColor = boss.color;
+
+  const count = Math.floor(Math.random() * 3) + 3;
+  state.currentQuestions = shuffle(boss.questions).slice(0, count);
+  state.damagePerHit = Math.ceil(boss.hp / count);
+
+  updatePlayerHP();
+  updateBossHP();
+  updateItemUI();
+  updateScoreUI();
+  loadQuestion();
+}
+
+function loadQuestion() {
+  state.answered = false;
+  el.choicesGrid.innerHTML = '';
+  const q = state.currentQuestions[state.questionIndex];
+
+  el.questionHanzi.textContent = q.hanzi;
+  el.questionPinyin.textContent = q.pinyin;
+
+  const meanings = shuffle([q.meaning, ...generateFakeAnswers(q.meaning)]);
+  meanings.forEach(meaning => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn rounded-xl px-3 py-2.5 sm:py-3 font-display font-600 shadow-card';
+    btn.textContent = meaning;
+    btn.addEventListener('click', () => handleChoice(btn, q.meaning));
+    el.choicesGrid.appendChild(btn);
   });
 
-  const levelLabels = {
-    'ง่าย (Easy)': { th: 'ง่าย', color: '#6FE3A8', icon: '🌱' },
-    'ปานกลาง (Medium)': { th: 'ปานกลาง', color: '#FFD34D', icon: '🐉' },
-    'ยาก (Hard)': { th: 'ยาก', color: '#FF9FC3', icon: '🔥' },
-  };
+  startTimer();
+}
 
-  document.querySelectorAll('.quest-btn[data-level]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const level = btn.getAttribute('data-level');
-      const info = levelLabels[level] || { th: level, color: '#BEE7F5', icon: '✨' };
+function startTimer() {
+  let time = 15;
+  el.timerBar.style.width = '100%';
+  el.timerBar.style.backgroundColor = '#FFD34D';
 
-      // Route to appropriate game mode
-      const routes = {
-        'ง่าย (Easy)': 'Mode_ez.html',
-        'ปานกลาง (Medium)': 'Mode_Normal.html',
-        'ยาก (Hard)': 'Mode_Hardcore.html'
-      };
+  clearInterval(state.timer);
+  state.timer = setInterval(() => {
+    time--;
+    const percent = (time / 15) * 100;
+    el.timerBar.style.width = percent + '%';
 
-      const targetPage = routes[level];
+    if (time <= 5) {
+      el.timerBar.style.backgroundColor = '#FF9FC3';
+    }
 
-      Swal.fire({
-        title: `${info.icon} Starting ${level} Mode!`,
-        text: 'Get Ready! เตรียมตัวให้พร้อม แล้วออกไปผจญภัยกันเลย!',
-        confirmButtonText: 'ลุยเลย!',
-        confirmButtonColor: info.color,
-        background: '#FEFCF3',
-        color: '#3A3355',
-        customClass: {
-          popup: 'rounded-3xl',
-        }
-      }).then((result) => {
-        if (result.isConfirmed && targetPage) {
-          window.location.href = targetPage;
-        }
-      });
+    if (time <= 0) {
+      clearInterval(state.timer);
+      state.answered = true;
+      state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+      resetCombo();
+      updateScoreUI();
+      updatePlayerHP(-WRONG_DAMAGE);
+      shakeScreen();
+      checkOutcomeThenNext();
+    }
+  }, 1000);
+}
+
+/* =========================================================
+   CHOICE HANDLING
+========================================================= */
+function handleChoice(btn, correctMeaning) {
+  if (state.answered) return;
+  state.answered = true;
+  clearInterval(state.timer);
+  disableChoices();
+
+  const isCorrect = btn.textContent === correctMeaning;
+
+  if (isCorrect) {
+    btn.classList.add('choice-correct');
+    const dmg = Math.min(state.bossHP, state.damagePerHit);
+    state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
+    state.comboCount += 1;
+    state.scoreMultiplier = getComboMultiplier();
+    state.score += 100 * state.scoreMultiplier;
+    updateScoreUI();
+    if (state.comboCount === 3 || state.comboCount === 5 || state.comboCount === 10) {
+      showComboPopup(`🎯 COMBO ${state.comboCount}! x${state.scoreMultiplier}`);
+    }
+    updateBossHP(dmg);
+    hitBoss();
+  } else {
+    btn.classList.add('choice-wrong');
+    document.querySelectorAll('.choice-btn').forEach(b => {
+      if (b.textContent === correctMeaning) b.classList.add('choice-correct');
     });
+    state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+    resetCombo();
+    updateScoreUI();
+    updatePlayerHP(-WRONG_DAMAGE);
+    shakeScreen();
+  }
+
+  updateItemUI();
+  checkOutcomeThenNext();
+}
+
+function checkOutcomeThenNext() {
+  setTimeout(() => {
+    if (state.playerHP <= 0) return gameOver();
+    if (state.bossHP <= 0) return bossDefeated();
+
+    state.questionIndex++;
+    if (state.questionIndex >= state.currentQuestions.length) {
+      const boss = bossData[state.bossIndex];
+      const count = Math.floor(Math.random() * 3) + 3;
+      state.currentQuestions = shuffle(boss.questions).slice(0, count);
+      state.questionIndex = 0;
+      state.damagePerHit = Math.ceil(state.bossHP / count) || 1;
+    }
+    loadQuestion();
+  }, 900);
+}
+
+/* =========================================================
+   OVERLAY SYSTEM (pause / boss-clear / defeat / victory)
+========================================================= */
+const overlayEl = document.createElement('div');
+overlayEl.className = 'overlay';
+overlayEl.innerHTML = `
+  <div class="overlay-backdrop"></div>
+  <div class="overlay-card" id="overlay-card">
+    <div class="overlay-icon" id="overlay-icon"></div>
+    <h2 class="overlay-title" id="overlay-title"></h2>
+    <p class="overlay-message" id="overlay-message"></p>
+    <div class="overlay-stats hidden" id="overlay-stats"></div>
+    <div class="overlay-buttons" id="overlay-buttons"></div>
+  </div>
+`;
+el.appFrame.appendChild(overlayEl);
+const ovIcon = overlayEl.querySelector('#overlay-icon');
+const ovTitle = overlayEl.querySelector('#overlay-title');
+const ovMessage = overlayEl.querySelector('#overlay-message');
+const ovStats = overlayEl.querySelector('#overlay-stats');
+const ovButtons = overlayEl.querySelector('#overlay-buttons');
+const ovCard = overlayEl.querySelector('#overlay-card');
+
+function showOverlay({ icon, title, message, stats, accent, buttons, shake, confetti }) {
+  ovIcon.textContent = icon || '';
+  ovTitle.textContent = title || '';
+  ovMessage.textContent = message || '';
+  if (stats) {
+    ovStats.innerHTML = stats;
+    ovStats.classList.remove('hidden');
+  } else {
+    ovStats.classList.add('hidden');
+  }
+  ovCard.style.setProperty('--overlay-accent', accent || '#6FE3A8');
+  ovButtons.innerHTML = '';
+  (buttons || []).forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'overlay-btn ' + (b.type || 'primary');
+    btn.textContent = b.label;
+    btn.addEventListener('click', () => { hideOverlay(); b.action && b.action(); });
+    ovButtons.appendChild(btn);
   });
+  overlayEl.classList.add('show');
+  if (shake) shakeScreen();
+  if (confetti) spawnConfetti();
+}
+
+function hideOverlay() {
+  overlayEl.classList.remove('show');
+}
+
+/* =========================================================
+   OUTCOMES
+========================================================= */
+function bossDefeated() {
+  state.bossesDefeated++;
+  state.score += (state.playerHP * 10);
+  updateScoreUI();
+  showOverlay({
+    icon: '⚔️🎉',
+    title: 'ปราบบอสสำเร็จ!',
+    message: 'ไปลุยบอสตัวต่อไปกันเลย!',
+    accent: '#6FE3A8',
+    buttons: [
+      { label: 'ไปต่อ', type: 'primary', action: () => {
+        const next = state.bossIndex + 1;
+        if (next >= TOTAL_BOSSES) victory(); else loadBoss(next);
+      }}
+    ]
+  });
+}
+
+function gameOver() {
+  clearInterval(state.timer);
+  el.dangerVignette.classList.remove('active');
+  showOverlay({
+    icon: '💔',
+    title: 'พ่ายแพ้!',
+    message: 'พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!',
+    accent: '#FF7BA6',
+    stats: `ปราบบอสได้ <strong>${state.bossesDefeated}</strong>/${TOTAL_BOSSES} &nbsp;·&nbsp; คะแนน <strong>${state.score}</strong>`,
+    shake: true,
+    buttons: [
+      { label: 'ลองอีกครั้ง', type: 'primary', action: () => location.reload() },
+      { label: 'กลับหน้าแรก', type: 'secondary', action: () => location.href = 'index.html' },
+    ]
+  });
+}
+
+function victory() {
+  state.score += (state.playerHP * 10);
+  updateScoreUI();
+  showOverlay({
+    icon: '🏆',
+    title: `ชนะครบ ${TOTAL_BOSSES} บอส!`,
+    message: 'สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน',
+    accent: '#FFD34D',
+    stats: `🎯 ปราบบอสได้ <strong>${state.bossesDefeated}</strong>/${TOTAL_BOSSES} &nbsp;·&nbsp; ⭐ คะแนนรวม <strong>${state.score}</strong>`,
+    confetti: true,
+    buttons: [
+      { label: 'เล่นอีกครั้ง', type: 'primary', action: () => location.reload() },
+      { label: 'กลับหน้าแรก', type: 'secondary', action: () => location.href = 'index.html' },
+    ]
+  });
+}
+
+function pauseGame() {
+  if (state.gameOver || state.victory || overlayEl.classList.contains('show')) return;
+  state.paused = true;
+  clearInterval(state.timer);
+  disableChoices();
+
+  showOverlay({
+    icon: '⏸️',
+    title: 'หยุดชั่วคราว',
+    message: 'เลือกสิ่งที่คุณต้องการ',
+    accent: '#6FCBE8',
+    buttons: [
+      { label: 'เล่นต่อ', type: 'primary', action: () => {
+        state.paused = false;
+        document.querySelectorAll('.choice-btn').forEach(b => b.disabled = false);
+        startTimer();
+      }},
+      { label: 'กลับหน้าแรก', type: 'secondary', action: () => location.href = 'index.html' },
+    ]
+  });
+}
+
+/* =========================================================
+   ITEMS & BUTTONS
+========================================================= */
+document.getElementById('stop-btn').addEventListener('click', pauseGame);
+
+document.querySelectorAll('[data-item]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.getAttribute('data-item');
+    if (state.items[type] <= 0 || state.answered) return;
+
+    if (type === 'heal') {
+      state.items.heal--;
+      const before = state.playerHP;
+      state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
+      updatePlayerHP(state.playerHP - before);
+      showComboPopup(`💚 ฮีล! +${HEAL_AMOUNT} HP`);
+    }
+
+    if (type === 'fifty') {
+      state.items.fifty--;
+      const q = state.currentQuestions[state.questionIndex];
+      const wrongButtons = [...document.querySelectorAll('.choice-btn')]
+        .filter(b => b.textContent !== q.meaning);
+      shuffle(wrongButtons).slice(0, 2).forEach(b => {
+        b.disabled = true;
+        b.style.visibility = 'hidden';
+      });
+    }
+
+    if (type === 'skip') {
+      state.items.skip--;
+      state.answered = true;
+      clearInterval(state.timer);
+      disableChoices();
+      checkOutcomeThenNext();
+    }
+
+    updateItemUI();
+  });
+});
+
+el.playSoundBtn.addEventListener('click', () => {
+  speak(el.questionHanzi.textContent);
+  el.playSoundBtn.classList.remove('speaking');
+  void el.playSoundBtn.offsetWidth;
+  el.playSoundBtn.classList.add('speaking');
+});
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+initAmbientEffects();
+updatePlayerHP();
+updateBossHP();
+updateItemUI();
+updateScoreUI();
+loadBoss(0);
 </script>
 
 </body>
