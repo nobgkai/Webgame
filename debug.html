@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🛠️ Debug Console | Panda's Chinese Quest</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          mint: '#B8F2D4', mintDeep: '#6FE3A8',
+          sky: '#BEE7F5', skyDeep: '#6FCBE8',
+          pink: '#FFD6E8', pinkDeep: '#FF9FC3',
+          yellow: '#FFF3B0', yellowDeep: '#FFD34D',
+          amber: '#FFE1B8', amberDeep: '#FF9F45',
+          ink: '#3A3355', plum: '#A395C9',
+          blood: '#FF4D6D', bloodDeep: '#E0184A',
+          darkBg: '#181524', cardBg: '#231F35', borderDark: '#352F4C'
+        },
+        fontFamily: { 
+          display: ['Fredoka','sans-serif'], 
+          thai: ['Mali','sans-serif'], 
+          hanzi: ["'Noto Sans SC'",'sans-serif'],
+          mono: ["'Fira Code'", 'monospace']
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  * { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  body {
+    font-family: 'Mali', sans-serif;
+    background: #181524;
+    color: #F1EFF7;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+  .mono-font { font-family: 'Fira Code', monospace; }
+  .tab-btn.active {
+    background: #6FE3A8;
+    color: #181524;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body class="p-4 sm:p-6 max-w-5xl mx-auto">
+
+  <!-- TOP HEADER -->
+  <div class="flex flex-wrap justify-between items-center pb-4 mb-6 border-b border-borderDark gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-blood/20 border border-blood text-blood flex items-center justify-center text-xl font-bold">
+        🛠️
+      </div>
+      <div>
+        <h1 class="font-display text-xl sm:text-2xl font-700 text-white flex items-center gap-2">
+          Panda's Quest Debug Console
+          <span class="text-xs bg-blood/20 text-pinkDeep px-2 py-0.5 rounded-full border border-blood/30 font-mono">INTERNAL</span>
+        </h1>
+        <p class="text-xs text-gray-300">Developer testing & state management dashboard (URL Access Only)</p>
+      </div>
+    </div>
+
+    <a href="index.html" class="px-4 py-2 rounded-xl bg-cardBg hover:bg-borderDark border border-borderDark text-xs sm:text-sm font-display font-600 text-mintDeep flex items-center gap-2 transition">
+      <i class="fa-solid fa-house text-xs"></i>
+      <span>หน้าหลัก (Main Menu)</span>
+    </a>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <div class="flex flex-wrap gap-2 mb-6 bg-cardBg p-1.5 rounded-2xl border border-borderDark">
+    <button data-tab="launch" class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-600 transition flex items-center gap-2">
+      <i class="fa-solid fa-rocket"></i> Launch & Cheats
+    </button>
+    <button data-tab="scores" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-600 text-gray-300 hover:text-white transition flex items-center gap-2">
+      <i class="fa-solid fa-database"></i> High Scores & Storage
+    </button>
+    <button data-tab="tts" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-600 text-gray-300 hover:text-white transition flex items-center gap-2">
+      <i class="fa-solid fa-volume-high"></i> TTS Audio Engine
+    </button>
+    <button data-tab="vocab" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-600 text-gray-300 hover:text-white transition flex items-center gap-2">
+      <i class="fa-solid fa-book"></i> Vocabulary Database
+    </button>
+    <button data-tab="system" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-600 text-gray-300 hover:text-white transition flex items-center gap-2">
+      <i class="fa-solid fa-microchip"></i> Diagnostics
+    </button>
+  </div>
+
+  <!-- TAB CONTENT 1: LAUNCH & CHEATS -->
+  <div id="tab-launch" class="tab-content space-y-4">
+    <div class="bg-cardBg rounded-2xl p-4 sm:p-6 border border-borderDark">
+      <h2 class="font-display font-700 text-lg text-white mb-1 flex items-center gap-2">
+        <i class="fa-solid fa-gamepad text-mintDeep"></i> Game Mode Quick Launch
+      </h2>
+      <p class="text-xs text-gray-300 mb-4">Directly test any game mode HTML page with optional parameter overrides.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Easy Mode -->
+        <div class="bg-darkBg p-4 rounded-xl border border-borderDark flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-display font-700 text-mintDeep text-base">🌱 Easy Mode</h3>
+              <span class="text-[10px] bg-mint/10 text-mintDeep px-2 py-0.5 rounded-full border border-mint/20">Mode_ez.html</span>
+            </div>
+            <p class="text-xs text-gray-300">15s per question, 10 bosses</p>
+          </div>
+          <a href="Mode_ez.html" class="w-full text-center py-2 rounded-lg bg-mintDeep text-darkBg font-display font-700 text-xs hover:bg-mint transition">
+            Launch Easy Mode <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+        </div>
+
+        <!-- Medium Mode -->
+        <div class="bg-darkBg p-4 rounded-xl border border-borderDark flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-display font-700 text-yellowDeep text-base">⚡ Medium Mode</h3>
+              <span class="text-[10px] bg-yellow/10 text-yellowDeep px-2 py-0.5 rounded-full border border-yellow/20">Mode_Normal.html</span>
+            </div>
+            <p class="text-xs text-gray-300">12s per question, category questions</p>
+          </div>
+          <a href="Mode_Normal.html" class="w-full text-center py-2 rounded-lg bg-yellowDeep text-darkBg font-display font-700 text-xs hover:bg-yellow transition">
+            Launch Medium Mode <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+        </div>
+
+        <!-- Hardcore Mode -->
+        <div class="bg-darkBg p-4 rounded-xl border border-borderDark flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-display font-700 text-blood text-base">🔥 Hardcore Mode</h3>
+              <span class="text-[10px] bg-blood/10 text-blood px-2 py-0.5 rounded-full border border-blood/20">Mode_Hardcore.html</span>
+            </div>
+            <p class="text-xs text-gray-300">10s per question, high damage</p>
+          </div>
+          <a href="Mode_Hardcore.html" class="w-full text-center py-2 rounded-lg bg-blood text-white font-display font-700 text-xs hover:bg-bloodDeep transition">
+            Launch Hardcore Mode <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT 2: LOCALSTORAGE & SCORES -->
+  <div id="tab-scores" class="tab-content hidden space-y-4">
+    <div class="bg-cardBg rounded-2xl p-4 sm:p-6 border border-borderDark">
+      <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
+        <div>
+          <h2 class="font-display font-700 text-lg text-white flex items-center gap-2">
+            <i class="fa-solid fa-trophy text-yellowDeep"></i> High Scores Manager
+          </h2>
+          <p class="text-xs text-gray-300">Inspect, edit, or reset saved high score records in LocalStorage.</p>
+        </div>
+        <button id="btn-reset-all-scores" class="px-3 py-1.5 rounded-xl bg-blood/20 hover:bg-blood/30 border border-blood/40 text-blood text-xs font-display font-600 transition">
+          <i class="fa-solid fa-trash-can mr-1"></i> Reset All Scores
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Easy Score -->
+        <div class="bg-darkBg p-4 rounded-xl border border-borderDark">
+          <p class="text-xs text-gray-300 mb-1">Easy Mode Best Score</p>
+          <div class="flex items-center justify-between">
+            <span id="score-easy-val" class="mono-font text-2xl font-bold text-mintDeep">0</span>
+            <button onclick="setScorePrompt('panda_quest_easy_best')" class="px-2.5 py-1 rounded bg-cardBg hover:bg-borderDark text-xs text-white border border-borderDark">
+              Edit
+            </button>
+          </div>
+        </div>
+
+        <!-- Normal Score -->
+        <div class="bg-darkBg p-4 rounded-xl border border-borderDark">
+          <p class="text-xs text-gray-300 mb-1">Medium Mode Best Score</p>
+          <div class="flex items-center justify-between">
+            <span id="score-normal-val" class="mono-font text-2xl font-bold text-yellowDeep">0</span>
+            <button onclick="setScorePrompt('panda_quest_normal_best')" class="px-2.5 py-1 rounded bg-cardBg hover:bg-borderDark text-xs text-white border border-borderDark">
+              Edit
+            </button>
+          </div>
+        </div>
+
+        <!-- Hard Score -->
+        <div class="bg-darkBg p-4 rounded-xl border border-borderDark">
+          <p class="text-xs text-gray-300 mb-1">Hardcore Mode Best Score</p>
+          <div class="flex items-center justify-between">
+            <span id="score-hard-val" class="mono-font text-2xl font-bold text-blood">0</span>
+            <button onclick="setScorePrompt('panda_quest_hard_best')" class="px-2.5 py-1 rounded bg-cardBg hover:bg-borderDark text-xs text-white border border-borderDark">
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-borderDark">
+        <h3 class="text-xs font-mono text-gray-300 mb-2">Raw LocalStorage Inspector:</h3>
+        <div id="storage-raw-dump" class="bg-darkBg p-3 rounded-xl mono-font text-xs text-mint text-wrap break-all max-h-40 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT 3: TTS AUDIO ENGINE -->
+  <div id="tab-tts" class="tab-content hidden space-y-4">
+    <div class="bg-cardBg rounded-2xl p-4 sm:p-6 border border-borderDark">
+      <h2 class="font-display font-700 text-lg text-white mb-1 flex items-center gap-2">
+        <i class="fa-solid fa-volume-high text-skyDeep"></i> Chinese TTS Sound Test Console
+      </h2>
+      <p class="text-xs text-sky-200 mb-4">Test native browser SpeechSynthesis vs online audio fallback engines (Youdao / Baidu / Google).</p>
+
+      <!-- Status Banner -->
+      <div id="tts-status-banner" class="mb-4 p-3 rounded-xl text-xs font-thai border flex items-start gap-2.5"></div>
+
+      <!-- Live Audio Log Output -->
+      <div id="tts-log" class="mb-4 p-3 rounded-xl text-xs mono-font bg-darkBg border border-borderDark text-mint text-wrap break-all hidden"></div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-display text-gray-200 mb-1">Test Chinese Phrase / Text:</label>
+          <div class="flex gap-2">
+            <input type="text" id="tts-input" value="你好！欢迎来到熊猫汉语大冒险" 
+                   class="flex-1 bg-darkBg border border-borderDark rounded-xl px-3 py-2 text-sm text-white font-hanzi focus:outline-none focus:border-mintDeep">
+            <button id="btn-test-speak" class="px-4 py-2 rounded-xl bg-mintDeep text-darkBg font-display font-700 text-xs hover:bg-mint transition">
+              <i class="fa-solid fa-play mr-1"></i> Speak Text
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-darkBg p-3.5 rounded-xl border border-borderDark">
+            <p class="text-xs font-display text-white mb-2 font-700">Browser SpeechSynthesis Voices Detected:</p>
+            <div id="voice-list-box" class="text-xs mono-font text-gray-300 max-h-48 overflow-y-auto space-y-1.5 pr-1"></div>
+          </div>
+          
+          <div class="bg-darkBg p-3.5 rounded-xl border border-borderDark">
+            <p class="text-xs font-display text-white mb-2 font-700">Preset Chinese Sample Phrases:</p>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="speakTest('早上好')" class="px-3 py-1.5 rounded-xl bg-cardBg hover:bg-borderDark text-xs text-mint font-600 border border-borderDark">早上好 (Good morning)</button>
+              <button onclick="speakTest('十点十五分')" class="px-3 py-1.5 rounded-xl bg-cardBg hover:bg-borderDark text-xs text-yellowDeep font-600 border border-borderDark">十点十五分 (10:15)</button>
+              <button onclick="speakTest('生日')" class="px-3 py-1.5 rounded-xl bg-cardBg hover:bg-borderDark text-xs text-pinkDeep font-600 border border-borderDark">生日 (Birthday)</button>
+              <button onclick="speakTest('加油')" class="px-3 py-1.5 rounded-xl bg-cardBg hover:bg-borderDark text-xs text-skyDeep font-600 border border-borderDark">加油 (Jiāyóu)</button>
+            </div>
+
+            <!-- How to install Windows Chinese Voice guide -->
+            <div class="mt-4 pt-3 border-t border-borderDark text-xs text-gray-300">
+              <p class="font-bold text-amberDeep mb-1"><i class="fa-solid fa-gear mr-1"></i> How to add Windows Chinese TTS Voice:</p>
+              <ol class="list-decimal list-inside space-y-1 text-[11px] text-gray-300">
+                <li>Open <strong>Windows Settings</strong> (Win + I)</li>
+                <li>Go to <strong>Time & Language</strong> → <strong>Language & Region</strong></li>
+                <li>Click <strong>Add a language</strong> → Select <strong>Chinese (Simplified)</strong></li>
+                <li>Check <strong>Speech recognition / Text-to-speech</strong> and install!</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT 4: VOCABULARY DATABASE -->
+  <div id="tab-vocab" class="tab-content hidden space-y-4">
+    <div class="bg-cardBg rounded-2xl p-4 sm:p-6 border border-borderDark">
+      <h2 class="font-display font-700 text-lg text-white mb-1 flex items-center gap-2">
+        <i class="fa-solid fa-book text-pinkDeep"></i> Vocabulary Database Explorer
+      </h2>
+      <p class="text-xs text-gray-300 mb-4">View questions and vocabulary items included across game modes.</p>
+
+      <div id="vocab-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[60vh] overflow-y-auto pr-1"></div>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT 5: SYSTEM DIAGNOSTICS -->
+  <div id="tab-system" class="tab-content hidden space-y-4">
+    <div class="bg-cardBg rounded-2xl p-4 sm:p-6 border border-borderDark">
+      <h2 class="font-display font-700 text-lg text-white mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-microchip text-mintDeep"></i> Client Environment Diagnostics
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs mono-font">
+        <div class="bg-darkBg p-3 rounded-xl border border-borderDark">
+          <span class="text-gray-300">Screen Dimensions:</span>
+          <span id="diag-screen" class="text-mint font-bold float-right">-</span>
+        </div>
+        <div class="bg-darkBg p-3 rounded-xl border border-borderDark">
+          <span class="text-gray-300">Viewport Size:</span>
+          <span id="diag-viewport" class="text-mint font-bold float-right">-</span>
+        </div>
+        <div class="bg-darkBg p-3 rounded-xl border border-borderDark">
+          <span class="text-gray-300">Device Pixel Ratio:</span>
+          <span id="diag-dpr" class="text-mint font-bold float-right">-</span>
+        </div>
+        <div class="bg-darkBg p-3 rounded-xl border border-borderDark">
+          <span class="text-gray-300">SpeechSynthesis Supported:</span>
+          <span id="diag-speech" class="text-mint font-bold float-right">-</span>
+        </div>
+        <div class="bg-darkBg p-3 rounded-xl border border-borderDark sm:col-span-2">
+          <span class="text-gray-300">User Agent:</span>
+          <p id="diag-ua" class="text-mint font-mono mt-1 text-[11px] text-wrap break-all">-</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* Tab switching */
+document.querySelectorAll('[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-tab]').forEach(b => {
+      b.classList.remove('active');
+      b.classList.add('text-gray-300');
+    });
+    btn.classList.add('active');
+    btn.classList.remove('text-gray-300');
+
+    const tabId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.add('hidden'));
+    const target = document.getElementById(`tab-${tabId}`);
+    if (target) target.classList.remove('hidden');
+  });
+});
+
+/* LocalStorage Manager */
+function updateScoreUI() {
+  document.getElementById('score-easy-val').textContent = localStorage.getItem('panda_quest_easy_best') || '0';
+  document.getElementById('score-normal-val').textContent = localStorage.getItem('panda_quest_normal_best') || '0';
+  document.getElementById('score-hard-val').textContent = localStorage.getItem('panda_quest_hard_best') || '0';
+
+  const dump = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    dump[k] = localStorage.getItem(k);
+  }
+  document.getElementById('storage-raw-dump').textContent = JSON.stringify(dump, null, 2);
+}
+
+function setScorePrompt(keyName) {
+  const current = localStorage.getItem(keyName) || '0';
+  Swal.fire({
+    title: 'Edit High Score',
+    input: 'number',
+    inputValue: current,
+    showCancelButton: true,
+    confirmButtonColor: '#6FE3A8',
+    cancelButtonColor: '#FF4D6D',
+    background: '#231F35',
+    color: '#FFF'
+  }).then(res => {
+    if (res.isConfirmed && res.value !== null) {
+      localStorage.setItem(keyName, res.value);
+      updateScoreUI();
+    }
+  });
+}
+
+document.getElementById('btn-reset-all-scores').addEventListener('click', () => {
+  Swal.fire({
+    title: 'Reset all saved scores?',
+    text: 'This will clear all panda quest local storage high score entries.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#FF4D6D',
+    cancelButtonColor: '#6FCBE8',
+    confirmButtonText: 'Yes, clear all',
+    background: '#231F35',
+    color: '#FFF'
+  }).then(res => {
+    if (res.isConfirmed) {
+      localStorage.removeItem('panda_quest_easy_best');
+      localStorage.removeItem('panda_quest_normal_best');
+      localStorage.removeItem('panda_quest_hard_best');
+      updateScoreUI();
+    }
+  });
+});
+
+/* TTS Engine */
+let chineseVoice = null;
+
+function logTTS(msg) {
+  const logEl = document.getElementById('tts-log');
+  if (logEl) {
+    logEl.classList.remove('hidden');
+    logEl.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  }
+}
+
+function loadVoices() {
+  const listBox = document.getElementById('voice-list-box');
+  const banner = document.getElementById('tts-status-banner');
+  listBox.innerHTML = '';
+  
+  if ('speechSynthesis' in window) {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      listBox.innerHTML = '<span class="text-amber-300">Loading browser voices...</span>';
+      return;
+    }
+    chineseVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN') || (v.name && v.name.toLowerCase().includes('chinese'))) || null;
+    
+    voices.forEach((v, idx) => {
+      const isZh = v.lang.includes('zh') || v.lang.includes('CN') || (v.name && v.name.toLowerCase().includes('chinese'));
+      const div = document.createElement('div');
+      div.className = isZh ? 'text-mint font-bold py-0.5' : 'text-gray-300 py-0.5';
+      div.textContent = `[${idx+1}] ${v.name} (${v.lang}) ${isZh ? '★ (Chinese Match)' : ''}`;
+      listBox.appendChild(div);
+    });
+
+    if (chineseVoice) {
+      banner.className = 'mb-4 p-3 rounded-xl text-xs font-thai border bg-mint/10 border-mintDeep/40 text-mint';
+      banner.innerHTML = `<i class="fa-solid fa-circle-check text-base text-mintDeep"></i> <div><strong>Native Chinese Speech Voice Found:</strong> ${chineseVoice.name} (${chineseVoice.lang}). Native SpeechSynthesis engine is active.</div>`;
+    } else {
+      banner.className = 'mb-4 p-3 rounded-xl text-xs font-thai border bg-yellow/10 border-yellowDeep/40 text-yellowDeep';
+      banner.innerHTML = `<i class="fa-solid fa-circle-info text-base text-yellowDeep"></i> <div><strong>No Native Windows Chinese Voice Installed:</strong> Automatically routing Chinese speech through <strong>Online Audio Engine (Youdao / Baidu / Google)</strong> instantly on user tap!</div>`;
+    }
+  } else {
+    listBox.innerHTML = '<span class="text-blood font-bold">SpeechSynthesis API not supported</span>';
+    banner.className = 'mb-4 p-3 rounded-xl text-xs font-thai border bg-blood/10 border-blood/40 text-blood';
+    banner.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-base"></i> <div>SpeechSynthesis not supported. Using Online Audio Engine fallback.</div>`;
+  }
+}
+
+if ('speechSynthesis' in window) {
+  loadVoices();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+}
+
+let currentOnlineAudio = null;
+
+async function playOnlineTTS(text) {
+  try {
+    const cleanText = text.trim();
+    if (!cleanText) return;
+
+    if (currentOnlineAudio) {
+      currentOnlineAudio.pause();
+      currentOnlineAudio = null;
+    }
+
+    const encoded = encodeURIComponent(cleanText);
+    const stripped = encodeURIComponent(cleanText.replace(/[！!？?，,。. ]/g, ''));
+
+    const sources = [
+      `public/audio/${cleanText}.mp3`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=tw-ob`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=gtx`,
+      `https://dict.youdao.com/dictvoice?audio=${stripped}&le=zh`,
+      `https://fanyi.baidu.com/gettts?lan=zh&text=${encoded}&spd=5&source=web`
+    ];
+
+    for (let i = 0; i < sources.length; i++) {
+      const src = sources[i];
+      if (typeof logTTS === 'function') logTTS(`Trying audio source [${i + 1}/${sources.length}]: "${cleanText}"`);
+
+      const success = await new Promise((resolve) => {
+        const audio = new Audio();
+        audio.referrerPolicy = 'no-referrer';
+        audio.src = src;
+        currentOnlineAudio = audio;
+
+        let resolved = false;
+        const cleanupAndResolve = (isOk) => {
+          if (!resolved) {
+            resolved = true;
+            audio.onplaying = null;
+            audio.onerror = null;
+            resolve(isOk);
+          }
+        };
+
+        audio.onplaying = () => {
+          if (typeof logTTS === 'function') {
+            const label = src.startsWith('public') ? 'Local File' : 'GoogleSpeech API';
+            logTTS(`🔊 Audio playing successfully via ${label}!`);
+          }
+          cleanupAndResolve(true);
+        };
+
+        audio.onerror = () => cleanupAndResolve(false);
+
+        audio.play().then(() => {
+          if (!resolved && typeof logTTS === 'function') {
+            const label = src.startsWith('public') ? 'Local File' : 'GoogleSpeech API';
+            logTTS(`🔊 Audio playing successfully via ${label}!`);
+          }
+          cleanupAndResolve(true);
+        }).catch(() => cleanupAndResolve(false));
+      });
+
+      if (success) return;
+    }
+
+    if (typeof logTTS === 'function') logTTS(`⚠️ All audio sources failed.`);
+  } catch (e) {
+    if (typeof logTTS === 'function') logTTS(`Audio execution error: ${e.message}`);
+  }
+}
+
+function speakTest(text) {
+  if (!text) return;
+  
+  if ('speechSynthesis' in window && !chineseVoice) {
+    loadVoices();
+  }
+
+  // ONLY use SpeechSynthesis IF a native Chinese voice was detected on the OS!
+  if ('speechSynthesis' in window && chineseVoice) {
+    try {
+      logTTS(`🔊 Playing via Native SpeechSynthesis (${chineseVoice.name})`);
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = chineseVoice;
+      utterance.lang = chineseVoice.lang;
+      utterance.rate = 0.85;
+      speechSynthesis.speak(utterance);
+      return;
+    } catch (e) {
+      logTTS(`Native speech error. Switching to Online Audio...`);
+    }
+  }
+
+  // If no native Chinese voice is installed on OS (e.g. Windows with English voices only), route to Online Audio immediately!
+  logTTS(`No native Chinese voice installed on OS. Routing to Online Audio...`);
+  playOnlineTTS(text);
+}
+
+document.getElementById('btn-test-speak').addEventListener('click', () => {
+  const val = document.getElementById('tts-input').value;
+  speakTest(val);
+});
+
+/* Vocab explorer */
+const sampleVocab = [
+  { hanzi: '十点十五分', pinyin: 'shí diǎn shíwǔ fēn', meaning: '10:15 น.' },
+  { hanzi: '早上', pinyin: 'zǎoshang', meaning: 'เช้า / ตอนเช้า' },
+  { hanzi: '下午', pinyin: 'xiàwǔ', meaning: 'บ่าย' },
+  { hanzi: '晚上', pinyin: 'wǎnshang', meaning: 'เย็น / ตอนเย็น' },
+  { hanzi: '现在几点', pinyin: 'xiànzài jǐ diǎn', meaning: 'ตอนนี้กี่โมง' },
+  { hanzi: '八点', pinyin: 'bā diǎn', meaning: '8:00 น.' },
+  { hanzi: '三点半', pinyin: 'sān diǎn bàn', meaning: '3:30 น.' },
+  { hanzi: '一月一号', pinyin: 'yī yuè yī hào', meaning: 'วันที่ 1 มกราคม' },
+  { hanzi: '星期一', pinyin: 'xīngqīyī', meaning: 'วันจันทร์' },
+  { hanzi: '星期天', pinyin: 'xīngqītiān', meaning: 'วันอาทิตย์' },
+  { hanzi: '昨天', pinyin: 'zuótiān', meaning: 'เมื่อวาน' },
+  { hanzi: '明天', pinyin: 'míngtiān', meaning: 'พรุ่งนี้' },
+  { hanzi: '生日', pinyin: 'shēngrì', meaning: 'วันเกิด' },
+  { hanzi: '起床', pinyin: 'qǐchuáng', meaning: 'ตื่นนอน' },
+  { hanzi: '睡觉', pinyin: 'shuìjiào', meaning: 'นอนหลับ' },
+  { hanzi: '吃饭', pinyin: 'chīfàn', meaning: 'กินข้าว' },
+  { hanzi: '看书', pinyin: 'kànshū', meaning: 'อ่านหนังสือ' },
+  { hanzi: '天气', pinyin: 'tiānqì', meaning: 'อากาศ' },
+];
+
+function renderVocab() {
+  const container = document.getElementById('vocab-container');
+  container.innerHTML = '';
+  sampleVocab.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'bg-darkBg p-3.5 rounded-xl border border-borderDark flex flex-col justify-between';
+    card.innerHTML = `
+      <div>
+        <p class="font-hanzi text-lg font-bold text-mint">${item.hanzi}</p>
+        <p class="text-xs text-sky-200 font-medium">${item.pinyin}</p>
+        <p class="text-xs text-white font-thai mt-1">${item.meaning}</p>
+      </div>
+      <button onclick="speakTest('${item.hanzi}')" class="mt-3 text-left text-[11px] text-skyDeep hover:underline font-600">
+        <i class="fa-solid fa-volume-high mr-1"></i> Play Sound
+      </button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+/* System Diagnostics */
+function renderDiagnostics() {
+  document.getElementById('diag-screen').textContent = `${window.screen.width} x ${window.screen.height}`;
+  document.getElementById('diag-viewport').textContent = `${window.innerWidth} x ${window.innerHeight}`;
+  document.getElementById('diag-dpr').textContent = `${window.devicePixelRatio || 1}x`;
+  document.getElementById('diag-speech').textContent = ('speechSynthesis' in window) ? 'YES ✅' : 'NO ❌';
+  document.getElementById('diag-ua').textContent = navigator.userAgent;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateScoreUI();
+  renderVocab();
+  renderDiagnostics();
+});
+</script>
+</body>
+</html>
