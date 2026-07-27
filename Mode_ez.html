@@ -1,1140 +1,1492 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Easy Mode | Panda's Chinese Quest</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy Mode | Panda's Chinese Quest</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          mint: '#B8F2D4', mintDeep: '#6FE3A8',
-          sky: '#BEE7F5', skyDeep: '#6FCBE8',
-          pink: '#FFD6E8', pinkDeep: '#FF9FC3',
-          yellow: '#FFF3B0', yellowDeep: '#FFD34D',
-          bamboo: '#E9F7D8', ink: '#3A3355', plum: '#5C4B8A',
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              mint: "#B8F2D4",
+              mintDeep: "#6FE3A8",
+              sky: "#BEE7F5",
+              skyDeep: "#6FCBE8",
+              pink: "#FFD6E8",
+              pinkDeep: "#FF9FC3",
+              yellow: "#FFF3B0",
+              yellowDeep: "#FFD34D",
+              bamboo: "#E9F7D8",
+              ink: "#3A3355",
+              plum: "#5C4B8A",
+            },
+            fontFamily: {
+              display: ["Fredoka", "Mali", "sans-serif"],
+              thai: ["Mali", "sans-serif"],
+              hanzi: ["'Noto Sans SC'", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)",
+              card: "0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)",
+              btn: "0 6px 0 0 rgba(0,0,0,0.15)",
+              glow: "0 0 20px rgba(111, 227, 168, 0.4)",
+            },
+          },
         },
-        fontFamily: { display: ['Fredoka','Mali','sans-serif'], thai: ['Mali','sans-serif'], hanzi: ["'Noto Sans SC'",'sans-serif'] },
-        boxShadow: {
-          soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
-          card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
-          btn: '0 6px 0 0 rgba(0,0,0,0.15)',
-          glow: '0 0 20px rgba(111, 227, 168, 0.4)',
+      };
+    </script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      body {
+        font-family: "Mali", sans-serif;
+        background-color: #fbfbf6;
+        color: #3a3355;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      #game-container::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          #ffe5f0 0%,
+          #b8f2d4 25%,
+          #bee7f5 50%,
+          #fff3b0 75%,
+          #e9f7d8 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
         }
       }
-    }
-  }
-</script>
 
-<style>
-  * { 
-    box-sizing: border-box; 
-    -webkit-tap-highlight-color: transparent; 
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  body { 
-    font-family:'Mali',sans-serif; 
-    background-color:#FBFBF6; 
-    color:#3A3355;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-  }
-  
-  #game-container::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #FFE5F0 0%, #B8F2D4 25%, #BEE7F5 50%, #FFF3B0 75%, #E9F7D8 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-    z-index: -2;
-    pointer-events: none;
-  }
+      /* Particle Background */
+      .particle-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        overflow: hidden;
+      }
 
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+      .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        opacity: 0.3;
+      }
 
-  /* Particle Background */
-  .particle-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
-  }
+      @keyframes float-particle {
+        0% {
+          transform: translateY(100vh) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.5;
+        }
+        90% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(100px);
+          opacity: 0;
+        }
+      }
 
-  .particle {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    opacity: 0.3;
-  }
+      .particle.active {
+        animation: float-particle linear infinite;
+      }
 
-  @keyframes float-particle {
-    0% {
-      transform: translateY(100vh) translateX(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.5;
-    }
-    90% {
-      opacity: 0.5;
-    }
-    100% {
-      transform: translateY(-100vh) translateX(100px);
-      opacity: 0;
-    }
-  }
+      .font-display {
+        font-family: "Fredoka", "Mali", sans-serif;
+      }
+      .font-hanzi {
+        font-family: "'Noto Sans SC'", sans-serif;
+      }
 
-  .particle.active {
-    animation: float-particle linear infinite;
-  }
+      /* === HEART BEAT EFFECT === */
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        25% {
+          transform: scale(1.2);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
 
-  .font-display { font-family:'Fredoka','Mali',sans-serif; }
-  .font-hanzi { font-family:"'Noto Sans SC'",sans-serif; }
+      .heartbeat-active {
+        animation: heartbeat 0.6s ease-in-out;
+      }
 
-  /* === HEART BEAT EFFECT === */
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    25% { transform: scale(1.2); }
-    50% { transform: scale(1.1); }
-  }
+      /* === BUBBLE ANIMATION === */
+      @keyframes bubble-float {
+        0% {
+          transform: translateY(0) translateX(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-30px) translateX(8px);
+          opacity: 0;
+        }
+      }
 
-  .heartbeat-active { animation: heartbeat 0.6s ease-in-out; }
+      .bubble {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: bubble-float 1.2s ease-out forwards;
+      }
 
-  /* === BUBBLE ANIMATION === */
-  @keyframes bubble-float {
-    0% {
-      transform: translateY(0) translateX(0);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-30px) translateX(8px);
-      opacity: 0;
-    }
-  }
+      /* === HP BAR GLOW === */
+      .hp-bar-container {
+        position: relative;
+        border: 4px solid rgba(58, 51, 85, 0.3);
+      }
 
-  .bubble {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 50%;
-    animation: bubble-float 1.2s ease-out forwards;
-  }
+      .hp-bar-container.damaged {
+        animation: hp-pulse 0.4s ease;
+      }
 
-  /* === HP BAR GLOW === */
-  .hp-bar-container {
-    position: relative;
-    border: 4px solid rgba(58, 51, 85, 0.3);
-  }
+      @keyframes hp-pulse {
+        0%,
+        100% {
+          box-shadow: inset 0 0 0 rgba(255, 159, 195, 0.5);
+        }
+        50% {
+          box-shadow: inset 0 0 15px rgba(255, 159, 195, 0.8);
+        }
+      }
 
-  .hp-bar-container.damaged {
-    animation: hp-pulse 0.4s ease;
-  }
+      #player-hp-bar {
+        background: linear-gradient(90deg, #6fe3a8, #4fd89a);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
 
-  @keyframes hp-pulse {
-    0%, 100% { box-shadow: inset 0 0 0 rgba(255, 159, 195, 0.5); }
-    50% { box-shadow: inset 0 0 15px rgba(255, 159, 195, 0.8); }
-  }
+      #boss-hp-bar {
+        background: linear-gradient(90deg, #ff9fc3, #ff7ba6);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
 
-  #player-hp-bar {
-    background: linear-gradient(90deg, #6FE3A8, #4FD89A);
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5);
-    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
+      /* === COMBO POPUP === */
+      .combo-popup {
+        position: fixed;
+        bottom: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        pointer-events: none;
+      }
 
-  #boss-hp-bar {
-    background: linear-gradient(90deg, #FF9FC3, #FF7BA6);
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4);
-    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
+      .combo-card {
+        background: linear-gradient(135deg, #ff9fc3 0%, #ff7ba6 100%);
+        color: white;
+        box-shadow: 0 8px 20px rgba(255, 159, 195, 0.6);
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
 
-  /* === COMBO POPUP === */
-  .combo-popup {
-    position: fixed;
-    bottom: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    pointer-events: none;
-  }
+      @keyframes combo-pop {
+        0% {
+          transform: scale(0.2) translateY(20px);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
+      }
 
-  .combo-card {
-    background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%);
-    color: white;
-    box-shadow: 0 8px 20px rgba(255, 159, 195, 0.6);
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
+      @keyframes combo-float-up {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-60px);
+        }
+      }
 
-  @keyframes combo-pop {
-    0% {
-      transform: scale(0.2) translateY(20px);
-      opacity: 0;
-    }
-    50% {
-      transform: scale(1.15);
-    }
-    100% {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-  }
+      .combo-card.show {
+        animation: combo-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
 
-  @keyframes combo-float-up {
-    0% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-60px);
-    }
-  }
+      .combo-card.float-away {
+        animation: combo-float-up 0.8s ease-out forwards;
+      }
 
-  .combo-card.show {
-    animation: combo-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
+      /* === SHAKE EFFECT === */
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-14px) rotate(-1deg);
+        }
+        40% {
+          transform: translateX(12px) rotate(1deg);
+        }
+        60% {
+          transform: translateX(-8px);
+        }
+        80% {
+          transform: translateX(8px);
+        }
+      }
+      .shake {
+        animation: shake 0.4s ease;
+      }
 
-  .combo-card.float-away {
-    animation: combo-float-up 0.8s ease-out forwards;
-  }
+      /* === HIT EFFECT === */
+      @keyframes hit {
+        0% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+        30% {
+          transform: scale(0.92);
+          filter: brightness(1.6) saturate(2);
+        }
+        100% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+      }
+      .hit {
+        animation: hit 0.35s ease;
+      }
 
-  /* === SHAKE EFFECT === */
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    20% { transform: translateX(-14px) rotate(-1deg); }
-    40% { transform: translateX(12px) rotate(1deg); }
-    60% { transform: translateX(-8px); }
-    80% { transform: translateX(8px); }
-  }
-  .shake { animation: shake 0.4s ease; }
+      /* === FLOAT ANIMATION === */
+      @keyframes floaty {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+      .float-slow {
+        animation: floaty 3.5s ease-in-out infinite;
+      }
 
-  /* === HIT EFFECT === */
-  @keyframes hit {
-    0% { transform: scale(1); filter: brightness(1); }
-    30% { transform: scale(0.92); filter: brightness(1.6) saturate(2); }
-    100% { transform: scale(1); filter: brightness(1); }
-  }
-  .hit { animation: hit 0.35s ease; }
+      /* === BUTTON STYLES === */
+      .choice-btn {
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease,
+          filter 0.12s ease;
+        position: relative;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        border: 3px solid rgba(58, 51, 85, 0.15);
+      }
 
-  /* === FLOAT ANIMATION === */
-  @keyframes floaty { 
-    0%,100%{transform:translateY(0);} 
-    50%{transform:translateY(-8px);} 
-  }
-  .float-slow { animation: floaty 3.5s ease-in-out infinite; }
+      .choice-btn:hover:not(:disabled) {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(58, 51, 85, 0.15);
+        filter: brightness(1.05);
+      }
 
-  /* === BUTTON STYLES === */
-  .choice-btn { 
-    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-    position: relative;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
-    border: 3px solid rgba(58, 51, 85, 0.15);
-  }
-  
-  .choice-btn:hover:not(:disabled) { 
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(58, 51, 85, 0.15);
-    filter: brightness(1.05);
-  }
-  
-  .choice-btn:active:not(:disabled) { transform: translateY(2px); }
-  .choice-btn:disabled { opacity: .5; cursor: not-allowed; }
+      .choice-btn:active:not(:disabled) {
+        transform: translateY(2px);
+      }
+      .choice-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-  .choice-correct { 
-    background: linear-gradient(135deg, #6FE3A8 0%, #4FD89A 100%) !important;
-    color: white !important;
-    border-color: transparent !important;
-    box-shadow: 0 6px 20px rgba(111, 227, 168, 0.5) !important;
-  }
-  
-  .choice-wrong { 
-    background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%) !important;
-    color: white !important;
-    border-color: transparent !important;
-    box-shadow: 0 6px 20px rgba(255, 159, 195, 0.5) !important;
-  }
+      .choice-correct {
+        background: linear-gradient(
+          135deg,
+          #6fe3a8 0%,
+          #4fd89a 100%
+        ) !important;
+        color: white !important;
+        border-color: transparent !important;
+        box-shadow: 0 6px 20px rgba(111, 227, 168, 0.5) !important;
+      }
 
-  /* === ICON BUTTONS === */
-  .icon-btn { 
-    transition: transform .12s ease, box-shadow .12s ease;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F8F8F8 100%) !important;
-    border: 2px solid rgba(58, 51, 85, 0.1) !important;
-  }
-  
-  .icon-btn:hover:not(:disabled) { 
-    transform: translateY(-3px) scale(1.08);
-    box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15);
-  }
-  
-  .icon-btn:active:not(:disabled) { transform: translateY(1px) scale(.97); }
-  .icon-btn:disabled { opacity:.35; cursor:not-allowed; transform:none !important; }
+      .choice-wrong {
+        background: linear-gradient(
+          135deg,
+          #ff9fc3 0%,
+          #ff7ba6 100%
+        ) !important;
+        color: white !important;
+        border-color: transparent !important;
+        box-shadow: 0 6px 20px rgba(255, 159, 195, 0.5) !important;
+      }
 
-  /* === TIMER BAR === */
-  #timer-bar { 
-    transition: width 0.1s linear, background-color .3s;
-    background: linear-gradient(90deg, #FFD34D, #FFC94D);
-    box-shadow: 0 0 10px rgba(255, 211, 77, 0.4);
-  }
+      /* === ICON BUTTONS === */
+      .icon-btn {
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #f8f8f8 100%
+        ) !important;
+        border: 2px solid rgba(58, 51, 85, 0.1) !important;
+      }
 
-  /* === STATUS CHIPS === */
-  .status-chip {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.85) !important;
-    border: 2px solid rgba(255, 255, 255, 0.5) !important;
-    box-shadow: 0 4px 15px rgba(58, 51, 85, 0.1);
-  }
+      .icon-btn:hover:not(:disabled) {
+        transform: translateY(-3px) scale(1.08);
+        box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15);
+      }
 
-  /* === SPEECH BUBBLE === */
-  .speech-bubble { 
-    position: relative;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F8FFFE 100%);
-    border: 3px solid rgba(111, 227, 168, 0.3);
-    backdrop-filter: blur(5px);
-  }
-  
-  .speech-bubble::before {
-    content: '';
-    position: absolute;
-    top: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 16px solid transparent;
-    border-right: 16px solid transparent;
-    border-bottom: 18px solid #FFFFFF;
-    filter: drop-shadow(0 -2px 2px rgba(58, 51, 85, 0.1));
-  }
+      .icon-btn:active:not(:disabled) {
+        transform: translateY(1px) scale(0.97);
+      }
+      .icon-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+        transform: none !important;
+      }
 
-  /* === HEART ICON WITH PULSE === */
-  .heart-icon {
-    position: relative;
-  }
+      /* === TIMER BAR === */
+      #timer-bar {
+        transition:
+          width 0.1s linear,
+          background-color 0.3s;
+        background: linear-gradient(90deg, #ffd34d, #ffc94d);
+        box-shadow: 0 0 10px rgba(255, 211, 77, 0.4);
+      }
 
-  .heart-pulse {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 159, 195, 0.6), transparent);
-    animation: heart-pulse-anim 1.5s ease-out infinite;
-  }
+      /* === STATUS CHIPS === */
+      .status-chip {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.85) !important;
+        border: 2px solid rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 4px 15px rgba(58, 51, 85, 0.1);
+      }
 
-  @keyframes heart-pulse-anim {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(2);
-      opacity: 0;
-    }
-  }
+      /* === SPEECH BUBBLE === */
+      .speech-bubble {
+        position: relative;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+        border: 3px solid rgba(111, 227, 168, 0.3);
+        backdrop-filter: blur(5px);
+      }
 
-  /* === CARD STYLES === */
-  .card-glass {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 248, 248, 0.7) 100%);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 8px 32px rgba(58, 51, 85, 0.08);
-  }
+      .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+        border-bottom: 18px solid #ffffff;
+        filter: drop-shadow(0 -2px 2px rgba(58, 51, 85, 0.1));
+      }
 
-  /* === DAMAGE NUMBER === */
-  .damage-number {
-    position: fixed;
-    font-weight: 700;
-    font-size: 24px;
-    pointer-events: none;
-    z-index: 999;
-  }
+      /* === HEART ICON WITH PULSE === */
+      .heart-icon {
+        position: relative;
+      }
 
-  @keyframes float-damage {
-    0% {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-50px) scale(0.5);
-      opacity: 0;
-    }
-  }
+      .heart-pulse {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 159, 195, 0.6),
+          transparent
+        );
+        animation: heart-pulse-anim 1.5s ease-out infinite;
+      }
 
-  .damage-number.show {
-    animation: float-damage 1s ease-out forwards;
-  }
-</style>
-</head>
-<body class="min-h-screen">
+      @keyframes heart-pulse-anim {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
 
-<div class="particle-container" id="particle-container"></div>
+      /* === CARD STYLES === */
+      .card-glass {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.9) 0%,
+          rgba(248, 248, 248, 0.7) 100%
+        );
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px rgba(58, 51, 85, 0.08);
+      }
 
-<div id="game-container" class="relative max-w-2xl mx-auto p-4 md:p-6 z-10">
-  
-  <!-- COMBO POPUP -->
-  <div id="combo-popup" class="combo-popup">
-    <div id="combo-popup-text" class="combo-card rounded-full px-6 py-4 text-xl md:text-2xl hidden"></div>
-  </div>
+      /* === DAMAGE NUMBER === */
+      .damage-number {
+        position: fixed;
+        font-weight: 700;
+        font-size: 24px;
+        pointer-events: none;
+        z-index: 999;
+      }
 
-  <!-- STATUS ROW -->
-  <div class="flex justify-between items-center mb-4 gap-2">
-    <div class="status-chip rounded-full px-4 py-2 font-display text-ink text-sm font-600">
-      <i class="fa-solid fa-dragon text-pinkDeep mr-2"></i>
-      Boss <span id="boss-progress">1</span>/10
-    </div>
-    <div class="flex items-center gap-2">
-      <div id="score-chip" class="status-chip rounded-full px-4 py-2 font-display text-ink text-sm font-600">
-        <i class="fa-solid fa-star text-yellowDeep mr-2"></i>
-        <span id="score-value">0</span>
-        <span id="combo-badge" class="ml-3 inline-block rounded-full bg-gradient-to-r from-pinkDeep to-pink text-white px-3 py-1 text-xs font-700" style="box-shadow: 0 4px 10px rgba(255, 159, 195, 0.4);">x1</span>
+      @keyframes float-damage {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-50px) scale(0.5);
+          opacity: 0;
+        }
+      }
+
+      .damage-number.show {
+        animation: float-damage 1s ease-out forwards;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <div class="particle-container" id="particle-container"></div>
+
+    <div id="game-container" class="relative max-w-2xl mx-auto p-4 md:p-6 z-10">
+      <!-- COMBO POPUP -->
+      <div id="combo-popup" class="combo-popup">
+        <div
+          id="combo-popup-text"
+          class="combo-card rounded-full px-6 py-4 text-xl md:text-2xl hidden"
+        ></div>
       </div>
-      <div class="status-chip rounded-full px-4 py-2 text-white text-xs font-700" style="background: linear-gradient(135deg, #6FE3A8, #4FD89A);">
-        <i class="fa-solid fa-star mr-1"></i>EASY
+
+      <!-- STATUS ROW -->
+      <div class="flex justify-between items-center mb-4 gap-2">
+        <div
+          class="status-chip rounded-full px-4 py-2 font-display text-ink text-sm font-600"
+        >
+          <i class="fa-solid fa-dragon text-pinkDeep mr-2"></i>
+          Boss <span id="boss-progress">1</span>/10
+        </div>
+        <div class="flex items-center gap-2">
+          <div
+            id="score-chip"
+            class="status-chip rounded-full px-4 py-2 font-display text-ink text-sm font-600"
+          >
+            <i class="fa-solid fa-star text-yellowDeep mr-2"></i>
+            <span id="score-value">0</span>
+            <span
+              id="combo-badge"
+              class="ml-3 inline-block rounded-full bg-gradient-to-r from-pinkDeep to-pink text-white px-3 py-1 text-xs font-700"
+              style="box-shadow: 0 4px 10px rgba(255, 159, 195, 0.4)"
+              >x1</span
+            >
+          </div>
+          <div
+            class="status-chip rounded-full px-4 py-2 text-white text-xs font-700"
+            style="background: linear-gradient(135deg, #6fe3a8, #4fd89a)"
+          >
+            <i class="fa-solid fa-star mr-1"></i>EASY
+          </div>
+        </div>
+      </div>
+
+      <!-- BOSS NAME -->
+      <div class="text-center mb-3">
+        <h2
+          id="boss-name"
+          class="font-display font-700 text-2xl md:text-3xl text-ink drop-shadow-sm"
+        >
+          จอมเวลา ปีศาจนาฬิกา
+        </h2>
+      </div>
+
+      <!-- BOSS HP BAR WITH ANIMATION -->
+      <div
+        class="relative w-full h-12 md:h-14 bg-gray-200 hp-bar-container rounded-full overflow-hidden mb-3"
+        style="border-color: rgba(58, 51, 85, 0.3)"
+      >
+        <div id="boss-hp-bar" class="h-full" style="width: 100%"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span
+            id="boss-hp-text"
+            class="font-display font-700 text-white text-sm md:text-base"
+            style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4)"
+            >100/100</span
+          >
+        </div>
+      </div>
+
+      <!-- BOSS IMAGE -->
+      <div class="flex justify-center mb-3">
+        <img
+          id="boss-image"
+          src="public/1.png"
+          alt="boss"
+          class="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-2xl float-slow"
+        />
+      </div>
+
+      <!-- QUESTION CARD -->
+      <div class="speech-bubble rounded-3xl p-6 md:p-8 text-center mt-6 mb-5">
+        <img
+          id="question-image"
+          src="https://placehold.co/200x200/png?text=Birthday"
+          alt="question hint"
+          class="w-28 h-28 object-contain mx-auto mb-4 rounded-lg shadow-sm"
+        />
+        <p
+          id="question-hanzi"
+          class="font-hanzi text-5xl md:text-6xl text-ink mb-2 font-700"
+        >
+          生日
+        </p>
+        <p
+          id="question-pinyin"
+          class="text-lg md:text-xl font-thai text-plum mb-4 font-500"
+        >
+          shēngrì
+        </p>
+
+        <button
+          id="play-sound-btn"
+          aria-label="ฟังเสียง"
+          class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full text-pinkDeep shadow-btn flex items-center justify-center mx-auto transition-all"
+        >
+          <i class="fa-solid fa-volume-high text-2xl md:text-3xl"></i>
+        </button>
+      </div>
+
+      <!-- TIMER BAR -->
+      <div
+        class="w-full h-3 bg-white/40 rounded-full overflow-hidden mb-5"
+        style="border: 2px solid rgba(255, 211, 77, 0.2)"
+      >
+        <div id="timer-bar" class="h-full" style="width: 100%"></div>
+      </div>
+
+      <!-- CHOICES GRID -->
+      <div
+        id="choices-grid"
+        class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"
+      ></div>
+
+      <!-- PLAYER CARD -->
+      <div class="card-glass rounded-3xl p-5 md:p-6 mb-5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="relative">
+            <img
+              src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1"
+              alt="player avatar"
+              class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-yellow border-3 border-ink/20 object-cover"
+            />
+            <div
+              class="heart-pulse"
+              style="width: 50px; height: 50px; margin: -18px 0 0 -18px"
+            ></div>
+          </div>
+          <span class="font-display font-600 text-ink text-sm md:text-base"
+            >ผู้เล่น</span
+          >
+        </div>
+
+        <!-- PLAYER HP BAR WITH BUBBLE EFFECT -->
+        <div
+          class="relative w-full h-10 md:h-11 bg-gray-200 hp-bar-container rounded-full overflow-hidden"
+          style="border-color: rgba(58, 51, 85, 0.3)"
+        >
+          <div
+            id="player-hp-bar"
+            class="h-full flex items-center"
+            style="width: 100%; position: relative"
+          >
+            <!-- Bubble container -->
+            <div
+              id="bubble-container"
+              style="
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+              "
+            ></div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span
+              id="player-hp-text"
+              class="font-display font-700 text-white text-xs md:text-sm"
+              style="
+                text-shadow: 1px 1.5px 2px rgba(0, 0, 0, 0.4);
+                position: relative;
+                z-index: 10;
+              "
+              >100/100</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- HELPER ITEMS -->
+      <div class="flex justify-center gap-4 md:gap-5">
+        <div class="relative">
+          <button
+            data-item="heal"
+            aria-label="ฮีล"
+            class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center"
+          >
+            <i class="fa-solid fa-heart text-pinkDeep text-2xl md:text-3xl"></i>
+          </button>
+          <span
+            id="item-heal-count"
+            class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-pinkDeep to-pink text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg"
+            >1</span
+          >
+        </div>
+        <div class="relative">
+          <button
+            data-item="fifty"
+            aria-label="50/50"
+            class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center"
+          >
+            <i
+              class="fa-solid fa-code-branch text-skyDeep text-2xl md:text-3xl"
+            ></i>
+          </button>
+          <span
+            id="item-fifty-count"
+            class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-skyDeep to-sky text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg"
+            >1</span
+          >
+        </div>
+        <div class="relative">
+          <button
+            data-item="skip"
+            aria-label="ข้าม"
+            class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center"
+          >
+            <i
+              class="fa-solid fa-forward text-yellowDeep text-2xl md:text-3xl"
+            ></i>
+          </button>
+          <span
+            id="item-skip-count"
+            class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-yellowDeep to-yellow text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg"
+            >1</span
+          >
+        </div>
+        <button
+          id="stop-btn"
+          aria-label="หยุด"
+          class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center hover:bg-gray-100"
+        >
+          <i class="fa-solid fa-stop text-red-500 text-2xl md:text-3xl"></i>
+        </button>
       </div>
     </div>
-  </div>
 
-  <!-- BOSS NAME -->
-  <div class="text-center mb-3">
-    <h2 id="boss-name" class="font-display font-700 text-2xl md:text-3xl text-ink drop-shadow-sm">จอมเวลา ปีศาจนาฬิกา</h2>
-  </div>
-
-  <!-- BOSS HP BAR WITH ANIMATION -->
-  <div class="relative w-full h-12 md:h-14 bg-gray-200 hp-bar-container rounded-full overflow-hidden mb-3" style="border-color: rgba(58, 51, 85, 0.3);">
-    <div id="boss-hp-bar" class="h-full" style="width:100%"></div>
-    <div class="absolute inset-0 flex items-center justify-center">
-      <span id="boss-hp-text" class="font-display font-700 text-white text-sm md:text-base" style="text-shadow: 2px 2px 4px rgba(0,0,0,.4);">100/100</span>
-    </div>
-  </div>
-
-  <!-- BOSS IMAGE -->
-  <div class="flex justify-center mb-3">
-    <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss"
-      class="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-2xl float-slow">
-  </div>
-
-  <!-- QUESTION CARD -->
-  <div class="speech-bubble rounded-3xl p-6 md:p-8 text-center mt-6 mb-5">
-    <img id="question-image" src="https://placehold.co/200x200/png?text=Birthday" alt="question hint"
-      class="w-28 h-28 object-contain mx-auto mb-4 rounded-lg shadow-sm">
-    <p id="question-hanzi" class="font-hanzi text-5xl md:text-6xl text-ink mb-2 font-700">生日</p>
-    <p id="question-pinyin" class="text-lg md:text-xl font-thai text-plum mb-4 font-500">shēngrì</p>
-
-    <button id="play-sound-btn" aria-label="ฟังเสียง"
-      class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full text-pinkDeep shadow-btn flex items-center justify-center mx-auto transition-all">
-      <i class="fa-solid fa-volume-high text-2xl md:text-3xl"></i>
-    </button>
-  </div>
-
-  <!-- TIMER BAR -->
-  <div class="w-full h-3 bg-white/40 rounded-full overflow-hidden mb-5" style="border: 2px solid rgba(255, 211, 77, 0.2);">
-    <div id="timer-bar" class="h-full" style="width:100%"></div>
-  </div>
-
-  <!-- CHOICES GRID -->
-  <div id="choices-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"></div>
-
-  <!-- PLAYER CARD -->
-  <div class="card-glass rounded-3xl p-5 md:p-6 mb-5">
-    <div class="flex items-center gap-3 mb-3">
-      <div class="relative">
-        <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1" alt="player avatar"
-          class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-yellow border-3 border-ink/20 object-cover">
-        <div class="heart-pulse" style="width: 50px; height: 50px; margin: -18px 0 0 -18px;"></div>
-      </div>
-      <span class="font-display font-600 text-ink text-sm md:text-base">ผู้เล่น</span>
-    </div>
-    
-    <!-- PLAYER HP BAR WITH BUBBLE EFFECT -->
-    <div class="relative w-full h-10 md:h-11 bg-gray-200 hp-bar-container rounded-full overflow-hidden" style="border-color: rgba(58, 51, 85, 0.3);">
-      <div id="player-hp-bar" class="h-full flex items-center" style="width:100%; position: relative;">
-        <!-- Bubble container -->
-        <div id="bubble-container" style="position: absolute; width: 100%; height: 100%; pointer-events: none;"></div>
-      </div>
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span id="player-hp-text" class="font-display font-700 text-white text-xs md:text-sm" style="text-shadow: 1px 1.5px 2px rgba(0,0,0,.4); position: relative; z-index: 10;">100/100</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- HELPER ITEMS -->
-  <div class="flex justify-center gap-4 md:gap-5">
-    <div class="relative">
-      <button data-item="heal" aria-label="ฮีล" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center">
-        <i class="fa-solid fa-heart text-pinkDeep text-2xl md:text-3xl"></i>
-      </button>
-      <span id="item-heal-count" class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-pinkDeep to-pink text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg">1</span>
-    </div>
-    <div class="relative">
-      <button data-item="fifty" aria-label="50/50" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center">
-        <i class="fa-solid fa-code-branch text-skyDeep text-2xl md:text-3xl"></i>
-      </button>
-      <span id="item-fifty-count" class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-skyDeep to-sky text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg">1</span>
-    </div>
-    <div class="relative">
-      <button data-item="skip" aria-label="ข้าม" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center">
-        <i class="fa-solid fa-forward text-yellowDeep text-2xl md:text-3xl"></i>
-      </button>
-      <span id="item-skip-count" class="absolute -top-2 -right-2 font-display text-xs bg-gradient-to-r from-yellowDeep to-yellow text-white rounded-full w-6 h-6 flex items-center justify-center font-700 shadow-lg">1</span>
-    </div>
-    <button id="stop-btn" aria-label="หยุด" class="icon-btn w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center hover:bg-gray-100">
-      <i class="fa-solid fa-stop text-red-500 text-2xl md:text-3xl"></i>
-    </button>
-  </div>
-
-</div>
-
-<script>
-/* =========================================================
+    <script>
+      /* =========================================================
    BOSS & QUESTION DATA
 ========================================================= */
-const bossData = [
-  {
-    id: 1,
-    name: 'จอมเวลา ปีศาจนาฬิกา',
-    hp: 100,
-    color: '#FF9FC3',
-    questions: [
-      { hanzi: "一点",       pinyin: "yī diǎn",                  meaning: "หนึ่งนาฬิกา (ตีหนึ่ง)", questionImage: "public/Clock/01_00.png" },
-      { hanzi: "两点",       pinyin: "liǎng diǎn",               meaning: "สองนาฬิกา",             questionImage: "public/Clock/02_00.png" },
-      { hanzi: "三点半",     pinyin: "sān diǎn bàn",             meaning: "สามโมงครึ่ง",           questionImage: "public/Clock/03_30.png" },
-      { hanzi: "十分",       pinyin: "shí fēn",                  meaning: "สิบนาที",               questionImage: "public/Clock/10minutes.png" },
-      { hanzi: "五点十分",   pinyin: "wǔ diǎn shí fēn",          meaning: "ห้าโมงสิบนาที",         questionImage: "public/Clock/05_10.png" },
-      { hanzi: "现在几点",   pinyin: "xiànzài jǐ diǎn",          meaning: "ตอนนี้กี่โมง",           questionImage: "public/Clock/what_time.png" },
-      { hanzi: "中午十二点", pinyin: "zhōngwǔ shí\u2019èr diǎn", meaning: "เที่ยงวัน",             questionImage: "public/Clock/12_00.png" },
-      { hanzi: "晚上八点",   pinyin: "wǎnshang bā diǎn",         meaning: "สองทุ่ม (20:00)",       questionImage: "public/Clock/08_00.png" },
-      { hanzi: "早上七点",   pinyin: "zǎoshang qī diǎn",         meaning: "เจ็ดโมงเช้า",           questionImage: "public/Clock/07_00.png" },
-      { hanzi: "半夜十二点", pinyin: "bànyè shí\u2019èr diǎn",   meaning: "เที่ยงคืน",             questionImage: "public/Clock/12_00.png" },
-    ]
-  },
-  {
-    id: 2,
-    name: "อสูรปฏิทิน",
-    questions: [
-      { hanzi: "一月一号", pinyin: "yī yuè yī hào",  meaning: "วันที่ 1 มกราคม",       questionImage: "public/Calendar/1jan.png" },
-      { hanzi: "星期一",   pinyin: "xīngqīyī",       meaning: "วันจันทร์",             questionImage: "public/Calendar/Monday.png" },
-      { hanzi: "星期天",   pinyin: "xīngqītiān",     meaning: "วันอาทิตย์",           questionImage: "public/Calendar/Sunday.png" },
-      { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
-      { hanzi: "昨天",     pinyin: "zuótiān",        meaning: "เมื่อวาน",             questionImage: "public/Calendar/Yesterday.png" },
-      { hanzi: "明天",     pinyin: "míngtiān",       meaning: "พรุ่งนี้",             questionImage: "public/Calendar/Tomorrow.png" },
-      { hanzi: "五月四日", pinyin: "wǔ yuè sì rì",   meaning: "วันที่ 4 พฤษภาคม",     questionImage: "public/Calendar/4May.png" },
-      { hanzi: "星期六",   pinyin: "xīngqīliù",      meaning: "วันเสาร์",             questionImage: "public/Calendar/Saturday.png" },
-      { hanzi: "生日",     pinyin: "shēngrì",        meaning: "วันเกิด",              questionImage: "public/Calendar/HappyBirthday.png" },
-      { hanzi: "假日",     pinyin: "jiàrì",          meaning: "วันหยุด",              questionImage: "public/Calendar/Holiday.png" },
-    ]
-  },
-  {
-    id: 3,
-    name: "เทพเจ้าฤดูกาล",
-    questions: [
-      { hanzi: "一月",   pinyin: "yī yuè",    meaning: "เดือนมกราคม",           questionImage: "public/Calender/January" },
-      { hanzi: "二月",   pinyin: "èr yuè",    meaning: "เดือนกุมภาพันธ์",       questionImage: "public/Calender/February" },
-      { hanzi: "星期几", pinyin: "xīngqī jǐ", meaning: "วันอะไร (ของสัปดาห์)", questionImage: "public/Calender/WhichDay" },
-      { hanzi: "下午",   pinyin: "xiàwǔ",     meaning: "ตอนบ่าย",               questionImage: "public/Time/Afternoon" },
-      { hanzi: "晚上",   pinyin: "wǎnshang",  meaning: "ตอนกลางคืน/ตอนเย็น",   questionImage: "public/Time/Evening" },
-      { hanzi: "早上",   pinyin: "zǎoshang",  meaning: "ตอนเช้า",               questionImage: "public/Time/Morning" },
-      { hanzi: "现在",   pinyin: "xiànzài",   meaning: "ตอนนี้",                 questionImage: "public/Time/Now" },
-      { hanzi: "时间",   pinyin: "shíjiān",   meaning: "เวลา",                   questionImage: "public/Time/Time" },
-      { hanzi: "分钟",   pinyin: "fēnzhōng",  meaning: "นาที",                   questionImage: "public/Time/Minutes" },
-      { hanzi: "小时",   pinyin: "xiǎoshí",   meaning: "ชั่วโมง",                 questionImage: "public/Time/Hour" },
-    ]
-  },
-  // ... เพิ่มบอสอื่นตามต้องการ
-];
+      const bossData = [
+        {
+          id: 1,
+          name: "จอมเวลา ปีศาจนาฬิกา",
+          hp: 100,
+          color: "#FF9FC3",
+          questions: [
+            {
+              hanzi: "一点",
+              pinyin: "yī diǎn",
+              meaning: "หนึ่งนาฬิกา (ตีหนึ่ง)",
+              questionImage: "public/Clock/01_00.png",
+            },
+            {
+              hanzi: "两点",
+              pinyin: "liǎng diǎn",
+              meaning: "สองนาฬิกา",
+              questionImage: "public/Clock/02_00.png",
+            },
+            {
+              hanzi: "三点半",
+              pinyin: "sān diǎn bàn",
+              meaning: "สามโมงครึ่ง",
+              questionImage: "public/Clock/03_30.png",
+            },
+            {
+              hanzi: "十分",
+              pinyin: "shí fēn",
+              meaning: "สิบนาที",
+              questionImage: "public/Clock/10minutes.png",
+            },
+            {
+              hanzi: "五点十分",
+              pinyin: "wǔ diǎn shí fēn",
+              meaning: "ห้าโมงสิบนาที",
+              questionImage: "public/Clock/05_10.png",
+            },
+            {
+              hanzi: "现在几点",
+              pinyin: "xiànzài jǐ diǎn",
+              meaning: "ตอนนี้กี่โมง",
+              questionImage: "public/Clock/what_time.png",
+            },
+            {
+              hanzi: "中午十二点",
+              pinyin: "zhōngwǔ shí\u2019èr diǎn",
+              meaning: "เที่ยงวัน",
+              questionImage: "public/Clock/12_00.png",
+            },
+            {
+              hanzi: "晚上八点",
+              pinyin: "wǎnshang bā diǎn",
+              meaning: "สองทุ่ม (20:00)",
+              questionImage: "public/Clock/08_00.png",
+            },
+            {
+              hanzi: "早上七点",
+              pinyin: "zǎoshang qī diǎn",
+              meaning: "เจ็ดโมงเช้า",
+              questionImage: "public/Clock/07_00.png",
+            },
+            {
+              hanzi: "半夜十二点",
+              pinyin: "bànyè shí\u2019èr diǎn",
+              meaning: "เที่ยงคืน",
+              questionImage: "public/Clock/12_00.png",
+            },
+          ],
+        },
+        {
+          id: 2,
+          name: "อสูรปฏิทิน",
+          questions: [
+            {
+              hanzi: "一月一号",
+              pinyin: "yī yuè yī hào",
+              meaning: "วันที่ 1 มกราคม",
+              questionImage: "public/Calendar/1jan.png",
+            },
+            {
+              hanzi: "星期一",
+              pinyin: "xīngqīyī",
+              meaning: "วันจันทร์",
+              questionImage: "public/Calendar/Monday.png",
+            },
+            {
+              hanzi: "星期天",
+              pinyin: "xīngqītiān",
+              meaning: "วันอาทิตย์",
+              questionImage: "public/Calendar/Sunday.png",
+            },
+            {
+              hanzi: "今天几号",
+              pinyin: "jīntiān jǐ hào",
+              meaning: "วันนี้วันที่เท่าไหร่",
+              questionImage: "public/Calendar/Whatdate.png",
+            },
+            {
+              hanzi: "昨天",
+              pinyin: "zuótiān",
+              meaning: "เมื่อวาน",
+              questionImage: "public/Calendar/Yesterday.png",
+            },
+            {
+              hanzi: "明天",
+              pinyin: "míngtiān",
+              meaning: "พรุ่งนี้",
+              questionImage: "public/Calendar/Tomorrow.png",
+            },
+            {
+              hanzi: "五月四日",
+              pinyin: "wǔ yuè sì rì",
+              meaning: "วันที่ 4 พฤษภาคม",
+              questionImage: "public/Calendar/4May.png",
+            },
+            {
+              hanzi: "星期六",
+              pinyin: "xīngqīliù",
+              meaning: "วันเสาร์",
+              questionImage: "public/Calendar/Saturday.png",
+            },
+            {
+              hanzi: "生日",
+              pinyin: "shēngrì",
+              meaning: "วันเกิด",
+              questionImage: "public/Calendar/HappyBirthday.png",
+            },
+            {
+              hanzi: "假日",
+              pinyin: "jiàrì",
+              meaning: "วันหยุด",
+              questionImage: "public/Calendar/Holiday.png",
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: "เทพเจ้าฤดูกาล",
+          questions: [
+            {
+              hanzi: "一月",
+              pinyin: "yī yuè",
+              meaning: "เดือนมกราคม",
+              questionImage: "public/Calender/January",
+            },
+            {
+              hanzi: "二月",
+              pinyin: "èr yuè",
+              meaning: "เดือนกุมภาพันธ์",
+              questionImage: "public/Calender/February",
+            },
+            {
+              hanzi: "星期几",
+              pinyin: "xīngqī jǐ",
+              meaning: "วันอะไร (ของสัปดาห์)",
+              questionImage: "public/Calender/WhichDay",
+            },
+            {
+              hanzi: "下午",
+              pinyin: "xiàwǔ",
+              meaning: "ตอนบ่าย",
+              questionImage: "public/Time/Afternoon",
+            },
+            {
+              hanzi: "晚上",
+              pinyin: "wǎnshang",
+              meaning: "ตอนกลางคืน/ตอนเย็น",
+              questionImage: "public/Time/Evening",
+            },
+            {
+              hanzi: "早上",
+              pinyin: "zǎoshang",
+              meaning: "ตอนเช้า",
+              questionImage: "public/Time/Morning",
+            },
+            {
+              hanzi: "现在",
+              pinyin: "xiànzài",
+              meaning: "ตอนนี้",
+              questionImage: "public/Time/Now",
+            },
+            {
+              hanzi: "时间",
+              pinyin: "shíjiān",
+              meaning: "เวลา",
+              questionImage: "public/Time/Time",
+            },
+            {
+              hanzi: "分钟",
+              pinyin: "fēnzhōng",
+              meaning: "นาที",
+              questionImage: "public/Time/Minutes",
+            },
+            {
+              hanzi: "小时",
+              pinyin: "xiǎoshí",
+              meaning: "ชั่วโมง",
+              questionImage: "public/Time/Hour",
+            },
+          ],
+        },
+        // ... เพิ่มบอสอื่นตามต้องการ
+      ];
 
-const TOTAL_BOSSES = 1;
-const WRONG_DAMAGE = 20;
-const HEAL_AMOUNT = 30;
+      const TOTAL_BOSSES = 1;
+      const WRONG_DAMAGE = 20;
+      const HEAL_AMOUNT = 30;
 
-let state = {
-  bossIndex: 0,
-  questionIndex: 0,
-  bossHP: 100,
-  playerHP: 100,
-  score: 0,
-  scoreMultiplier: 1,
-  comboCount: 0,
-  items: { heal: 1, fifty: 1, skip: 1 },
-  currentQuestions: [],
-  answered: false,
-  paused: false,
-  gameOver: false,
-  victory: false,
-  bossesDefeated: 0,
-  timer: null,
-  damagePerHit: 25,
-};
+      let state = {
+        bossIndex: 0,
+        questionIndex: 0,
+        bossHP: 100,
+        playerHP: 100,
+        score: 0,
+        scoreMultiplier: 1,
+        comboCount: 0,
+        items: { heal: 1, fifty: 1, skip: 1 },
+        currentQuestions: [],
+        answered: false,
+        paused: false,
+        gameOver: false,
+        victory: false,
+        bossesDefeated: 0,
+        timer: null,
+        damagePerHit: 25,
+      };
 
-const el = {
-  gameContainer: document.getElementById('game-container'),
-  bossName: document.getElementById('boss-name'),
-  bossHPBar: document.getElementById('boss-hp-bar'),
-  bossHPText: document.getElementById('boss-hp-text'),
-  playerHPBar: document.getElementById('player-hp-bar'),
-  playerHPText: document.getElementById('player-hp-text'),
-  scoreValue: document.getElementById('score-value'),
-  comboBadge: document.getElementById('combo-badge'),
-  questionHanzi: document.getElementById('question-hanzi'),
-  questionPinyin: document.getElementById('question-pinyin'),
-  playSoundBtn: document.getElementById('play-sound-btn'),
-  choicesGrid: document.getElementById('choices-grid'),
-  timerBar: document.getElementById('timer-bar'),
-  bossProgress: document.getElementById('boss-progress'),
-  comboPopup: document.getElementById('combo-popup'),
-  comboPopupText: document.getElementById('combo-popup-text'),
-  bubbleContainer: document.getElementById('bubble-container'),
-};
+      const el = {
+        gameContainer: document.getElementById("game-container"),
+        bossName: document.getElementById("boss-name"),
+        bossHPBar: document.getElementById("boss-hp-bar"),
+        bossHPText: document.getElementById("boss-hp-text"),
+        playerHPBar: document.getElementById("player-hp-bar"),
+        playerHPText: document.getElementById("player-hp-text"),
+        scoreValue: document.getElementById("score-value"),
+        comboBadge: document.getElementById("combo-badge"),
+        questionHanzi: document.getElementById("question-hanzi"),
+        questionPinyin: document.getElementById("question-pinyin"),
+        playSoundBtn: document.getElementById("play-sound-btn"),
+        choicesGrid: document.getElementById("choices-grid"),
+        timerBar: document.getElementById("timer-bar"),
+        bossProgress: document.getElementById("boss-progress"),
+        comboPopup: document.getElementById("combo-popup"),
+        comboPopupText: document.getElementById("combo-popup-text"),
+        bubbleContainer: document.getElementById("bubble-container"),
+      };
 
-// Utility
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-let chineseVoice = null;
-function loadVoices() {
-  if ('speechSynthesis' in window) {
-    const voices = speechSynthesis.getVoices();
-    chineseVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN') || (v.name && v.name.toLowerCase().includes('chinese'))) || null;
-  }
-}
-if ('speechSynthesis' in window) {
-  loadVoices();
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = loadVoices;
-  }
-}
+      // Utility
+      function shuffle(arr) {
+        return [...arr].sort(() => Math.random() - 0.5);
+      }
+      let currentLocalAudio = null;
 
-let currentOnlineAudio = null;
-
-async function playOnlineTTS(text) {
-  try {
-    const cleanText = text.trim();
-    if (!cleanText) return;
-
-    if (currentOnlineAudio) {
-      currentOnlineAudio.pause();
-      currentOnlineAudio = null;
-    }
-
-    const encoded = encodeURIComponent(cleanText);
-    const stripped = encodeURIComponent(cleanText.replace(/[！!？?，,。. ]/g, ''));
-
-    const sources = [
-      `public/audio/${cleanText}.mp3`,
-      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=tw-ob`,
-      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=gtx`,
-      `https://dict.youdao.com/dictvoice?audio=${stripped}&le=zh`,
-      `https://fanyi.baidu.com/gettts?lan=zh&text=${encoded}&spd=5&source=web`
-    ];
-
-    for (let i = 0; i < sources.length; i++) {
-      const src = sources[i];
-      const success = await new Promise((resolve) => {
-        const audio = new Audio();
-        audio.referrerPolicy = 'no-referrer';
-        audio.src = src;
-        currentOnlineAudio = audio;
-
-        let resolved = false;
-        const cleanupAndResolve = (isOk) => {
-          if (!resolved) {
-            resolved = true;
-            audio.onplaying = null;
-            audio.onerror = null;
-            resolve(isOk);
+      function speak(text) {
+        if (!text) return;
+        try {
+          if (currentLocalAudio) {
+            currentLocalAudio.pause();
+            currentLocalAudio.currentTime = 0;
           }
-        };
+          const cleanText = text.trim();
+          const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
+          const audio = new Audio(audioPath);
+          audio.referrerPolicy = "no-referrer";
+          currentLocalAudio = audio;
+          audio.play().catch((err) => {
+            console.warn(
+              `Local audio playback failed for "${cleanText}":`,
+              err,
+            );
+          });
+        } catch (e) {
+          console.error("Audio playback error:", e);
+        }
+      }
 
-        audio.onplaying = () => cleanupAndResolve(true);
-        audio.onerror = () => cleanupAndResolve(false);
+      function getComboMultiplier() {
+        if (state.comboCount >= 10) return 5;
+        if (state.comboCount >= 5) return 3;
+        if (state.comboCount >= 3) return 2;
+        return 1;
+      }
 
-        audio.play().then(() => cleanupAndResolve(true)).catch(() => cleanupAndResolve(false));
-      });
+      function resetCombo() {
+        state.comboCount = 0;
+        state.scoreMultiplier = 1;
+      }
 
-      if (success) return;
-    }
-  } catch (e) {
-    console.error("playOnlineTTS error:", e);
-  }
-}
-
-function speak(text) {
-  if (!text) return;
-  if ('speechSynthesis' in window && !chineseVoice) {
-    loadVoices();
-  }
-  if ('speechSynthesis' in window && chineseVoice) {
-    try {
-      speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = chineseVoice;
-      utterance.lang = chineseVoice.lang;
-      utterance.rate = 0.85;
-      speechSynthesis.speak(utterance);
-      return;
-    } catch (e) {
-      console.warn("Speech error, switching to online TTS:", e);
-    }
-  }
-  playOnlineTTS(text);
-}
-
-function getComboMultiplier() {
-  if (state.comboCount >= 10) return 5;
-  if (state.comboCount >= 5) return 3;
-  if (state.comboCount >= 3) return 2;
-  return 1;
-}
-
-function resetCombo() {
-  state.comboCount = 0;
-  state.scoreMultiplier = 1;
-}
-
-/* =========================================================
+      /* =========================================================
    PARTICLE SYSTEM
 ========================================================= */
-function initParticles() {
-  const container = document.getElementById('particle-container');
-  const colors = ['#FFD6E8', '#B8F2D4', '#BEE7F5', '#FFF3B0'];
-  
-  for (let i = 0; i < 15; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    particle.style.animationDuration = (5 + Math.random() * 10) + 's';
-    particle.style.animationDelay = Math.random() * 5 + 's';
-    particle.classList.add('active');
-    container.appendChild(particle);
-  }
-}
+      function initParticles() {
+        const container = document.getElementById("particle-container");
+        const colors = ["#FFD6E8", "#B8F2D4", "#BEE7F5", "#FFF3B0"];
 
-/* =========================================================
+        for (let i = 0; i < 15; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          particle.style.animationDuration = 5 + Math.random() * 10 + "s";
+          particle.style.animationDelay = Math.random() * 5 + "s";
+          particle.classList.add("active");
+          container.appendChild(particle);
+        }
+      }
+
+      /* =========================================================
    BUBBLE EFFECT IN HP BAR
 ========================================================= */
-function createBubble() {
-  if (state.answered) return;
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.style.left = Math.random() * 100 + '%';
-  bubble.style.top = Math.random() * 100 + '%';
-  el.bubbleContainer.appendChild(bubble);
-  
-  setTimeout(() => bubble.remove(), 1200);
-}
+      function createBubble() {
+        if (state.answered) return;
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.style.left = Math.random() * 100 + "%";
+        bubble.style.top = Math.random() * 100 + "%";
+        el.bubbleContainer.appendChild(bubble);
 
-setInterval(createBubble, 300);
+        setTimeout(() => bubble.remove(), 1200);
+      }
 
-/* =========================================================
+      setInterval(createBubble, 300);
+
+      /* =========================================================
    HP & DAMAGE DISPLAY
 ========================================================= */
-function updatePlayerHP() {
-  const percent = Math.max(0, (state.playerHP / 100) * 100);
-  el.playerHPBar.style.width = percent + '%';
-  el.playerHPText.textContent = `${state.playerHP}/100`;
-  
-  // Add damage animation
-  el.playerHPBar.parentElement.classList.add('damaged');
-  setTimeout(() => el.playerHPBar.parentElement.classList.remove('damaged'), 400);
-}
+      function updatePlayerHP() {
+        const percent = Math.max(0, (state.playerHP / 100) * 100);
+        el.playerHPBar.style.width = percent + "%";
+        el.playerHPText.textContent = `${state.playerHP}/100`;
 
-function updateBossHP() {
-  const percent = Math.max(0, (state.bossHP / 100) * 100);
-  el.bossHPBar.style.width = percent + '%';
-  el.bossHPText.textContent = `${state.bossHP}/100`;
-  
-  el.bossHPBar.parentElement.classList.add('damaged');
-  setTimeout(() => el.bossHPBar.parentElement.classList.remove('damaged'), 400);
-  
-  // Heart beat effect
-  const heart = document.querySelector('.heart-pulse');
-  if (heart) {
-    heart.style.animation = 'none';
-    setTimeout(() => heart.style.animation = 'heart-pulse-anim 1.5s ease-out infinite', 10);
-  }
-}
+        // Add damage animation
+        el.playerHPBar.parentElement.classList.add("damaged");
+        setTimeout(
+          () => el.playerHPBar.parentElement.classList.remove("damaged"),
+          400,
+        );
+      }
 
-function updateScoreUI() {
-  el.scoreValue.textContent = state.score;
-  el.comboBadge.textContent = `x${state.scoreMultiplier}`;
-  
-  // Combo badge color change
-  if (state.comboCount >= 10) {
-    el.comboBadge.style.background = 'linear-gradient(135deg, #FFD34D, #FFC94D)';
-  } else if (state.comboCount >= 5) {
-    el.comboBadge.style.background = 'linear-gradient(135deg, #FF9FC3, #FF7BA6)';
-  } else {
-    el.comboBadge.style.background = 'linear-gradient(135deg, #6FCBE8, #5CB8DD)';
-  }
-}
+      function updateBossHP() {
+        const percent = Math.max(0, (state.bossHP / 100) * 100);
+        el.bossHPBar.style.width = percent + "%";
+        el.bossHPText.textContent = `${state.bossHP}/100`;
 
-function updateItemUI() {
-  for (const [type, count] of Object.entries(state.items)) {
-    const el_count = document.getElementById(`item-${type}-count`);
-    if (el_count) el_count.textContent = count;
-  }
-}
+        el.bossHPBar.parentElement.classList.add("damaged");
+        setTimeout(
+          () => el.bossHPBar.parentElement.classList.remove("damaged"),
+          400,
+        );
 
-function showComboPopup(title, subtitle) {
-  const popupText = el.comboPopupText;
-  popupText.textContent = title;
-  popupText.classList.add('show');
-  popupText.classList.remove('hidden');
-  
-  setTimeout(() => {
-    popupText.classList.add('float-away');
-    setTimeout(() => {
-      popupText.classList.remove('show', 'float-away');
-      popupText.classList.add('hidden');
-    }, 800);
-  }, 1000);
-}
+        // Heart beat effect
+        const heart = document.querySelector(".heart-pulse");
+        if (heart) {
+          heart.style.animation = "none";
+          setTimeout(
+            () =>
+              (heart.style.animation =
+                "heart-pulse-anim 1.5s ease-out infinite"),
+            10,
+          );
+        }
+      }
 
-/* =========================================================
+      function updateScoreUI() {
+        el.scoreValue.textContent = state.score;
+        el.comboBadge.textContent = `x${state.scoreMultiplier}`;
+
+        // Combo badge color change
+        if (state.comboCount >= 10) {
+          el.comboBadge.style.background =
+            "linear-gradient(135deg, #FFD34D, #FFC94D)";
+        } else if (state.comboCount >= 5) {
+          el.comboBadge.style.background =
+            "linear-gradient(135deg, #FF9FC3, #FF7BA6)";
+        } else {
+          el.comboBadge.style.background =
+            "linear-gradient(135deg, #6FCBE8, #5CB8DD)";
+        }
+      }
+
+      function updateItemUI() {
+        for (const [type, count] of Object.entries(state.items)) {
+          const el_count = document.getElementById(`item-${type}-count`);
+          if (el_count) el_count.textContent = count;
+        }
+      }
+
+      function showComboPopup(title, subtitle) {
+        const popupText = el.comboPopupText;
+        popupText.textContent = title;
+        popupText.classList.add("show");
+        popupText.classList.remove("hidden");
+
+        setTimeout(() => {
+          popupText.classList.add("float-away");
+          setTimeout(() => {
+            popupText.classList.remove("show", "float-away");
+            popupText.classList.add("hidden");
+          }, 800);
+        }, 1000);
+      }
+
+      /* =========================================================
    BOSS & QUESTION LOADING
 ========================================================= */
-function loadBoss(index) {
-  const boss = bossData[index];
-  state.bossIndex = index;
-  state.bossHP = boss.hp;
-  state.playerHP = 100;
-  state.questionIndex = 0;
-  state.bossesDefeated = index;
-  state.comboCount = 0;
-  
-  el.bossName.textContent = boss.name;
-  el.bossProgress.textContent = (index + 1);
-  el.gameContainer.style.borderColor = boss.color;
-  
-  const count = Math.floor(Math.random() * 3) + 3;
-  state.currentQuestions = shuffle(boss.questions).slice(0, count);
-  state.damagePerHit = Math.ceil(boss.hp / count);
-  
-  updatePlayerHP();
-  updateBossHP();
-  updateItemUI();
-  updateScoreUI();
-  loadQuestion();
-}
+      function loadBoss(index) {
+        const boss = bossData[index];
+        state.bossIndex = index;
+        state.bossHP = boss.hp;
+        state.playerHP = 100;
+        state.questionIndex = 0;
+        state.bossesDefeated = index;
+        state.comboCount = 0;
 
-function loadQuestion() {
-  state.answered = false;
-  el.choicesGrid.innerHTML = '';
-  const q = state.currentQuestions[state.questionIndex];
-  
-  el.questionHanzi.textContent = q.hanzi;
-  el.questionPinyin.textContent = q.pinyin;
-  
-  // Auto-play Chinese pronunciation
-  speak(q.hanzi);
-  
-  // Create choice buttons
-  const meanings = shuffle([q.meaning, ...generateFakeAnswers(q.meaning)]);
-  meanings.forEach(meaning => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn rounded-xl px-4 py-3 md:py-4 font-display text-sm md:text-base font-600 shadow-card';
-    btn.textContent = meaning;
-    btn.addEventListener('click', () => handleChoice(btn, q.meaning));
-    el.choicesGrid.appendChild(btn);
-  });
-  
-  startTimer();
-}
+        el.bossName.textContent = boss.name;
+        el.bossProgress.textContent = index + 1;
+        el.gameContainer.style.borderColor = boss.color;
 
-function generateFakeAnswers(correct) {
-  const fakes = [
-    'ตัวเลือกที่ 2',
-    'ตัวเลือกที่ 3',
-    'ตัวเลือกที่ 4',
-  ];
-  return shuffle(fakes).slice(0, 3);
-}
+        const count = Math.floor(Math.random() * 3) + 3;
+        state.currentQuestions = shuffle(boss.questions).slice(0, count);
+        state.damagePerHit = Math.ceil(boss.hp / count);
 
-function startTimer() {
-  let time = 15;
-  el.timerBar.style.width = '100%';
-  el.timerBar.style.backgroundColor = '#FFD34D';
-  
-  clearInterval(state.timer);
-  state.timer = setInterval(() => {
-    time--;
-    const percent = (time / 15) * 100;
-    el.timerBar.style.width = percent + '%';
-    
-    if (time <= 5) {
-      el.timerBar.style.backgroundColor = '#FF9FC3';
-    }
-    
-    if (time <= 0) {
-      clearInterval(state.timer);
-      state.answered = true;
-      state.playerHP -= WRONG_DAMAGE;
-      resetCombo();
-      updatePlayerHP();
-      checkOutcomeThenNext();
-    }
-  }, 1000);
-}
+        updatePlayerHP();
+        updateBossHP();
+        updateItemUI();
+        updateScoreUI();
+        loadQuestion();
+      }
 
-function hitBoss() {
-  const img = document.getElementById('boss-image');
-  img.classList.add('hit');
-  setTimeout(() => img.classList.remove('hit'), 350);
-}
+      function loadQuestion() {
+        state.answered = false;
+        el.choicesGrid.innerHTML = "";
+        const q = state.currentQuestions[state.questionIndex];
 
-function shakeScreen() {
-  el.gameContainer.classList.add('shake');
-  setTimeout(() => el.gameContainer.classList.remove('shake'), 400);
-}
+        el.questionHanzi.textContent = q.hanzi;
+        el.questionPinyin.textContent = q.pinyin;
 
-function disableChoices() {
-  document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
-}
+        // Auto-play Chinese pronunciation
+        speak(q.hanzi);
 
-function stopHeartbeat() {
-  // Clear heartbeat animation if needed
-}
+        // Create choice buttons
+        const meanings = shuffle([
+          q.meaning,
+          ...generateFakeAnswers(q.meaning),
+        ]);
+        meanings.forEach((meaning) => {
+          const btn = document.createElement("button");
+          btn.className =
+            "choice-btn rounded-xl px-4 py-3 md:py-4 font-display text-sm md:text-base font-600 shadow-card";
+          btn.textContent = meaning;
+          btn.addEventListener("click", () => handleChoice(btn, q.meaning));
+          el.choicesGrid.appendChild(btn);
+        });
 
-/* =========================================================
+        startTimer();
+      }
+
+      function generateFakeAnswers(correct) {
+        const fakes = ["ตัวเลือกที่ 2", "ตัวเลือกที่ 3", "ตัวเลือกที่ 4"];
+        return shuffle(fakes).slice(0, 3);
+      }
+
+      function startTimer() {
+        let time = 15;
+        el.timerBar.style.width = "100%";
+        el.timerBar.style.backgroundColor = "#FFD34D";
+
+        clearInterval(state.timer);
+        state.timer = setInterval(() => {
+          time--;
+          const percent = (time / 15) * 100;
+          el.timerBar.style.width = percent + "%";
+
+          if (time <= 5) {
+            el.timerBar.style.backgroundColor = "#FF9FC3";
+          }
+
+          if (time <= 0) {
+            clearInterval(state.timer);
+            state.answered = true;
+            state.playerHP -= WRONG_DAMAGE;
+            resetCombo();
+            updatePlayerHP();
+            checkOutcomeThenNext();
+          }
+        }, 1000);
+      }
+
+      function hitBoss() {
+        const img = document.getElementById("boss-image");
+        img.classList.add("hit");
+        setTimeout(() => img.classList.remove("hit"), 350);
+      }
+
+      function shakeScreen() {
+        el.gameContainer.classList.add("shake");
+        setTimeout(() => el.gameContainer.classList.remove("shake"), 400);
+      }
+
+      function disableChoices() {
+        document
+          .querySelectorAll(".choice-btn")
+          .forEach((btn) => (btn.disabled = true));
+      }
+
+      function stopHeartbeat() {
+        // Clear heartbeat animation if needed
+      }
+
+      /* =========================================================
    CHOICE HANDLING
 ========================================================= */
-function handleChoice(btn, correctMeaning) {
-  if (state.answered) return;
-  state.answered = true;
-  clearInterval(state.timer);
-  disableChoices();
-  
-  const isCorrect = btn.textContent === correctMeaning;
-  
-  if (isCorrect) {
-    btn.classList.add('choice-correct');
-    state.bossHP -= state.damagePerHit;
-    state.comboCount += 1;
-    state.scoreMultiplier = getComboMultiplier();
-    state.score += 100 * state.scoreMultiplier;
-    updateScoreUI();
-    if (state.comboCount === 3 || state.comboCount === 5 || state.comboCount === 10) {
-      showComboPopup(`🎯 COMBO ${state.comboCount}!`, `คะแนนคูณ x${state.scoreMultiplier}`);
-    }
-    updateBossHP();
-    hitBoss();
-  } else {
-    btn.classList.add('choice-wrong');
-    document.querySelectorAll('.choice-btn').forEach(b => {
-      if (b.textContent === correctMeaning) b.classList.add('choice-correct');
-    });
-    state.playerHP -= WRONG_DAMAGE;
-    resetCombo();
-    updatePlayerHP();
-    shakeScreen();
-  }
-  
-  updateItemUI();
-  checkOutcomeThenNext();
-}
+      function handleChoice(btn, correctMeaning) {
+        if (state.answered) return;
+        state.answered = true;
+        clearInterval(state.timer);
+        disableChoices();
 
-function checkOutcomeThenNext() {
-  setTimeout(() => {
-    if (state.playerHP <= 0) return gameOver();
-    if (state.bossHP <= 0) return bossDefeated();
-    
-    state.questionIndex++;
-    if (state.questionIndex >= state.currentQuestions.length) {
-      const boss = bossData[state.bossIndex];
-      const count = Math.floor(Math.random() * 3) + 3;
-      state.currentQuestions = shuffle(boss.questions).slice(0, count);
-      state.questionIndex = 0;
-      state.damagePerHit = Math.ceil(state.bossHP / count);
-    }
-    loadQuestion();
-  }, 900);
-}
+        const isCorrect = btn.textContent === correctMeaning;
 
-function bossDefeated() {
-  stopHeartbeat();
-  state.bossesDefeated++;
-  state.score += (state.playerHP * 10);
-  Swal.fire({
-    title: '⚔️ ปราบบอสสำเร็จ!',
-    text: 'ไปลุยบอสตัวต่อไปกันเลย!',
-    confirmButtonText: 'ไปต่อ',
-    confirmButtonColor: '#6FE3A8',
-    background: '#FEFCF3',
-    color: '#3A3355',
-  }).then(() => {
-    const next = state.bossIndex + 1;
-    if (next >= TOTAL_BOSSES) {
-      victory();
-    } else {
-      loadBoss(next);
-    }
-  });
-}
+        if (isCorrect) {
+          btn.classList.add("choice-correct");
+          state.bossHP -= state.damagePerHit;
+          state.comboCount += 1;
+          state.scoreMultiplier = getComboMultiplier();
+          state.score += 100 * state.scoreMultiplier;
+          updateScoreUI();
+          if (
+            state.comboCount === 3 ||
+            state.comboCount === 5 ||
+            state.comboCount === 10
+          ) {
+            showComboPopup(
+              `🎯 COMBO ${state.comboCount}!`,
+              `คะแนนคูณ x${state.scoreMultiplier}`,
+            );
+          }
+          updateBossHP();
+          hitBoss();
+        } else {
+          btn.classList.add("choice-wrong");
+          document.querySelectorAll(".choice-btn").forEach((b) => {
+            if (b.textContent === correctMeaning)
+              b.classList.add("choice-correct");
+          });
+          state.playerHP -= WRONG_DAMAGE;
+          resetCombo();
+          updatePlayerHP();
+          shakeScreen();
+        }
 
-function saveHighScore() {
-  const currentBest = parseInt(localStorage.getItem('panda_quest_easy_best') || '0', 10);
-  if (state.score > currentBest) {
-    localStorage.setItem('panda_quest_easy_best', state.score.toString());
-  }
-}
+        updateItemUI();
+        checkOutcomeThenNext();
+      }
 
-function gameOver() {
-  clearInterval(state.timer);
-  stopHeartbeat();
-  saveHighScore();
-  Swal.fire({
-    title: '💔 พ่ายแพ้!',
-    html: `<p>พลังชีวิตหมดแล้ว</p>
+      function checkOutcomeThenNext() {
+        setTimeout(() => {
+          if (state.playerHP <= 0) return gameOver();
+          if (state.bossHP <= 0) return bossDefeated();
+
+          state.questionIndex++;
+          if (state.questionIndex >= state.currentQuestions.length) {
+            const boss = bossData[state.bossIndex];
+            const count = Math.floor(Math.random() * 3) + 3;
+            state.currentQuestions = shuffle(boss.questions).slice(0, count);
+            state.questionIndex = 0;
+            state.damagePerHit = Math.ceil(state.bossHP / count);
+          }
+          loadQuestion();
+        }, 900);
+      }
+
+      function bossDefeated() {
+        stopHeartbeat();
+        state.bossesDefeated++;
+        state.score += state.playerHP * 10;
+        Swal.fire({
+          title: "⚔️ ปราบบอสสำเร็จ!",
+          text: "ไปลุยบอสตัวต่อไปกันเลย!",
+          confirmButtonText: "ไปต่อ",
+          confirmButtonColor: "#6FE3A8",
+          background: "#FEFCF3",
+          color: "#3A3355",
+        }).then(() => {
+          const next = state.bossIndex + 1;
+          if (next >= TOTAL_BOSSES) {
+            victory();
+          } else {
+            loadBoss(next);
+          }
+        });
+      }
+
+      function saveHighScore() {
+        const currentBest = parseInt(
+          localStorage.getItem("panda_quest_easy_best") || "0",
+          10,
+        );
+        if (state.score > currentBest) {
+          localStorage.setItem("panda_quest_easy_best", state.score.toString());
+        }
+      }
+
+      function gameOver() {
+        clearInterval(state.timer);
+        stopHeartbeat();
+        saveHighScore();
+        Swal.fire({
+          title: "💔 พ่ายแพ้!",
+          html: `<p>พลังชีวิตหมดแล้ว</p>
            <p style="font-size: 18px; margin-top: 10px;">ปราบบอสได้: <strong>${state.bossesDefeated}</strong>/10</p>
            <p style="font-size: 16px; margin-top: 5px;">คะแนน: <strong>${state.score}</strong></p>`,
-    confirmButtonText: 'เริ่มใหม่',
-    showDenyButton: true,
-    denyButtonText: 'กลับหน้าแรก',
-    confirmButtonColor: '#FF9FC3',
-    denyButtonColor: '#6FCBE8',
-    background: '#FEFCF3',
-    color: '#3A3355',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      location.reload();
-    } else {
-      window.location.href = 'index.html';
-    }
-  });
-}
+          confirmButtonText: "เริ่มใหม่",
+          showDenyButton: true,
+          denyButtonText: "กลับหน้าแรก",
+          confirmButtonColor: "#FF9FC3",
+          denyButtonColor: "#6FCBE8",
+          background: "#FEFCF3",
+          color: "#3A3355",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          } else {
+            window.location.href = "index.html";
+          }
+        });
+      }
 
-function victory() {
-  stopHeartbeat();
-  state.score += (state.playerHP * 10);
-  saveHighScore();
-  Swal.fire({
-    title: '🏆 ชนะครบ 10 บอส!',
-    html: `<p>สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน</p>
+      function victory() {
+        stopHeartbeat();
+        state.score += state.playerHP * 10;
+        saveHighScore();
+        Swal.fire({
+          title: "🏆 ชนะครบ 10 บอส!",
+          html: `<p>สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน</p>
            <div style="margin-top: 20px; padding: 15px; background: rgba(111, 227, 168, 0.2); border-radius: 10px;">
              <p style="font-size: 18px; margin: 5px 0;">🎯 ปราบบอสได้: <strong>${state.bossesDefeated}</strong>/10</p>
              <p style="font-size: 18px; margin: 5px 0;">⭐ คะแนนรวม: <strong>${state.score}</strong></p>
            </div>`,
-    confirmButtonText: 'เล่นอีกครั้ง',
-    showDenyButton: true,
-    denyButtonText: 'กลับหน้าแรก',
-    confirmButtonColor: '#FFD34D',
-    denyButtonColor: '#6FCBE8',
-    background: '#FEFCF3',
-    color: '#3A3355',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      location.reload();
-    } else {
-      window.location.href = 'index.html';
-    }
-  });
-}
+          confirmButtonText: "เล่นอีกครั้ง",
+          showDenyButton: true,
+          denyButtonText: "กลับหน้าแรก",
+          confirmButtonColor: "#FFD34D",
+          denyButtonColor: "#6FCBE8",
+          background: "#FEFCF3",
+          color: "#3A3355",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          } else {
+            window.location.href = "index.html";
+          }
+        });
+      }
 
-function pauseGame() {
-  if (state.gameOver || state.victory) return;
-  state.paused = true;
-  clearInterval(state.timer);
-  disableChoices();
-  
-  Swal.fire({
-    title: '⏸️ หยุดเล่น',
-    html: '<p>เลือกสิ่งที่คุณต้องการ</p>',
-    showDenyButton: true,
-    confirmButtonText: 'ต่อเล่น',
-    denyButtonText: 'กลับหน้าแรก',
-    confirmButtonColor: '#6FE3A8',
-    denyButtonColor: '#FF9FC3',
-    background: '#FEFCF3',
-    color: '#3A3355',
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      state.paused = false;
-      updateItemUI();
-      startTimer();
-    }
-  });
-}
+      function pauseGame() {
+        if (state.gameOver || state.victory) return;
+        state.paused = true;
+        clearInterval(state.timer);
+        disableChoices();
 
-/* =========================================================
+        Swal.fire({
+          title: "⏸️ หยุดเล่น",
+          html: "<p>เลือกสิ่งที่คุณต้องการ</p>",
+          showDenyButton: true,
+          confirmButtonText: "ต่อเล่น",
+          denyButtonText: "กลับหน้าแรก",
+          confirmButtonColor: "#6FE3A8",
+          denyButtonColor: "#FF9FC3",
+          background: "#FEFCF3",
+          color: "#3A3355",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            state.paused = false;
+            updateItemUI();
+            startTimer();
+          }
+        });
+      }
+
+      /* =========================================================
    ITEMS & BUTTONS
 ========================================================= */
-document.getElementById('stop-btn').addEventListener('click', pauseGame);
+      document.getElementById("stop-btn").addEventListener("click", pauseGame);
 
-document.querySelectorAll('[data-item]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const type = btn.getAttribute('data-item');
-    if (state.items[type] <= 0 || state.answered) return;
-    
-    if (type === 'heal') {
-      state.items.heal--;
-      state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
-      updatePlayerHP();
-      showComboPopup('💚 ฮีล!', `+${HEAL_AMOUNT} HP`);
-    }
-    
-    if (type === 'fifty') {
-      state.items.fifty--;
-      const q = state.currentQuestions[state.questionIndex];
-      const wrongButtons = [...document.querySelectorAll('.choice-btn')]
-        .filter(b => b.textContent !== q.meaning);
-      shuffle(wrongButtons).slice(0, 2).forEach(b => {
-        b.disabled = true;
-        b.style.visibility = 'hidden';
+      document.querySelectorAll("[data-item]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const type = btn.getAttribute("data-item");
+          if (state.items[type] <= 0 || state.answered) return;
+
+          if (type === "heal") {
+            state.items.heal--;
+            state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
+            updatePlayerHP();
+            showComboPopup("💚 ฮีล!", `+${HEAL_AMOUNT} HP`);
+          }
+
+          if (type === "fifty") {
+            state.items.fifty--;
+            const q = state.currentQuestions[state.questionIndex];
+            const wrongButtons = [
+              ...document.querySelectorAll(".choice-btn"),
+            ].filter((b) => b.textContent !== q.meaning);
+            shuffle(wrongButtons)
+              .slice(0, 2)
+              .forEach((b) => {
+                b.disabled = true;
+                b.style.visibility = "hidden";
+              });
+          }
+
+          if (type === "skip") {
+            state.items.skip--;
+            state.answered = true;
+            clearInterval(state.timer);
+            disableChoices();
+            checkOutcomeThenNext();
+          }
+
+          updateItemUI();
+        });
       });
-    }
-    
-    if (type === 'skip') {
-      state.items.skip--;
-      state.answered = true;
-      clearInterval(state.timer);
-      disableChoices();
-      checkOutcomeThenNext();
-    }
-    
-    updateItemUI();
-  });
-});
 
-el.playSoundBtn.addEventListener('click', () => {
-  speak(el.questionHanzi.textContent);
-});
+      el.playSoundBtn.addEventListener("click", () => {
+        speak(el.questionHanzi.textContent);
+      });
 
-/* =========================================================ข
+      /* =========================================================ข
    INITIALIZE
 ========================================================= */
-initParticles();
-updatePlayerHP();
-updateBossHP();
-updateItemUI();
-updateScoreUI();
-loadBoss(0);
-</script>
-
-</body>
+      initParticles();
+      updatePlayerHP();
+      updateBossHP();
+      updateItemUI();
+      updateScoreUI();
+      loadBoss(0);
+    </script>
+  </body>
 </html>

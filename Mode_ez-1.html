@@ -1,823 +1,1404 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Easy Mode | Panda's Chinese Quest</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Easy Mode | Panda's Chinese Quest</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          mint: '#B8F2D4', mintDeep: '#6FE3A8',
-          sky: '#BEE7F5', skyDeep: '#6FCBE8',
-          pink: '#FFD6E8', pinkDeep: '#FF9FC3',
-          yellow: '#FFF3B0', yellowDeep: '#FFD34D',
-          brandPurple: '#8A4AF3',
-          timerBg: '#0B1527',
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              mint: "#B8F2D4",
+              mintDeep: "#6FE3A8",
+              sky: "#BEE7F5",
+              skyDeep: "#6FCBE8",
+              pink: "#FFD6E8",
+              pinkDeep: "#FF9FC3",
+              yellow: "#FFF3B0",
+              yellowDeep: "#FFD34D",
+              brandPurple: "#8A4AF3",
+              timerBg: "#0B1527",
+            },
+            fontFamily: {
+              display: ["Fredoka", "Mali", "sans-serif"],
+              thai: ["Mali", "sans-serif"],
+              hanzi: ["'Noto Sans SC'", "sans-serif"],
+            },
+          },
         },
-        fontFamily: { display: ['Fredoka','Mali','sans-serif'], thai: ['Mali','sans-serif'], hanzi: ["'Noto Sans SC'",'sans-serif'] },
+      };
+    </script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
-    }
-  }
-</script>
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+        background-color: #f0f0f0;
+      }
+      body {
+        font-family: "Mali", sans-serif;
+        color: #3a3355;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-<style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-    background-color: #f0f0f0;
-  }
-  body {
-    font-family:'Mali',sans-serif;
-    color:#3A3355;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* =========================================================
+      /* =========================================================
      AMBIENT BACKGROUND 
   ========================================================= */
-  .ambient-bg {
-    position: fixed; inset: 0; z-index: 0; overflow: hidden;
-    background: #8A4AF3;
-  }
-  
-  .bg-bubble {
-    position: absolute; border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
-    pointer-events: none;
-    animation: float-complex ease-in-out infinite alternate;
-  }
-  
-  .bubble-1 { width: 50vh; height: 50vh; top: -10%; left: -10%; animation-duration: 12s; }
-  .bubble-2 { width: 35vh; height: 35vh; top: 15%; right: -5%; animation-duration: 15s; animation-delay: -2s; }
-  .bubble-3 { width: 65vh; height: 65vh; bottom: -20%; left: 5%; animation-duration: 18s; animation-delay: -5s; }
-  .bubble-4 { width: 25vh; height: 25vh; top: 40%; left: 65%; animation-duration: 10s; animation-delay: -1s; }
-  .bubble-5 { width: 40vh; height: 40vh; bottom: 10%; right: -15%; animation-duration: 14s; animation-delay: -7s; }
-  .bubble-6 { width: 20vh; height: 20vh; top: 50%; left: 20%; animation-duration: 9s; animation-delay: -3s; }
-  .bubble-7 { width: 30vh; height: 30vh; top: -5%; left: 40%; animation-duration: 11s; animation-delay: -4s; }
-  .bubble-8 { width: 15vh; height: 15vh; bottom: 30%; right: 25%; animation-duration: 8s; animation-delay: -6s; }
+      .ambient-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        background: #8a4af3;
+      }
 
-  @keyframes float-complex {
-    0%   { transform: translate(0px, 0px) scale(1); }
-    33%  { transform: translate(25px, -30px) scale(1.05); }
-    66%  { transform: translate(-20px, 20px) scale(0.95); }
-    100% { transform: translate(30px, 35px) scale(1.1); }
-  }
+      .bg-bubble {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+        animation: float-complex ease-in-out infinite alternate;
+      }
 
-  /* =========================================================
+      .bubble-1 {
+        width: 50vh;
+        height: 50vh;
+        top: -10%;
+        left: -10%;
+        animation-duration: 12s;
+      }
+      .bubble-2 {
+        width: 35vh;
+        height: 35vh;
+        top: 15%;
+        right: -5%;
+        animation-duration: 15s;
+        animation-delay: -2s;
+      }
+      .bubble-3 {
+        width: 65vh;
+        height: 65vh;
+        bottom: -20%;
+        left: 5%;
+        animation-duration: 18s;
+        animation-delay: -5s;
+      }
+      .bubble-4 {
+        width: 25vh;
+        height: 25vh;
+        top: 40%;
+        left: 65%;
+        animation-duration: 10s;
+        animation-delay: -1s;
+      }
+      .bubble-5 {
+        width: 40vh;
+        height: 40vh;
+        bottom: 10%;
+        right: -15%;
+        animation-duration: 14s;
+        animation-delay: -7s;
+      }
+      .bubble-6 {
+        width: 20vh;
+        height: 20vh;
+        top: 50%;
+        left: 20%;
+        animation-duration: 9s;
+        animation-delay: -3s;
+      }
+      .bubble-7 {
+        width: 30vh;
+        height: 30vh;
+        top: -5%;
+        left: 40%;
+        animation-duration: 11s;
+        animation-delay: -4s;
+      }
+      .bubble-8 {
+        width: 15vh;
+        height: 15vh;
+        bottom: 30%;
+        right: 25%;
+        animation-duration: 8s;
+        animation-delay: -6s;
+      }
+
+      @keyframes float-complex {
+        0% {
+          transform: translate(0px, 0px) scale(1);
+        }
+        33% {
+          transform: translate(25px, -30px) scale(1.05);
+        }
+        66% {
+          transform: translate(-20px, 20px) scale(0.95);
+        }
+        100% {
+          transform: translate(30px, 35px) scale(1.1);
+        }
+      }
+
+      /* =========================================================
      GAME FRAME
   ========================================================= */
-  .app-frame {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100dvh;
-    max-width: 480px;
-    margin: auto;
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-  }
-  @media (min-width: 640px) {
-    .app-frame {
-      height: min(94dvh, 900px);
-      border-radius: 1.75rem;
-    }
-  }
+      .app-frame {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100dvh;
+        max-width: 480px;
+        margin: auto;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+      }
+      @media (min-width: 640px) {
+        .app-frame {
+          height: min(94dvh, 900px);
+          border-radius: 1.75rem;
+        }
+      }
 
-  /* Timer fill uses transform scaling to avoid percentage width overrides */
-  #timer-bar {
-    transform-origin: left center;
-    transform: scaleX(1);
-    transition: transform .06s linear, background-color .12s ease;
-    will-change: transform;
-    width: 100%;
-    background: linear-gradient(90deg, #facc15, #f59e0b);
-  }
+      /* Timer fill uses transform scaling to avoid percentage width overrides */
+      #timer-bar {
+        transform-origin: left center;
+        transform: scaleX(1);
+        transition:
+          transform 0.06s linear,
+          background-color 0.12s ease;
+        will-change: transform;
+        width: 100%;
+        background: linear-gradient(90deg, #facc15, #f59e0b);
+      }
 
-  /* =========================================================
+      /* =========================================================
      FULL SCREEN DAMAGE EFFECT
   ========================================================= */
-  body.app-damage::before {
-    content: '';
-    position: fixed; 
-    left: 0; right: 0; top: 0; bottom: 0;
-    pointer-events: none; 
-    z-index: 9999; 
-    opacity: 0;
-    box-shadow: inset 0 0 120px rgba(239, 68, 68, 0.7);
-    transition: opacity .25s ease;
-    animation: damage-pulse-screen 0.9s ease-out both;
-  }
-  @keyframes damage-pulse-screen { 
-    0% { opacity: 0; } 
-    10% { opacity: 1; } 
-    80% { opacity: 1; } 
-    100% { opacity: 0; } 
-  }
+      body.app-damage::before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0;
+        box-shadow: inset 0 0 120px rgba(239, 68, 68, 0.7);
+        transition: opacity 0.25s ease;
+        animation: damage-pulse-screen 0.9s ease-out both;
+      }
+      @keyframes damage-pulse-screen {
+        0% {
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
 
-  /* =========================================================
+      /* =========================================================
      BOSS ZONE 
   ========================================================= */
-  #boss-image {
-    animation: floaty 3.5s ease-in-out infinite;
-    width: clamp(17rem, 45dvh, 28rem);
-    height: clamp(17rem, 45dvh, 28rem);
-    object-fit: contain;
-  }
-  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
-  
-  .boss-shake { animation: boss-hit-shake .35s ease; }
-  @keyframes boss-hit-shake {
-    0%,100% { transform: translateX(0); }
-    20% { transform: translateX(-6px); }
-    40% { transform: translateX(6px); }
-    60% { transform: translateX(-4px); }
-    80% { transform: translateX(4px); }
-  }
+      #boss-image {
+        animation: floaty 3.5s ease-in-out infinite;
+        width: clamp(17rem, 45dvh, 28rem);
+        height: clamp(17rem, 45dvh, 28rem);
+        object-fit: contain;
+      }
+      @keyframes floaty {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
 
-  /* =========================================================
+      .boss-shake {
+        animation: boss-hit-shake 0.35s ease;
+      }
+      @keyframes boss-hit-shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-6px);
+        }
+        40% {
+          transform: translateX(6px);
+        }
+        60% {
+          transform: translateX(-4px);
+        }
+        80% {
+          transform: translateX(4px);
+        }
+      }
+
+      /* =========================================================
      SPEECH BUBBLE
   ========================================================= */
-  .speech-bubble {
-    position: relative;
-    background: #FFFFFF;
-    border-radius: 1.5rem;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  }
-  .speech-bubble::before {
-    content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 16px solid #FFFFFF;
-  }
+      .speech-bubble {
+        position: relative;
+        background: #ffffff;
+        border-radius: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+      .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-bottom: 16px solid #ffffff;
+      }
 
-  /* =========================================================
+      /* =========================================================
      CHOICES
   ========================================================= */
-  .choice-btn {
-    transition: transform .12s ease, filter .12s ease;
-    background: #FFFFFF;
-    border-radius: 1rem;
-    font-size: clamp(.85rem, 2.2dvh, 1rem);
-    color: #4B5563;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  }
-  .choice-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.02); filter: brightness(0.98); }
-  .choice-btn:active:not(:disabled) { transform: translateY(1px); }
-  .choice-btn:disabled { opacity: .6; cursor: not-allowed; }
-  .choice-correct { background: #10B981 !important; color: white !important; box-shadow: 0 6px 15px rgba(16,185,129,0.4) !important; }
-  .choice-wrong { background: #EF4444 !important; color: white !important; box-shadow: 0 6px 15px rgba(239,68,68,0.4) !important; }
+      .choice-btn {
+        transition:
+          transform 0.12s ease,
+          filter 0.12s ease;
+        background: #ffffff;
+        border-radius: 1rem;
+        font-size: clamp(0.85rem, 2.2dvh, 1rem);
+        color: #4b5563;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .choice-btn:hover:not(:disabled) {
+        transform: translateY(-2px) scale(1.02);
+        filter: brightness(0.98);
+      }
+      .choice-btn:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+      .choice-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .choice-correct {
+        background: #10b981 !important;
+        color: white !important;
+        box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4) !important;
+      }
+      .choice-wrong {
+        background: #ef4444 !important;
+        color: white !important;
+        box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4) !important;
+      }
 
-  /* =========================================================
+      /* =========================================================
      PLAYER ZONE 
   ========================================================= */
-  .player-panel {
-    background: #FFFFFF;
-    border: 2px solid transparent;
-    transition: transform 0.1s, border-color 0.2s, box-shadow 0.2s;
-  }
-  .player-panel.damage-hit {
-    animation: player-panel-shake .45s ease;
-    border-color: #EF4444 !important;
-  }
-  .player-panel.damage-hit::before {
-    content: ''; position: absolute; inset: -2px; border-radius: inherit;
-    background: rgba(239, 68, 68, 0.15);
-    box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.6);
-    animation: player-panel-flash .45s ease;
-    pointer-events: none; z-index: 1;
-  }
-  
-  @keyframes player-panel-shake {
-    0%, 100% { transform: translateX(0); }
-    15% { transform: translateX(-8px) rotate(-1deg); }
-    30% { transform: translateX(7px) rotate(1deg); }
-    45% { transform: translateX(-6px); }
-    60% { transform: translateX(5px); }
-    75% { transform: translateX(-3px); }
-  }
-  @keyframes player-panel-flash { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+      .player-panel {
+        background: #ffffff;
+        border: 2px solid transparent;
+        transition:
+          transform 0.1s,
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .player-panel.damage-hit {
+        animation: player-panel-shake 0.45s ease;
+        border-color: #ef4444 !important;
+      }
+      .player-panel.damage-hit::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        background: rgba(239, 68, 68, 0.15);
+        box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.6);
+        animation: player-panel-flash 0.45s ease;
+        pointer-events: none;
+        z-index: 1;
+      }
 
-  /* OVERLAY */
-  .overlay {
-    position: absolute; inset: 0; z-index: 50;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity .25s ease;
-    background: rgba(0,0,0,0.5); backdrop-filter: blur(3px);
-  }
-  .overlay.show { opacity: 1; pointer-events: auto; }
-  .overlay-card {
-    background: white; border-radius: 1.5rem; padding: 2rem 1.5rem 1.5rem;
-    width: 85%; max-width: 300px; text-align: center;
-    transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  .overlay.show .overlay-card { transform: scale(1); }
+      @keyframes player-panel-shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        15% {
+          transform: translateX(-8px) rotate(-1deg);
+        }
+        30% {
+          transform: translateX(7px) rotate(1deg);
+        }
+        45% {
+          transform: translateX(-6px);
+        }
+        60% {
+          transform: translateX(5px);
+        }
+        75% {
+          transform: translateX(-3px);
+        }
+      }
+      @keyframes player-panel-flash {
+        0% {
+          opacity: 0;
+        }
+        30% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
 
-  /* FLAT UI */
-  .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-inner, .drop-shadow-2xl, .drop-shadow-md, .drop-shadow-sm {
-    box-shadow: none !important;
-    filter: none !important;
-  }
-  .speech-bubble, .player-panel, .status-chip, .overlay-card, .choice-btn, .app-frame, #boss-image, .vessel, .vessel-fill, .digital-clock {
-    box-shadow: none !important;
-    filter: none !important;
-  }
-  .shadow-inner { box-shadow: none !important; }
-  .overlay { background: rgba(0,0,0,0.24) !important; backdrop-filter: none !important; }
-</style>
-</head>
-<body>
+      /* OVERLAY */
+      .overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+      }
+      .overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .overlay-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem 1.5rem 1.5rem;
+        width: 85%;
+        max-width: 300px;
+        text-align: center;
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .overlay.show .overlay-card {
+        transform: scale(1);
+      }
 
-<!-- BACKGROUND BUBBLES -->
-<div class="ambient-bg" aria-hidden="true">
-  <div class="bg-bubble bubble-1"></div>
-  <div class="bg-bubble bubble-2"></div>
-  <div class="bg-bubble bubble-3"></div>
-  <div class="bg-bubble bubble-4"></div>
-  <div class="bg-bubble bubble-5"></div>
-  <div class="bg-bubble bubble-6"></div>
-  <div class="bg-bubble bubble-7"></div>
-  <div class="bg-bubble bubble-8"></div>
-</div>
-
-<div id="app-frame" class="app-frame">
-
-  <!-- TOP BAR -->
-  <div class="relative z-20 flex-shrink-0 flex justify-between items-center px-4 pt-3 mb-1">
-    <div class="bg-white rounded-full px-3 py-1.5 flex items-center shadow-sm">
-      <i class="fa-solid fa-dragon text-pink-400 mr-1.5 text-sm"></i>
-      <span class="font-display font-bold text-gray-700 text-sm">Boss <span id="boss-progress">1</span>/<span id="boss-total">5</span></span>
+      /* FLAT UI */
+      .shadow,
+      .shadow-sm,
+      .shadow-md,
+      .shadow-lg,
+      .shadow-inner,
+      .drop-shadow-2xl,
+      .drop-shadow-md,
+      .drop-shadow-sm {
+        box-shadow: none !important;
+        filter: none !important;
+      }
+      .speech-bubble,
+      .player-panel,
+      .status-chip,
+      .overlay-card,
+      .choice-btn,
+      .app-frame,
+      #boss-image,
+      .vessel,
+      .vessel-fill,
+      .digital-clock {
+        box-shadow: none !important;
+        filter: none !important;
+      }
+      .shadow-inner {
+        box-shadow: none !important;
+      }
+      .overlay {
+        background: rgba(0, 0, 0, 0.24) !important;
+        backdrop-filter: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- BACKGROUND BUBBLES -->
+    <div class="ambient-bg" aria-hidden="true">
+      <div class="bg-bubble bubble-1"></div>
+      <div class="bg-bubble bubble-2"></div>
+      <div class="bg-bubble bubble-3"></div>
+      <div class="bg-bubble bubble-4"></div>
+      <div class="bg-bubble bubble-5"></div>
+      <div class="bg-bubble bubble-6"></div>
+      <div class="bg-bubble bubble-7"></div>
+      <div class="bg-bubble bubble-8"></div>
     </div>
-    <div class="flex items-center gap-2">
-      <div class="bg-white rounded-full px-3 py-1.5 flex items-center shadow-sm">
-        <i class="fa-solid fa-star text-yellow-400 mr-1 text-sm"></i>
-        <span id="score-value" class="font-display font-bold text-gray-700 text-sm">0</span>
-        <span id="combo-badge" class="ml-1.5 bg-sky-400 text-white px-1.5 py-0.5 rounded-full text-[10px] font-bold hidden">x1</span>
-      </div>
-      <button id="stop-btn" aria-label="หยุดชั่วคราว" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-700 shadow-sm transition-transform active:scale-90">
-        <i class="fa-solid fa-pause text-sm"></i>
-      </button>
-    </div>
-  </div>
 
-  <!-- BOSS ZONE -->
-  <div class="boss-zone flex-1 flex flex-col justify-center px-4 relative z-0">
-    <h2 id="boss-name" class="font-display font-bold text-white text-lg sm:text-xl drop-shadow-md text-center mb-2">จอมเวลา ปีศาจนาฬิกา</h2>
-    
-    <div class="w-[90%] max-w-[400px] mx-auto mb-1">
-      <div class="w-full h-5 sm:h-6 bg-[#7835d0] rounded-full relative overflow-hidden border-2 border-[#5c21a9] shadow-inner">
-        <div id="boss-hp-bar" class="h-full bg-gradient-to-r from-[#d99aff] to-[#a952ff] transition-all duration-300 w-full"></div>
-        <div class="absolute inset-0 flex items-center justify-center text-white font-display font-bold text-[10px] drop-shadow-md">
-          <span id="boss-hp-text">100/100</span>
+    <div id="app-frame" class="app-frame">
+      <!-- TOP BAR -->
+      <div
+        class="relative z-20 flex-shrink-0 flex justify-between items-center px-4 pt-3 mb-1"
+      >
+        <div
+          class="bg-white rounded-full px-3 py-1.5 flex items-center shadow-sm"
+        >
+          <i class="fa-solid fa-dragon text-pink-400 mr-1.5 text-sm"></i>
+          <span class="font-display font-bold text-gray-700 text-sm"
+            >Boss <span id="boss-progress">1</span>/<span id="boss-total"
+              >5</span
+            ></span
+          >
         </div>
-      </div>
-    </div>
-
-    <!-- บอสถูกดึงลงและทับนิดหน่อยด้วยกล่องคำถาม -->
-    <div class="flex justify-center mt-0 -mb-16 sm:-mb-24 relative z-0">
-      <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss" class="drop-shadow-2xl">
-    </div>
-  </div>
-
-  <!-- QUESTION ZONE -->
-  <div class="question-zone flex-shrink-0 px-4 z-10 -mt-8 sm:-mt-12 relative">
-    <div class="speech-bubble w-full pt-5 pb-5 px-4 relative">
-      <button id="play-sound-btn" class="absolute top-3 right-3 bg-pink-50 text-pink-400 rounded-full w-8 h-8 flex items-center justify-center shadow-sm border border-pink-100 transition-transform active:scale-90 z-20">
-        <i class="fa-solid fa-volume-high text-xs"></i>
-      </button>
-      <img id="question-image" src="" class="hidden mx-auto h-16 sm:h-20 object-contain mb-2 drop-shadow-sm relative z-20">
-      <p id="question-hanzi" class="font-hanzi font-bold text-3xl sm:text-4xl text-[#3A3355] tracking-wide relative z-20">三点半</p>
-      <p id="question-pinyin" class="font-thai text-gray-500 mt-1 text-[13px] sm:text-sm relative z-20">sān diǎn bàn</p>
-    </div>
-  </div>
-
-  <!-- CHOICES -->
-  <div class="relative z-20 flex-shrink-0 px-4 mt-2">
-    <div id="choices-grid" class="grid grid-cols-2 gap-2"></div>
-  </div>
-
-  <!-- PLAYER ZONE -->
-  <div class="relative z-20 flex-shrink-0 p-4 pb-4 sm:pb-6">
-    
-    <!-- Timer Bar -->
-    <div class="w-full h-2 bg-gray-200 rounded-full mb-2 overflow-hidden shadow-inner border border-gray-300">
-      <div id="timer-bar" class="h-full bg-yellow-400 transition-all duration-75 ease-linear" style="width: 100%;"></div>
-    </div>
-
-    <div id="player-panel" class="player-panel rounded-2xl p-3 shadow-lg relative overflow-hidden">
-      <div class="flex justify-between items-center mb-2">
         <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center overflow-hidden"></div>
-          <span class="font-display font-600 text-gray-700 text-xs">Panda ภาษาจีน</span>
-        </div>
-        
-        <div class="flex gap-1.5">
-          <button data-item="heal" class="w-7 h-7 bg-green-50 text-green-500 border border-green-100 rounded-full flex items-center justify-center text-[10px] relative transition-transform active:scale-90">
-            <i class="fa-solid fa-flask"></i>
-            <span id="item-heal-count" class="absolute -top-1 -right-1 bg-green-400 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold shadow-sm">1</span>
-          </button>
-          <button data-item="fifty" class="w-7 h-7 bg-sky-50 text-sky-500 border border-sky-100 rounded-full flex items-center justify-center text-[10px] relative transition-transform active:scale-90">
-            <i class="fa-solid fa-code-branch"></i>
-            <span id="item-fifty-count" class="absolute -top-1 -right-1 bg-sky-400 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold shadow-sm">1</span>
-          </button>
-          <button data-item="skip" class="w-7 h-7 bg-yellow-50 text-yellow-500 border border-yellow-100 rounded-full flex items-center justify-center text-[10px] relative transition-transform active:scale-90">
-            <i class="fa-solid fa-forward"></i>
-            <span id="item-skip-count" class="absolute -top-1 -right-1 bg-yellow-400 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold shadow-sm">1</span>
+          <div
+            class="bg-white rounded-full px-3 py-1.5 flex items-center shadow-sm"
+          >
+            <i class="fa-solid fa-star text-yellow-400 mr-1 text-sm"></i>
+            <span
+              id="score-value"
+              class="font-display font-bold text-gray-700 text-sm"
+              >0</span
+            >
+            <span
+              id="combo-badge"
+              class="ml-1.5 bg-sky-400 text-white px-1.5 py-0.5 rounded-full text-[10px] font-bold hidden"
+              >x1</span
+            >
+          </div>
+          <button
+            id="stop-btn"
+            aria-label="หยุดชั่วคราว"
+            class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-700 shadow-sm transition-transform active:scale-90"
+          >
+            <i class="fa-solid fa-pause text-sm"></i>
           </button>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-heart text-red-500 text-lg drop-shadow-sm"></i>
-        <div class="flex-1 h-5 bg-[#2A0808] rounded-full relative overflow-hidden border border-[#4a0d0d] shadow-inner">
-          <div id="player-hp-bar" class="h-full bg-gradient-to-r from-red-500 to-[#8b0000] transition-all duration-300 w-full"></div>
-          <div class="absolute inset-0 flex items-center justify-center text-white font-display font-bold text-[10px] drop-shadow-md">
-            <span id="player-hp-text">100/100</span>
+      <!-- BOSS ZONE -->
+      <div
+        class="boss-zone flex-1 flex flex-col justify-center px-4 relative z-0"
+      >
+        <h2
+          id="boss-name"
+          class="font-display font-bold text-white text-lg sm:text-xl drop-shadow-md text-center mb-2"
+        >
+          จอมเวลา ปีศาจนาฬิกา
+        </h2>
+
+        <div class="w-[90%] max-w-[400px] mx-auto mb-1">
+          <div
+            class="w-full h-5 sm:h-6 bg-[#7835d0] rounded-full relative overflow-hidden border-2 border-[#5c21a9] shadow-inner"
+          >
+            <div
+              id="boss-hp-bar"
+              class="h-full bg-gradient-to-r from-[#d99aff] to-[#a952ff] transition-all duration-300 w-full"
+            ></div>
+            <div
+              class="absolute inset-0 flex items-center justify-center text-white font-display font-bold text-[10px] drop-shadow-md"
+            >
+              <span id="boss-hp-text">100/100</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- บอสถูกดึงลงและทับนิดหน่อยด้วยกล่องคำถาม -->
+        <div class="flex justify-center mt-0 -mb-16 sm:-mb-24 relative z-0">
+          <img
+            id="boss-image"
+            src="public/1.png"
+            alt="boss"
+            class="drop-shadow-2xl"
+          />
+        </div>
+      </div>
+
+      <!-- QUESTION ZONE -->
+      <div
+        class="question-zone flex-shrink-0 px-4 z-10 -mt-8 sm:-mt-12 relative"
+      >
+        <div class="speech-bubble w-full pt-5 pb-5 px-4 relative">
+          <button
+            id="play-sound-btn"
+            class="absolute top-3 right-3 bg-pink-50 text-pink-400 rounded-full w-8 h-8 flex items-center justify-center shadow-sm border border-pink-100 transition-transform active:scale-90 z-20"
+          >
+            <i class="fa-solid fa-volume-high text-xs"></i>
+          </button>
+          <img
+            id="question-image"
+            src=""
+            class="hidden mx-auto h-16 sm:h-20 object-contain mb-2 drop-shadow-sm relative z-20"
+          />
+          <p
+            id="question-hanzi"
+            class="font-hanzi font-bold text-3xl sm:text-4xl text-[#3A3355] tracking-wide relative z-20"
+          >
+            三点半
+          </p>
+          <p
+            id="question-pinyin"
+            class="font-thai text-gray-500 mt-1 text-[13px] sm:text-sm relative z-20"
+          >
+            sān diǎn bàn
+          </p>
+        </div>
+      </div>
+
+      <!-- CHOICES -->
+      <div class="relative z-20 flex-shrink-0 px-4 mt-2">
+        <div id="choices-grid" class="grid grid-cols-2 gap-2"></div>
+      </div>
+
+      <!-- PLAYER ZONE -->
+      <div class="relative z-20 flex-shrink-0 p-4 pb-4 sm:pb-6">
+        <!-- Timer Bar -->
+        <div
+          class="w-full h-2 bg-gray-200 rounded-full mb-2 overflow-hidden shadow-inner border border-gray-300"
+        >
+          <div
+            id="timer-bar"
+            class="h-full bg-yellow-400 transition-all duration-75 ease-linear"
+            style="width: 100%"
+          ></div>
+        </div>
+
+        <div
+          id="player-panel"
+          class="player-panel rounded-2xl p-3 shadow-lg relative overflow-hidden"
+        >
+          <div class="flex justify-between items-center mb-2">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-7 h-7 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center overflow-hidden"
+              ></div>
+              <span class="font-display font-600 text-gray-700 text-xs"
+                >Panda ภาษาจีน</span
+              >
+            </div>
+
+            <div class="flex gap-1.5">
+              <button
+                data-item="heal"
+                class="w-7 h-7 bg-green-50 text-green-500 border border-green-100 rounded-full flex items-center justify-center text-[10px] relative transition-transform active:scale-90"
+              >
+                <i class="fa-solid fa-flask"></i>
+                <span
+                  id="item-heal-count"
+                  class="absolute -top-1 -right-1 bg-green-400 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold shadow-sm"
+                  >1</span
+                >
+              </button>
+              <button
+                data-item="fifty"
+                class="w-7 h-7 bg-sky-50 text-sky-500 border border-sky-100 rounded-full flex items-center justify-center text-[10px] relative transition-transform active:scale-90"
+              >
+                <i class="fa-solid fa-code-branch"></i>
+                <span
+                  id="item-fifty-count"
+                  class="absolute -top-1 -right-1 bg-sky-400 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold shadow-sm"
+                  >1</span
+                >
+              </button>
+              <button
+                data-item="skip"
+                class="w-7 h-7 bg-yellow-50 text-yellow-500 border border-yellow-100 rounded-full flex items-center justify-center text-[10px] relative transition-transform active:scale-90"
+              >
+                <i class="fa-solid fa-forward"></i>
+                <span
+                  id="item-skip-count"
+                  class="absolute -top-1 -right-1 bg-yellow-400 text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold shadow-sm"
+                  >1</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <i
+              class="fa-solid fa-heart text-red-500 text-lg drop-shadow-sm"
+            ></i>
+            <div
+              class="flex-1 h-5 bg-[#2A0808] rounded-full relative overflow-hidden border border-[#4a0d0d] shadow-inner"
+            >
+              <div
+                id="player-hp-bar"
+                class="h-full bg-gradient-to-r from-red-500 to-[#8b0000] transition-all duration-300 w-full"
+              ></div>
+              <div
+                class="absolute inset-0 flex items-center justify-center text-white font-display font-bold text-[10px] drop-shadow-md"
+              >
+                <span id="player-hp-text">100/100</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      
+
+      <!-- OVERLAY CONTAINER -->
+      <div id="overlay-container" class="overlay">
+        <div class="overlay-card relative">
+          <div
+            id="overlay-ribbon"
+            class="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-400 text-white px-6 py-1 rounded shadow-md font-bold text-lg uppercase whitespace-nowrap"
+          >
+            TITLE
+          </div>
+          <div class="text-4xl mt-4 mb-2" id="overlay-icon">🏆</div>
+          <h3 id="overlay-title" class="font-bold text-gray-800 text-lg">
+            หัวข้อ
+          </h3>
+          <p id="overlay-message" class="text-sm text-gray-500 mt-1 mb-4">
+            รายละเอียด
+          </p>
+          <div
+            id="overlay-stats"
+            class="text-xs bg-gray-50 rounded-lg p-2 mb-4 hidden border border-gray-100"
+          ></div>
+          <div id="overlay-buttons" class="flex flex-col gap-2"></div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- OVERLAY CONTAINER -->
-  <div id="overlay-container" class="overlay">
-    <div class="overlay-card relative">
-      <div id="overlay-ribbon" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-400 text-white px-6 py-1 rounded shadow-md font-bold text-lg uppercase whitespace-nowrap">TITLE</div>
-      <div class="text-4xl mt-4 mb-2" id="overlay-icon">🏆</div>
-      <h3 id="overlay-title" class="font-bold text-gray-800 text-lg">หัวข้อ</h3>
-      <p id="overlay-message" class="text-sm text-gray-500 mt-1 mb-4">รายละเอียด</p>
-      <div id="overlay-stats" class="text-xs bg-gray-50 rounded-lg p-2 mb-4 hidden border border-gray-100"></div>
-      <div id="overlay-buttons" class="flex flex-col gap-2"></div>
-    </div>
-  </div>
-
-</div>
-
-<script>
-/* =========================================================
+    <script>
+      /* =========================================================
    DATA & CONFIG
 ========================================================= */
-const bossData = [
-  {
-    id: 1, name: 'จอมเวลา ปีศาจนาฬิกา', hp: 100,
-    bossImage: 'public/1.png',
-    questions: [
-      { hanzi: '一点', pinyin: 'yī diǎn', meaning: 'ตีหนึ่ง', isClock: true, time: '01:00', questionImage: 'public/Clock/01_00.png' },
-      { hanzi: '两点', pinyin: 'liǎng diǎn', meaning: 'สองนาฬิกา', isClock: true, time: '02:00', questionImage: 'public/Clock/02_00.png' },
-      { hanzi: '三点半', pinyin: 'sān diǎn bàn', meaning: 'สามโมงครึ่ง', isClock: true, time: '03:30', questionImage: 'public/Clock/03_30.png' },
-      { hanzi: '十分', pinyin: 'shí fēn', meaning: 'สิบนาที', isClock: true, time: '00:10', questionImage: 'public/Clock/10minutes.png' },
-      { hanzi: '五点十分', pinyin: 'wǔ diǎn shí fēn', meaning: 'ห้าโมงสิบนาที', isClock: true, time: '05:10', questionImage: 'public/Clock/05_10.png' },
-    ]
-  },
-  {
-    id: 2, name: 'ปีศาจปฏิทิน (สัปดาห์)', hp: 100,
-    bossImage: 'public/2.png',
-    questions: [
-      { hanzi: '一月一号', pinyin: 'yī yuè yī hào', meaning: 'วันที่ 1 มกราคม', questionImage: 'public/Calendar/1jan.png' },
-      { hanzi: '星期一', pinyin: 'xīngqīyī', meaning: 'วันจันทร์', questionImage: 'public/Calendar/Monday.png' },
-      { hanzi: '星期天', pinyin: 'xīngqītiān', meaning: 'วันอาทิตย์', questionImage: 'public/Calendar/Sunday.png' },
-      { hanzi: '今天几号', pinyin: 'jīntiān jǐ hào', meaning: 'วันนี้วันที่เท่าไหร่', questionImage: 'public/Calendar/Whatdate.png' },
-      { hanzi: '明天', pinyin: 'míngtiān', meaning: 'พรุ่งนี้', questionImage: 'public/Calendar/Tomorrow.png' },
-    ]
-  },
-  {
-    id: 3, name: 'ปีศาจปฏิทิน (เดือน)', hp: 100,
-    bossImage: 'public/3.png',
-    questions: [
-      { hanzi: '一月', pinyin: 'yī yuè', meaning: 'เดือนมกราคม', questionImage: 'public/Calendar/January.png' },
-      { hanzi: '二月', pinyin: 'èr yuè', meaning: 'เดือนกุมภาพันธ์', questionImage: 'public/Calendar/February.png' },
-      { hanzi: '星期几', pinyin: 'xīngqī jǐ', meaning: 'วันอะไร (ของสัปดาห์)', questionImage: 'public/Calendar/WhichDay.png' },
-      { hanzi: '下午', pinyin: 'xiàwǔ', meaning: 'ตอนบ่าย', questionImage: 'public/Time/Afternoon.png' },
-      { hanzi: '晚上', pinyin: 'wǎnshang', meaning: 'ตอนกลางคืน/ตอนเย็น', questionImage: 'public/Time/Evening.png' },
-    ]
-  },
-  {
-    id: 4, name: 'ปีศาจสภาพอากาศ', hp: 100,
-    bossImage: 'public/4.png',
-    questions: [
-      { hanzi: '天气', pinyin: 'tiānqì', meaning: 'สภาพอากาศ', questionImage: 'public/Weather/weather.png' },
-      { hanzi: '热', pinyin: 'rè', meaning: 'ร้อน', questionImage: 'public/Weather/hot.png' },
-      { hanzi: '冷', pinyin: 'lěng', meaning: 'หนาว', questionImage: 'public/Weather/cold.png' },
-      { hanzi: '下雨', pinyin: 'xià yǔ', meaning: 'ฝนตก', questionImage: 'public/Weather/weather.png' },
-      { hanzi: '晴天', pinyin: 'qíngtiān', meaning: 'วันที่ท้องฟ้าแจ่มใส', questionImage: 'public/Weather/weather.png' },
-    ]
-  },
-  {
-    id: 5, name: 'ปีศาจสถานที่', hp: 100,
-    bossImage: 'public/5.png',
-    questions: [
-      { hanzi: '学校', pinyin: 'xuéxiào', meaning: 'โรงเรียน', questionImage: 'public/Locations/school.png' },
-      { hanzi: '医院', pinyin: 'yīyuàn', meaning: 'โรงพยาบาล', questionImage: 'public/Locations/hospital.png' },
-      { hanzi: '商店', pinyin: 'shāngdiàn', meaning: 'ร้านค้า', questionImage: 'public/Locations/store.png' },
-      { hanzi: '前面', pinyin: 'qiánmiàn', meaning: 'ด้านหน้า', questionImage: 'public/Locations/front.png' },
-      { hanzi: '后面', pinyin: 'hòumiàn', meaning: 'ด้านหลัง', questionImage: 'public/Locations/back.png' },
-    ]
-  }
-];
+      const bossData = [
+        {
+          id: 1,
+          name: "จอมเวลา ปีศาจนาฬิกา",
+          hp: 100,
+          bossImage: "public/1.png",
+          questions: [
+            {
+              hanzi: "一点",
+              pinyin: "yī diǎn",
+              meaning: "ตีหนึ่ง",
+              isClock: true,
+              time: "01:00",
+              questionImage: "public/Clock/01_00.png",
+            },
+            {
+              hanzi: "两点",
+              pinyin: "liǎng diǎn",
+              meaning: "สองนาฬิกา",
+              isClock: true,
+              time: "02:00",
+              questionImage: "public/Clock/02_00.png",
+            },
+            {
+              hanzi: "三点半",
+              pinyin: "sān diǎn bàn",
+              meaning: "สามโมงครึ่ง",
+              isClock: true,
+              time: "03:30",
+              questionImage: "public/Clock/03_30.png",
+            },
+            {
+              hanzi: "十分",
+              pinyin: "shí fēn",
+              meaning: "สิบนาที",
+              isClock: true,
+              time: "00:10",
+              questionImage: "public/Clock/10minutes.png",
+            },
+            {
+              hanzi: "五点十分",
+              pinyin: "wǔ diǎn shí fēn",
+              meaning: "ห้าโมงสิบนาที",
+              isClock: true,
+              time: "05:10",
+              questionImage: "public/Clock/05_10.png",
+            },
+          ],
+        },
+        {
+          id: 2,
+          name: "ปีศาจปฏิทิน (สัปดาห์)",
+          hp: 100,
+          bossImage: "public/2.png",
+          questions: [
+            {
+              hanzi: "一月一号",
+              pinyin: "yī yuè yī hào",
+              meaning: "วันที่ 1 มกราคม",
+              questionImage: "public/Calendar/1jan.png",
+            },
+            {
+              hanzi: "星期一",
+              pinyin: "xīngqīyī",
+              meaning: "วันจันทร์",
+              questionImage: "public/Calendar/Monday.png",
+            },
+            {
+              hanzi: "星期天",
+              pinyin: "xīngqītiān",
+              meaning: "วันอาทิตย์",
+              questionImage: "public/Calendar/Sunday.png",
+            },
+            {
+              hanzi: "今天几号",
+              pinyin: "jīntiān jǐ hào",
+              meaning: "วันนี้วันที่เท่าไหร่",
+              questionImage: "public/Calendar/Whatdate.png",
+            },
+            {
+              hanzi: "明天",
+              pinyin: "míngtiān",
+              meaning: "พรุ่งนี้",
+              questionImage: "public/Calendar/Tomorrow.png",
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: "ปีศาจปฏิทิน (เดือน)",
+          hp: 100,
+          bossImage: "public/3.png",
+          questions: [
+            {
+              hanzi: "一月",
+              pinyin: "yī yuè",
+              meaning: "เดือนมกราคม",
+              questionImage: "public/Calendar/January.png",
+            },
+            {
+              hanzi: "二月",
+              pinyin: "èr yuè",
+              meaning: "เดือนกุมภาพันธ์",
+              questionImage: "public/Calendar/February.png",
+            },
+            {
+              hanzi: "星期几",
+              pinyin: "xīngqī jǐ",
+              meaning: "วันอะไร (ของสัปดาห์)",
+              questionImage: "public/Calendar/WhichDay.png",
+            },
+            {
+              hanzi: "下午",
+              pinyin: "xiàwǔ",
+              meaning: "ตอนบ่าย",
+              questionImage: "public/Time/Afternoon.png",
+            },
+            {
+              hanzi: "晚上",
+              pinyin: "wǎnshang",
+              meaning: "ตอนกลางคืน/ตอนเย็น",
+              questionImage: "public/Time/Evening.png",
+            },
+          ],
+        },
+        {
+          id: 4,
+          name: "ปีศาจสภาพอากาศ",
+          hp: 100,
+          bossImage: "public/4.png",
+          questions: [
+            {
+              hanzi: "天气",
+              pinyin: "tiānqì",
+              meaning: "สภาพอากาศ",
+              questionImage: "public/Weather/weather.png",
+            },
+            {
+              hanzi: "热",
+              pinyin: "rè",
+              meaning: "ร้อน",
+              questionImage: "public/Weather/hot.png",
+            },
+            {
+              hanzi: "冷",
+              pinyin: "lěng",
+              meaning: "หนาว",
+              questionImage: "public/Weather/cold.png",
+            },
+            {
+              hanzi: "下雨",
+              pinyin: "xià yǔ",
+              meaning: "ฝนตก",
+              questionImage: "public/Weather/weather.png",
+            },
+            {
+              hanzi: "晴天",
+              pinyin: "qíngtiān",
+              meaning: "วันที่ท้องฟ้าแจ่มใส",
+              questionImage: "public/Weather/weather.png",
+            },
+          ],
+        },
+        {
+          id: 5,
+          name: "ปีศาจสถานที่",
+          hp: 100,
+          bossImage: "public/5.png",
+          questions: [
+            {
+              hanzi: "学校",
+              pinyin: "xuéxiào",
+              meaning: "โรงเรียน",
+              questionImage: "public/Locations/school.png",
+            },
+            {
+              hanzi: "医院",
+              pinyin: "yīyuàn",
+              meaning: "โรงพยาบาล",
+              questionImage: "public/Locations/hospital.png",
+            },
+            {
+              hanzi: "商店",
+              pinyin: "shāngdiàn",
+              meaning: "ร้านค้า",
+              questionImage: "public/Locations/store.png",
+            },
+            {
+              hanzi: "前面",
+              pinyin: "qiánmiàn",
+              meaning: "ด้านหน้า",
+              questionImage: "public/Locations/front.png",
+            },
+            {
+              hanzi: "后面",
+              pinyin: "hòumiàn",
+              meaning: "ด้านหลัง",
+              questionImage: "public/Locations/back.png",
+            },
+          ],
+        },
+      ];
 
-const FALLBACK_DISTRACTORS = ['เที่ยงคืน', 'เมื่อวาน', 'สัปดาห์หน้า', 'ตอนเช้า', 'ตีสี่', 'เดือนหน้า'];
-const TOTAL_BOSSES = bossData.length;
-const WRONG_DAMAGE = 20;
-const HEAL_AMOUNT = 30;
-const GAME_TIME = 15000; // เวลาตั้งต้น 15 วินาที
+      const FALLBACK_DISTRACTORS = [
+        "เที่ยงคืน",
+        "เมื่อวาน",
+        "สัปดาห์หน้า",
+        "ตอนเช้า",
+        "ตีสี่",
+        "เดือนหน้า",
+      ];
+      const TOTAL_BOSSES = bossData.length;
+      const WRONG_DAMAGE = 20;
+      const HEAL_AMOUNT = 30;
+      const GAME_TIME = 15000; // เวลาตั้งต้น 15 วินาที
 
-let state = {
-  bossIndex: 0, questionIndex: 0,
-  bossHP: 100, bossMaxHP: 100, playerHP: 100,
-  score: 0, comboCount: 0, scoreMultiplier: 1, bossesDefeated: 0,
-  items: { heal: 1, fifty: 1, skip: 1 },
-  currentQuestions: [],
-  answered: false, damagePerHit: 25
-};
+      let state = {
+        bossIndex: 0,
+        questionIndex: 0,
+        bossHP: 100,
+        bossMaxHP: 100,
+        playerHP: 100,
+        score: 0,
+        comboCount: 0,
+        scoreMultiplier: 1,
+        bossesDefeated: 0,
+        items: { heal: 1, fifty: 1, skip: 1 },
+        currentQuestions: [],
+        answered: false,
+        damagePerHit: 25,
+      };
 
-// ระบบเวลาแบบใช้อ้างอิงเวลาจริง (Absolute Time) 
-let timerState = {
-  reqFrame: null,
-  endTime: 0,
-  remaining: GAME_TIME,
-  isPlaying: false
-};
+      // ระบบเวลาแบบใช้อ้างอิงเวลาจริง (Absolute Time)
+      let timerState = {
+        reqFrame: null,
+        endTime: 0,
+        remaining: GAME_TIME,
+        isPlaying: false,
+      };
 
-const el = {
-  bossName: document.getElementById('boss-name'),
-  bossImage: document.getElementById('boss-image'),
-  bossHPBar: document.getElementById('boss-hp-bar'),
-  bossHPText: document.getElementById('boss-hp-text'),
-  playerHPBar: document.getElementById('player-hp-bar'),
-  playerHPText: document.getElementById('player-hp-text'),
-  playerPanel: document.getElementById('player-panel'),
-  scoreValue: document.getElementById('score-value'),
-  comboBadge: document.getElementById('combo-badge'),
-  questionHanzi: document.getElementById('question-hanzi'),
-  questionPinyin: document.getElementById('question-pinyin'),
-  questionImage: document.getElementById('question-image'),
-  timerBar: document.getElementById('timer-bar'), 
-  choicesGrid: document.getElementById('choices-grid'),
-  bossProgress: document.getElementById('boss-progress'),
-  bossTotal: document.getElementById('boss-total'),
-  overlayContainer: document.getElementById('overlay-container')
-};
+      const el = {
+        bossName: document.getElementById("boss-name"),
+        bossImage: document.getElementById("boss-image"),
+        bossHPBar: document.getElementById("boss-hp-bar"),
+        bossHPText: document.getElementById("boss-hp-text"),
+        playerHPBar: document.getElementById("player-hp-bar"),
+        playerHPText: document.getElementById("player-hp-text"),
+        playerPanel: document.getElementById("player-panel"),
+        scoreValue: document.getElementById("score-value"),
+        comboBadge: document.getElementById("combo-badge"),
+        questionHanzi: document.getElementById("question-hanzi"),
+        questionPinyin: document.getElementById("question-pinyin"),
+        questionImage: document.getElementById("question-image"),
+        timerBar: document.getElementById("timer-bar"),
+        choicesGrid: document.getElementById("choices-grid"),
+        bossProgress: document.getElementById("boss-progress"),
+        bossTotal: document.getElementById("boss-total"),
+        overlayContainer: document.getElementById("overlay-container"),
+      };
 
-el.bossTotal.textContent = TOTAL_BOSSES;
+      el.bossTotal.textContent = TOTAL_BOSSES;
 
-/* =========================================================
+      /* =========================================================
    UTILITIES
 ========================================================= */
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function buildMeaningPool() {
-  const set = new Set(FALLBACK_DISTRACTORS);
-  bossData.forEach(b => b.questions.forEach(q => set.add(q.meaning)));
-  return [...set];
-}
-const MEANING_POOL = buildMeaningPool();
+      function shuffle(arr) {
+        return [...arr].sort(() => Math.random() - 0.5);
+      }
+      function buildMeaningPool() {
+        const set = new Set(FALLBACK_DISTRACTORS);
+        bossData.forEach((b) => b.questions.forEach((q) => set.add(q.meaning)));
+        return [...set];
+      }
+      const MEANING_POOL = buildMeaningPool();
 
-function speak(text) {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
-  }
-}
+      function speak(text) {
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "zh-CN";
+          speechSynthesis.cancel();
+          speechSynthesis.speak(utterance);
+        }
+      }
 
-/* =========================================================
+      /* =========================================================
    HP & UI UPDATES
 ========================================================= */
-function updatePlayerHP(delta) {
-  const percent = Math.max(0, (state.playerHP / 100) * 100);
-  el.playerHPBar.style.width = percent + '%';
-  el.playerHPText.textContent = `${Math.max(0, state.playerHP)}/100`;
+      function updatePlayerHP(delta) {
+        const percent = Math.max(0, (state.playerHP / 100) * 100);
+        el.playerHPBar.style.width = percent + "%";
+        el.playerHPText.textContent = `${Math.max(0, state.playerHP)}/100`;
 
-  if (delta && delta < 0) {
-    el.playerPanel.classList.remove('damage-hit');
-    void el.playerPanel.offsetWidth;
-    el.playerPanel.classList.add('damage-hit');
-    
-    document.body.classList.remove('app-damage');
-    void document.body.offsetWidth;
-    document.body.classList.add('app-damage');
-    
-    setTimeout(() => {
-      el.playerPanel.classList.remove('damage-hit');
-      document.body.classList.remove('app-damage');
-    }, 700);
-  }
-}
+        if (delta && delta < 0) {
+          el.playerPanel.classList.remove("damage-hit");
+          void el.playerPanel.offsetWidth;
+          el.playerPanel.classList.add("damage-hit");
 
-function updateBossHP() {
-  const percent = Math.max(0, (state.bossHP / state.bossMaxHP) * 100);
-  el.bossHPBar.style.width = percent + '%';
-  el.bossHPText.textContent = `${Math.max(0, state.bossHP)}/${state.bossMaxHP}`;
-}
+          document.body.classList.remove("app-damage");
+          void document.body.offsetWidth;
+          document.body.classList.add("app-damage");
 
-function updateScoreUI() {
-  el.scoreValue.textContent = state.score;
-  el.comboBadge.textContent = `x${state.scoreMultiplier}`;
-  el.comboBadge.style.display = state.scoreMultiplier > 1 ? 'inline-block' : 'none';
-}
+          setTimeout(() => {
+            el.playerPanel.classList.remove("damage-hit");
+            document.body.classList.remove("app-damage");
+          }, 700);
+        }
+      }
 
-function updateItemUI() {
-  ['heal', 'fifty', 'skip'].forEach(type => {
-    document.getElementById(`item-${type}-count`).textContent = state.items[type];
-    const btn = document.querySelector(`[data-item="${type}"]`);
-    if(btn) btn.disabled = state.items[type] <= 0;
-  });
-}
+      function updateBossHP() {
+        const percent = Math.max(0, (state.bossHP / state.bossMaxHP) * 100);
+        el.bossHPBar.style.width = percent + "%";
+        el.bossHPText.textContent = `${Math.max(0, state.bossHP)}/${state.bossMaxHP}`;
+      }
 
-function hitBoss() {
-  el.bossImage.classList.remove('boss-shake');
-  void el.bossImage.offsetWidth;
-  el.bossImage.classList.add('boss-shake');
-}
+      function updateScoreUI() {
+        el.scoreValue.textContent = state.score;
+        el.comboBadge.textContent = `x${state.scoreMultiplier}`;
+        el.comboBadge.style.display =
+          state.scoreMultiplier > 1 ? "inline-block" : "none";
+      }
 
-/* =========================================================
+      function updateItemUI() {
+        ["heal", "fifty", "skip"].forEach((type) => {
+          document.getElementById(`item-${type}-count`).textContent =
+            state.items[type];
+          const btn = document.querySelector(`[data-item="${type}"]`);
+          if (btn) btn.disabled = state.items[type] <= 0;
+        });
+      }
+
+      function hitBoss() {
+        el.bossImage.classList.remove("boss-shake");
+        void el.bossImage.offsetWidth;
+        el.bossImage.classList.add("boss-shake");
+      }
+
+      /* =========================================================
    GAMEPLAY LOGIC
 ========================================================= */
-function loadBoss(index) {
-  const boss = bossData[index];
-  state.bossIndex = index;
-  state.bossHP = boss.hp;
-  state.bossMaxHP = boss.hp;
-  state.playerHP = 100;
-  state.questionIndex = 0;
-  state.comboCount = 0;
-  state.scoreMultiplier = 1;
+      function loadBoss(index) {
+        const boss = bossData[index];
+        state.bossIndex = index;
+        state.bossHP = boss.hp;
+        state.bossMaxHP = boss.hp;
+        state.playerHP = 100;
+        state.questionIndex = 0;
+        state.comboCount = 0;
+        state.scoreMultiplier = 1;
 
-  el.bossName.textContent = boss.name;
-  el.bossProgress.textContent = (index + 1);
-  el.bossImage.src = boss.bossImage || 'https://robohash.org/1?set=set3';
-  state.currentQuestions = shuffle(boss.questions);
-  state.damagePerHit = Math.ceil(boss.hp / state.currentQuestions.length) || 1;
+        el.bossName.textContent = boss.name;
+        el.bossProgress.textContent = index + 1;
+        el.bossImage.src = boss.image || "public/1.png";
+        state.currentQuestions = shuffle(boss.questions);
+        state.damagePerHit =
+          Math.ceil(boss.hp / state.currentQuestions.length) || 1;
 
-  updatePlayerHP(); updateBossHP(); updateItemUI(); updateScoreUI();
-  loadQuestion();
-}
+        updatePlayerHP();
+        updateBossHP();
+        updateItemUI();
+        updateScoreUI();
+        loadQuestion();
+      }
 
-function loadQuestion() {
-  state.answered = false;
-  el.choicesGrid.innerHTML = '';
-  const q = state.currentQuestions[state.questionIndex];
+      function loadQuestion() {
+        state.answered = false;
+        el.choicesGrid.innerHTML = "";
+        const q = state.currentQuestions[state.questionIndex];
 
-  el.questionHanzi.textContent = q.hanzi;
-  el.questionPinyin.textContent = q.pinyin;
-  
-  if(q.questionImage) {
-    el.questionImage.src = q.questionImage;
-    el.questionImage.classList.remove('hidden');
-  } else {
-    el.questionImage.classList.add('hidden');
-  }
+        el.questionHanzi.textContent = q.hanzi;
+        el.questionPinyin.textContent = q.pinyin;
 
-  const fakeAnswers = shuffle(MEANING_POOL.filter(m => m !== q.meaning)).slice(0, 3);
-  const choices = shuffle([q.meaning, ...fakeAnswers]);
+        if (q.questionImage) {
+          el.questionImage.src = q.questionImage;
+          el.questionImage.classList.remove("hidden");
+        } else {
+          el.questionImage.classList.add("hidden");
+        }
 
-  choices.forEach(meaning => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn py-2.5 sm:py-3 font-display font-600 text-[13px] sm:text-sm w-full';
-    btn.textContent = meaning;
-    btn.onclick = () => handleChoice(btn, q.meaning);
-    el.choicesGrid.appendChild(btn);
-  });
-  
-  startTimer();
-}
+        const fakeAnswers = shuffle(
+          MEANING_POOL.filter((m) => m !== q.meaning),
+        ).slice(0, 3);
+        const choices = shuffle([q.meaning, ...fakeAnswers]);
 
-/* =========================================================
+        choices.forEach((meaning) => {
+          const btn = document.createElement("button");
+          btn.className =
+            "choice-btn py-2.5 sm:py-3 font-display font-600 text-[13px] sm:text-sm w-full";
+          btn.textContent = meaning;
+          btn.onclick = () => handleChoice(btn, q.meaning);
+          el.choicesGrid.appendChild(btn);
+        });
+
+        startTimer();
+      }
+
+      /* =========================================================
    BULLETPROOF TIMER SYSTEM (อิงตามเวลาเครื่อง + requestAnimationFrame)
 ========================================================= */
-function updateClockDisplay() {
-  let percent = (timerState.remaining / GAME_TIME) * 100;
-  if (percent < 0) percent = 0;
-  if (percent > 100) percent = 100;
-  
-  if (el.timerBar) {
-    el.timerBar.style.width = '100%';
-    el.timerBar.style.transform = `scaleX(${percent / 100})`;
+      function updateClockDisplay() {
+        let percent = (timerState.remaining / GAME_TIME) * 100;
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
 
-    if (timerState.remaining <= 5000) {
-      el.timerBar.classList.remove('bg-yellow-400');
-      el.timerBar.classList.add('bg-red-500');
-    } else {
-      el.timerBar.classList.remove('bg-red-500');
-      el.timerBar.classList.add('bg-yellow-400');
-    }
-  }
-}
+        if (el.timerBar) {
+          el.timerBar.style.width = "100%";
+          el.timerBar.style.transform = `scaleX(${percent / 100})`;
 
-function startTimer(isResume = false) {
-  if (!isResume) {
-    timerState.remaining = GAME_TIME;
-  }
-  // คำนวณเวลาจบเกมตามเวลาโลก (Date.now())
-  timerState.endTime = Date.now() + timerState.remaining;
-  timerState.isPlaying = true;
-  
-  // ยกเลิกเฟรมเดิมถ้ามีการทำงานซ้อนทับ
-  cancelAnimationFrame(timerState.reqFrame);
+          if (timerState.remaining <= 5000) {
+            el.timerBar.classList.remove("bg-yellow-400");
+            el.timerBar.classList.add("bg-red-500");
+          } else {
+            el.timerBar.classList.remove("bg-red-500");
+            el.timerBar.classList.add("bg-yellow-400");
+          }
+        }
+      }
 
-  function tick() {
-    if (!timerState.isPlaying) return;
-    
-    // เวลาที่เหลือ = เวลาจบ - เวลาปัจจุบัน
-    timerState.remaining = timerState.endTime - Date.now();
-    updateClockDisplay();
+      function startTimer(isResume = false) {
+        if (!isResume) {
+          timerState.remaining = GAME_TIME;
+        }
+        // คำนวณเวลาจบเกมตามเวลาโลก (Date.now())
+        timerState.endTime = Date.now() + timerState.remaining;
+        timerState.isPlaying = true;
 
-    // เช็คหมดเวลา
-    if (timerState.remaining <= 0) {
-      timerState.remaining = 0;
-      timerState.isPlaying = false;
-      cancelAnimationFrame(timerState.reqFrame);
-      updateClockDisplay();
-      
-      state.answered = true;
-      document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
-      
-      state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
-      state.comboCount = 0; 
-      state.scoreMultiplier = 1;
-      updateScoreUI();
-      updatePlayerHP(-WRONG_DAMAGE); 
-      
-      setTimeout(checkOutcome, 1000);
-    } else {
-      // เรียกตัวเองในเฟรมถัดไป
-      timerState.reqFrame = requestAnimationFrame(tick);
-    }
-  }
-  
-  // เริ่มต้นลูป
-  timerState.reqFrame = requestAnimationFrame(tick);
-}
+        // ยกเลิกเฟรมเดิมถ้ามีการทำงานซ้อนทับ
+        cancelAnimationFrame(timerState.reqFrame);
 
-function stopTimer() {
-  timerState.isPlaying = false;
-  cancelAnimationFrame(timerState.reqFrame);
-}
+        function tick() {
+          if (!timerState.isPlaying) return;
 
-/* =========================================================
+          // เวลาที่เหลือ = เวลาจบ - เวลาปัจจุบัน
+          timerState.remaining = timerState.endTime - Date.now();
+          updateClockDisplay();
+
+          // เช็คหมดเวลา
+          if (timerState.remaining <= 0) {
+            timerState.remaining = 0;
+            timerState.isPlaying = false;
+            cancelAnimationFrame(timerState.reqFrame);
+            updateClockDisplay();
+
+            state.answered = true;
+            document
+              .querySelectorAll(".choice-btn")
+              .forEach((b) => (b.disabled = true));
+
+            state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+            state.comboCount = 0;
+            state.scoreMultiplier = 1;
+            updateScoreUI();
+            updatePlayerHP(-WRONG_DAMAGE);
+
+            setTimeout(checkOutcome, 1000);
+          } else {
+            // เรียกตัวเองในเฟรมถัดไป
+            timerState.reqFrame = requestAnimationFrame(tick);
+          }
+        }
+
+        // เริ่มต้นลูป
+        timerState.reqFrame = requestAnimationFrame(tick);
+      }
+
+      function stopTimer() {
+        timerState.isPlaying = false;
+        cancelAnimationFrame(timerState.reqFrame);
+      }
+
+      /* =========================================================
    USER ACTIONS
 ========================================================= */
-function handleChoice(btn, correctMeaning) {
-  if (state.answered) return;
-  state.answered = true;
-  stopTimer();
-  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+      function handleChoice(btn, correctMeaning) {
+        if (state.answered) return;
+        state.answered = true;
+        stopTimer();
+        document
+          .querySelectorAll(".choice-btn")
+          .forEach((b) => (b.disabled = true));
 
-  if (btn.textContent === correctMeaning) {
-    btn.classList.add('choice-correct');
-    state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
-    state.comboCount++;
-    state.scoreMultiplier = state.comboCount >= 5 ? 3 : (state.comboCount >= 3 ? 2 : 1);
-    state.score += 100 * state.scoreMultiplier;
-    hitBoss();
-    updateBossHP();
-  } else {
-    btn.classList.add('choice-wrong');
-    document.querySelectorAll('.choice-btn').forEach(b => {
-      if (b.textContent === correctMeaning) b.classList.add('choice-correct');
-    });
-    state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
-    state.comboCount = 0; state.scoreMultiplier = 1;
-    updatePlayerHP(-WRONG_DAMAGE); 
-  }
-  updateScoreUI();
-  setTimeout(checkOutcome, 1000);
-}
+        if (btn.textContent === correctMeaning) {
+          btn.classList.add("choice-correct");
+          state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
+          state.comboCount++;
+          state.scoreMultiplier =
+            state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
+          state.score += 100 * state.scoreMultiplier;
+          hitBoss();
+          updateBossHP();
+        } else {
+          btn.classList.add("choice-wrong");
+          document.querySelectorAll(".choice-btn").forEach((b) => {
+            if (b.textContent === correctMeaning)
+              b.classList.add("choice-correct");
+          });
+          state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+          state.comboCount = 0;
+          state.scoreMultiplier = 1;
+          updatePlayerHP(-WRONG_DAMAGE);
+        }
+        updateScoreUI();
+        setTimeout(checkOutcome, 1000);
+      }
 
-function checkOutcome() {
-  if (state.playerHP <= 0) return gameOver();
-  if (state.bossHP <= 0) return bossDefeated();
+      function checkOutcome() {
+        if (state.playerHP <= 0) return gameOver();
+        if (state.bossHP <= 0) return bossDefeated();
 
-  state.questionIndex++;
-  if (state.questionIndex >= state.currentQuestions.length) {
-      state.currentQuestions = shuffle(bossData[state.bossIndex].questions);
-      state.questionIndex = 0;
-  }
-  loadQuestion();
-}
+        state.questionIndex++;
+        if (state.questionIndex >= state.currentQuestions.length) {
+          state.currentQuestions = shuffle(bossData[state.bossIndex].questions);
+          state.questionIndex = 0;
+        }
+        loadQuestion();
+      }
 
-/* =========================================================
+      /* =========================================================
    OVERLAYS
 ========================================================= */
-function showOverlay(opts) {
-  const ribbon = document.getElementById('overlay-ribbon');
-  ribbon.textContent = opts.ribbon;
-  ribbon.className = `absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1 rounded shadow-md font-bold text-lg uppercase whitespace-nowrap text-white ${opts.ribbonClass}`;
-  
-  document.getElementById('overlay-icon').innerHTML = opts.icon;
-  document.getElementById('overlay-title').textContent = opts.title;
-  document.getElementById('overlay-message').textContent = opts.message;
-  
-  const stats = document.getElementById('overlay-stats');
-  if(opts.stats) { stats.innerHTML = opts.stats; stats.classList.remove('hidden'); }
-  else { stats.classList.add('hidden'); }
-  
-  const btnContainer = document.getElementById('overlay-buttons');
-  btnContainer.innerHTML = '';
-  opts.buttons.forEach(b => {
-    const btn = document.createElement('button');
-    btn.className = `py-3 rounded-full font-bold text-sm w-full transition-transform active:scale-95 ${b.class}`;
-    btn.textContent = b.text;
-    btn.onclick = () => { hideOverlay(); b.action(); };
-    btnContainer.appendChild(btn);
-  });
-  el.overlayContainer.classList.add('show');
-}
-function hideOverlay() { el.overlayContainer.classList.remove('show'); }
+      function showOverlay(opts) {
+        const ribbon = document.getElementById("overlay-ribbon");
+        ribbon.textContent = opts.ribbon;
+        ribbon.className = `absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1 rounded shadow-md font-bold text-lg uppercase whitespace-nowrap text-white ${opts.ribbonClass}`;
 
-function gameOver() {
-  showOverlay({
-    ribbon: 'GAME OVER', ribbonClass: 'bg-red-400',
-    icon: '💔', title: 'พ่ายแพ้!', message: 'พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!',
-    stats: `ปราบได้: <b>${state.bossesDefeated}/${TOTAL_BOSSES}</b> • คะแนน: <b>${state.score}</b>`,
-    buttons: [
-      { text: 'กลับหน้าแรก', class: 'bg-sky-400 text-white', action: () => location.reload() },
-      { text: 'ลองอีกครั้ง', class: 'bg-red-400 text-white', action: () => loadBoss(state.bossIndex) }
-    ]
-  });
-}
+        document.getElementById("overlay-icon").innerHTML = opts.icon;
+        document.getElementById("overlay-title").textContent = opts.title;
+        document.getElementById("overlay-message").textContent = opts.message;
 
-function bossDefeated() {
-  state.bossesDefeated++;
-  const next = state.bossIndex + 1;
-  const isWin = next >= TOTAL_BOSSES;
-  showOverlay({
-    ribbon: isWin ? 'YOU WIN' : 'You defeated', ribbonClass: 'bg-green-500',
-    icon: isWin ? '🏆' : '⚔️', title: 'ชนะแล้ว', message: isWin ? 'คุณเก่งมากยินดีด้วย' : 'ไปต่อสู้ต่อไป',
-    stats: `ปราบบอสได้ <b>${state.bossesDefeated}/${TOTAL_BOSSES}</b> • คะแนน <b>${state.score}</b>`,
-    buttons: [
-      isWin 
-        ? { text: 'กลับหน้าแรก', class: 'bg-green-500 text-white', action: () => location.reload() }
-        : { text: 'ไปต่อ', class: 'bg-green-500 text-white', action: () => loadBoss(next) }
-    ]
-  });
-}
+        const stats = document.getElementById("overlay-stats");
+        if (opts.stats) {
+          stats.innerHTML = opts.stats;
+          stats.classList.remove("hidden");
+        } else {
+          stats.classList.add("hidden");
+        }
 
-document.getElementById('stop-btn').addEventListener('click', () => {
-  if (state.answered) return;
-  stopTimer();
-  showOverlay({
-    ribbon: 'BRAKE TIME', ribbonClass: 'bg-sky-400',
-    icon: '⏸️', title: 'หยุดชั่วคราว', message: 'บางทีการพักก็ทำให้ดีขึ้น',
-    buttons: [
-      { text: 'กลับหน้าแรก', class: 'bg-sky-400 text-white', action: () => location.reload() },
-      { text: 'เล่นต่อ', class: 'bg-pink-400 text-white', action: () => startTimer(true) }
-    ]
-  });
-});
+        const btnContainer = document.getElementById("overlay-buttons");
+        btnContainer.innerHTML = "";
+        opts.buttons.forEach((b) => {
+          const btn = document.createElement("button");
+          btn.className = `py-3 rounded-full font-bold text-sm w-full transition-transform active:scale-95 ${b.class}`;
+          btn.textContent = b.text;
+          btn.onclick = () => {
+            hideOverlay();
+            b.action();
+          };
+          btnContainer.appendChild(btn);
+        });
+        el.overlayContainer.classList.add("show");
+      }
+      function hideOverlay() {
+        el.overlayContainer.classList.remove("show");
+      }
 
-/* =========================================================
+      function gameOver() {
+        showOverlay({
+          ribbon: "GAME OVER",
+          ribbonClass: "bg-red-400",
+          icon: "💔",
+          title: "พ่ายแพ้!",
+          message: "พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!",
+          stats: `ปราบได้: <b>${state.bossesDefeated}/${TOTAL_BOSSES}</b> • คะแนน: <b>${state.score}</b>`,
+          buttons: [
+            {
+              text: "กลับหน้าแรก",
+              class: "bg-sky-400 text-white",
+              action: () => location.reload(),
+            },
+            {
+              text: "ลองอีกครั้ง",
+              class: "bg-red-400 text-white",
+              action: () => loadBoss(state.bossIndex),
+            },
+          ],
+        });
+      }
+
+      function bossDefeated() {
+        state.bossesDefeated++;
+        const next = state.bossIndex + 1;
+        const isWin = next >= TOTAL_BOSSES;
+        showOverlay({
+          ribbon: isWin ? "YOU WIN" : "You defeated",
+          ribbonClass: "bg-green-500",
+          icon: isWin ? "🏆" : "⚔️",
+          title: "ชนะแล้ว",
+          message: isWin ? "คุณเก่งมากยินดีด้วย" : "ไปต่อสู้ต่อไป",
+          stats: `ปราบบอสได้ <b>${state.bossesDefeated}/${TOTAL_BOSSES}</b> • คะแนน <b>${state.score}</b>`,
+          buttons: [
+            isWin
+              ? {
+                  text: "กลับหน้าแรก",
+                  class: "bg-green-500 text-white",
+                  action: () => location.reload(),
+                }
+              : {
+                  text: "ไปต่อ",
+                  class: "bg-green-500 text-white",
+                  action: () => loadBoss(next),
+                },
+          ],
+        });
+      }
+
+      document.getElementById("stop-btn").addEventListener("click", () => {
+        if (state.answered) return;
+        stopTimer();
+        showOverlay({
+          ribbon: "BRAKE TIME",
+          ribbonClass: "bg-sky-400",
+          icon: "⏸️",
+          title: "หยุดชั่วคราว",
+          message: "บางทีการพักก็ทำให้ดีขึ้น",
+          buttons: [
+            {
+              text: "กลับหน้าแรก",
+              class: "bg-sky-400 text-white",
+              action: () => location.reload(),
+            },
+            {
+              text: "เล่นต่อ",
+              class: "bg-pink-400 text-white",
+              action: () => startTimer(true),
+            },
+          ],
+        });
+      });
+
+      /* =========================================================
    ITEMS
 ========================================================= */
-document.querySelectorAll('[data-item]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const type = btn.getAttribute('data-item');
-    if (state.items[type] <= 0 || state.answered) return;
-    state.items[type]--;
-    
-    if (type === 'heal') {
-      state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
-      updatePlayerHP(0);
-    } else if (type === 'fifty') {
-      const q = state.currentQuestions[state.questionIndex];
-      const wrong = [...document.querySelectorAll('.choice-btn')].filter(b => b.textContent !== q.meaning);
-      shuffle(wrong).slice(0, 2).forEach(b => { b.disabled = true; b.style.opacity = '0.3'; });
-    } else if (type === 'skip') {
-      state.answered = true;
-      stopTimer();
-      document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
-      setTimeout(checkOutcome, 500);
-    }
-    updateItemUI();
-  });
-});
+      document.querySelectorAll("[data-item]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const type = btn.getAttribute("data-item");
+          if (state.items[type] <= 0 || state.answered) return;
+          state.items[type]--;
 
-document.getElementById('play-sound-btn').addEventListener('click', () => {
-  speak(el.questionHanzi.textContent);
-});
+          if (type === "heal") {
+            state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
+            updatePlayerHP(0);
+          } else if (type === "fifty") {
+            const q = state.currentQuestions[state.questionIndex];
+            const wrong = [...document.querySelectorAll(".choice-btn")].filter(
+              (b) => b.textContent !== q.meaning,
+            );
+            shuffle(wrong)
+              .slice(0, 2)
+              .forEach((b) => {
+                b.disabled = true;
+                b.style.opacity = "0.3";
+              });
+          } else if (type === "skip") {
+            state.answered = true;
+            stopTimer();
+            document
+              .querySelectorAll(".choice-btn")
+              .forEach((b) => (b.disabled = true));
+            setTimeout(checkOutcome, 500);
+          }
+          updateItemUI();
+        });
+      });
 
-// Init
-loadBoss(0);
-</script>
+      document
+        .getElementById("play-sound-btn")
+        .addEventListener("click", () => {
+          speak(el.questionHanzi.textContent);
+        });
 
-</body>
+      // Init
+      loadBoss(0);
+      let currentLocalAudio = null;
+
+      function speak(text) {
+        if (!text) return;
+        try {
+          if (currentLocalAudio) {
+            currentLocalAudio.pause();
+            currentLocalAudio.currentTime = 0;
+          }
+          const cleanText = text.trim();
+          const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
+          const audio = new Audio(audioPath);
+          audio.referrerPolicy = "no-referrer";
+          currentLocalAudio = audio;
+          audio.play().catch((err) => {
+            console.warn(
+              `Local audio playback failed for "${cleanText}":`,
+              err,
+            );
+          });
+        } catch (e) {
+          console.error("Audio playback error:", e);
+        }
+      }
+    </script>
+  </body>
 </html>
