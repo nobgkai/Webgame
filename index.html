@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Easy Mode | Panda's Chinese Quest</title>
+<title>Panda's Chinese Quest | หน้าหลัก - ภารกิจพิชิตภาษาจีนกับแพนด้า</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
   tailwind.config = {
@@ -21,34 +22,53 @@
           sky: '#BEE7F5', skyDeep: '#6FCBE8',
           pink: '#FFD6E8', pinkDeep: '#FF9FC3',
           yellow: '#FFF3B0', yellowDeep: '#FFD34D',
+          amber: '#FFE1B8', amberDeep: '#FF9F45',
           bamboo: '#E9F7D8', ink: '#3A3355', plum: '#5C4B8A',
           blood: '#FF4D6D', bloodDeep: '#E0184A', vein: '#3A1622',
         },
-        fontFamily: { display: ['Fredoka','Mali','sans-serif'], thai: ['Mali','sans-serif'], hanzi: ["'Noto Sans SC'",'sans-serif'] },
+        fontFamily: { 
+          display: ['Fredoka','Mali','sans-serif'], 
+          thai: ['Mali','sans-serif'], 
+          hanzi: ["'Noto Sans SC'",'sans-serif'] 
+        },
+        boxShadow: {
+          soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
+          card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
+          btn: '0 6px 0 0 rgba(0,0,0,0.15)',
+          glow: '0 0 25px rgba(111, 227, 168, 0.5)',
+        }
       }
     }
   }
 </script>
 
 <style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
   html, body {
     height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
-  body {
-    font-family:'Mali',sans-serif;
-    color:#3A3355;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+  }
+  body {
+    font-family: 'Mali', sans-serif;
+    color: #3A3355;
+    background: #201830;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #201830;
+    min-height: 100dvh;
   }
-  .font-display { font-family:'Fredoka','Mali',sans-serif; }
-  .font-hanzi { font-family:"'Noto Sans SC'",sans-serif; }
+  .font-display { font-family: 'Fredoka', 'Mali', sans-serif; }
+  .font-hanzi { font-family: "'Noto Sans SC'", sans-serif; }
+
   button { font-family: inherit; }
   button:focus-visible, a:focus-visible { outline: 3px solid #FFD34D; outline-offset: 2px; }
 
@@ -57,7 +77,7 @@
   }
 
   /* =========================================================
-     AMBIENT BACKGROUND (fills viewport behind the game frame)
+     AMBIENT BACKGROUND
   ========================================================= */
   .ambient-bg {
     position: fixed; inset: 0; z-index: 0; overflow: hidden;
@@ -84,7 +104,7 @@
     50% { opacity: .9; transform: scale(1) rotate(90deg); }
   }
   .bamboo-drift {
-    position: absolute; color: rgba(184, 242, 212, .18); pointer-events: none;
+    position: absolute; color: rgba(184, 242, 212, .22); pointer-events: none;
     animation: bamboo-fall linear infinite;
   }
   @keyframes bamboo-fall {
@@ -95,7 +115,7 @@
   }
 
   /* =========================================================
-     GAME FRAME — everything fits inside, no page scroll
+     GAME FRAME
   ========================================================= */
   .app-frame {
     position: relative;
@@ -107,12 +127,12 @@
     margin: auto;
     background: #FBFBF6;
     background-image:
-      radial-gradient(circle at 100% 0%, rgba(255,211,77,0.12), transparent 40%),
-      radial-gradient(circle at 0% 100%, rgba(111,203,232,0.12), transparent 40%);
+      radial-gradient(circle at 100% 0%, rgba(255,211,77,0.18), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgba(111,203,232,0.18), transparent 45%);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: border-color .3s;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
   }
   @media (min-width: 640px) {
     .app-frame {
@@ -130,501 +150,356 @@
       z-index: 30;
     }
   }
-  .app-frame.shake-once { animation: frame-shake .5s ease; }
-  @keyframes frame-shake {
-    0%,100% { transform: translateX(0); }
-    15% { transform: translateX(-10px) rotate(-1deg); }
-    30% { transform: translateX(9px) rotate(1deg); }
-    45% { transform: translateX(-7px); }
-    60% { transform: translateX(6px); }
-    75% { transform: translateX(-3px); }
-  }
 
-  .danger-vignette {
-    position: absolute; inset: 0; z-index: 25; pointer-events: none;
-    box-shadow: inset 0 0 0 0 rgba(224,24,74,0);
-    transition: box-shadow .4s ease;
-  }
-  .danger-vignette.active {
-    animation: danger-pulse 1.1s ease-in-out infinite;
-  }
-  @keyframes danger-pulse {
-    0%, 100% { box-shadow: inset 0 0 40px 6px rgba(224,24,74,.15); }
-    50% { box-shadow: inset 0 0 70px 14px rgba(224,24,74,.4); }
-  }
+  /* Custom Scrollbar */
+  .scroll-container::-webkit-scrollbar { width: 5px; }
+  .scroll-container::-webkit-scrollbar-track { background: transparent; }
+  .scroll-container::-webkit-scrollbar-thumb { background: rgba(58,51,85,0.15); border-radius: 999px; }
+  .scroll-container::-webkit-scrollbar-thumb:hover { background: rgba(58,51,85,0.3); }
 
-  /* =========================================================
-     TOP BAR
-  ========================================================= */
-  .topbar { flex: 0 0 auto; padding: clamp(.4rem,1.8dvh,.75rem) clamp(.6rem,3vw,1rem) 0; }
-  .status-chip {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: 2px solid rgba(58,51,85,.08) !important;
-    box-shadow: 0 4px 12px rgba(58, 51, 85, 0.1);
-  }
-
-  /* =========================================================
-     BOSS ZONE
-  ========================================================= */
-  .boss-zone { flex: 0 0 auto; padding: clamp(.2rem,1dvh,.5rem) clamp(.6rem,3vw,1rem) 0; text-align: center; }
-  #boss-image { animation: floaty 3.5s ease-in-out infinite; }
-  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6%);} }
-
-  /* =========================================================
-     VESSEL (blood-vessel HP bar) — shared player/boss styling
-  ========================================================= */
-  .vessel-row { display: flex; align-items: center; gap: .5rem; }
-  .vessel-heart {
-    flex: 0 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,.25));
-    animation: heartbeat 1s ease-in-out infinite;
-  }
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    20% { transform: scale(1.18); }
-    35% { transform: scale(.94); }
-    50% { transform: scale(1.1); }
-  }
-  .vessel {
-    position: relative;
-    flex: 1 1 auto;
-    border-radius: 999px;
-    overflow: hidden;
-    background: var(--vessel-wall, #3A1622);
-    border: 3px solid rgba(0,0,0,.35);
-    box-shadow: inset 0 3px 8px rgba(0,0,0,.5), inset 0 -2px 4px rgba(255,255,255,.05);
-  }
-  .vessel-fill {
-    position: relative;
-    height: 100%;
-    background: linear-gradient(90deg, var(--fluid-a,#FF4D6D) 0%, var(--fluid-b,#E0184A) 45%, var(--fluid-a,#FF4D6D) 90%);
-    background-size: 220% 100%;
-    animation: fluid-flow 2.4s linear infinite;
-    transition: width .45s cubic-bezier(.25,.46,.45,.94);
-  }
-  @keyframes fluid-flow { 0% { background-position: 0% 0; } 100% { background-position: -220% 0; } }
-  .vessel-fill::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,0) 45%);
-  }
-  .vessel-bubbles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-  .vessel-bubble {
-    position: absolute; bottom: -6px; border-radius: 50%;
-    background: rgba(255,255,255,.55);
-    animation: bubble-rise linear forwards;
-  }
-  @keyframes bubble-rise {
-    0% { transform: translateY(0) scale(1); opacity: .8; }
-    100% { transform: translateY(-140%) scale(.4); opacity: 0; }
-  }
-  .vessel-text {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-family: 'Fredoka', sans-serif; font-weight: 700; color: #fff;
-    text-shadow: 1px 1.5px 3px rgba(0,0,0,.5); z-index: 5;
-  }
-  .vessel-wrap.damaged .vessel { animation: vessel-hit-flash .4s ease; }
-  @keyframes vessel-hit-flash {
-    0%, 100% { filter: brightness(1); }
-    30% { filter: brightness(1.9) saturate(1.6); }
-  }
-  .vessel-wrap.healed .vessel { animation: vessel-heal-flash .5s ease; }
-  @keyframes vessel-heal-flash {
-    0%, 100% { filter: brightness(1) hue-rotate(0deg); }
-    40% { filter: brightness(1.6) saturate(1.3); }
-  }
-  .vessel-wrap.low-hp .vessel-fill { --fluid-a: #B3123A; --fluid-b: #6E0A24; animation-duration: .9s; }
-
-  /* =========================================================
-     DAMAGE / HEAL NUMBERS
-  ========================================================= */
-  .float-number {
-    position: absolute; z-index: 40; font-family: 'Fredoka', sans-serif; font-weight: 700;
-    pointer-events: none; animation: float-up 1.1s ease-out forwards;
-    text-shadow: 0 2px 4px rgba(0,0,0,.35);
-  }
-  @keyframes float-up {
-    0% { transform: translate(-50%, 0) scale(.7); opacity: 0; }
-    15% { transform: translate(-50%, -6px) scale(1.15); opacity: 1; }
-    100% { transform: translate(-50%, -46px) scale(1); opacity: 0; }
-  }
-
-  /* =========================================================
-     COMBO POPUP + BURST PARTICLES
-  ========================================================= */
-  .combo-popup { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); z-index: 45; pointer-events: none; }
-  .combo-card {
-    background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%);
-    color: white; box-shadow: 0 8px 20px rgba(255, 159, 195, 0.6);
-    font-weight: 700; letter-spacing: 1px; white-space: nowrap;
-  }
-  @keyframes combo-pop {
-    0% { transform: scale(.2) translateY(15px); opacity: 0; }
-    55% { transform: scale(1.15); }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
-  }
-  @keyframes combo-float-up { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-40px); } }
-  .combo-card.show { animation: combo-pop .35s cubic-bezier(.34,1.56,.64,1) forwards; }
-  .combo-card.float-away { animation: combo-float-up .7s ease-out forwards; }
-
-  .burst-particle {
-    position: absolute; left: 50%; top: 50%; pointer-events: none; z-index: 44;
-    animation: burst-fly .8s ease-out forwards;
-  }
-  @keyframes burst-fly {
-    0% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(.3) rotate(var(--rot)); opacity: 0; }
-  }
-
-  /* =========================================================
-     QUESTION ZONE
-  ========================================================= */
-  .question-zone { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; padding: clamp(.2rem,1dvh,.5rem) clamp(.6rem,3vw,1rem); }
-  .speech-bubble {
-    position: relative;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F8FFFE 100%);
-    border: 3px solid rgba(111, 227, 168, 0.3);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    flex: 0 1 auto; min-height: 0;
-  }
-  .speech-bubble::before {
-    content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 16px solid #FFFFFF;
-    filter: drop-shadow(0 -2px 2px rgba(58, 51, 85, 0.1));
-  }
-  #question-image { width: clamp(3.2rem, 9dvh, 6rem); height: clamp(3.2rem, 9dvh, 6rem); object-fit: contain; border-radius: .6rem; }
-  #question-hanzi { font-size: clamp(1.9rem, 6.5dvh, 3.4rem); line-height: 1.05; }
-  #question-pinyin { font-size: clamp(.9rem, 2.6dvh, 1.15rem); }
+  /* Buttons & Cards */
   .icon-btn {
     background: linear-gradient(135deg, #FFFFFF 0%, #F8F8F8 100%) !important;
     border: 2px solid rgba(58, 51, 85, 0.1) !important;
     transition: transform .12s ease, box-shadow .12s ease;
   }
-  .icon-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.06); box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15); }
-  .icon-btn:active:not(:disabled) { transform: translateY(1px) scale(.97); }
-  .icon-btn:disabled { opacity:.35; cursor:not-allowed; transform:none !important; }
-  .icon-btn.speaking { animation: sound-pulse .5s ease; }
-  @keyframes sound-pulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(255,159,195,.6);} 50%{ box-shadow: 0 0 0 10px rgba(255,159,195,0);} }
+  .icon-btn:hover { transform: translateY(-2px) scale(1.06); box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15); }
+  .icon-btn:active { transform: translateY(1px) scale(.97); }
 
-  #timer-bar { transition: width .1s linear, background-color .3s; background: linear-gradient(90deg, #FFD34D, #FFC94D); box-shadow: 0 0 8px rgba(255, 211, 77, 0.4); }
-
-  /* =========================================================
-     CHOICES
-  ========================================================= */
-  .choices-zone { flex: 0 0 auto; padding: 0 clamp(.6rem,3vw,1rem); }
-  .choice-btn {
-    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
-    border: 3px solid rgba(58, 51, 85, 0.15);
-    font-size: clamp(.8rem, 2.1dvh, 1rem);
+  .mode-card {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
   }
-  .choice-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 18px rgba(58, 51, 85, 0.15); filter: brightness(1.05); }
-  .choice-btn:active:not(:disabled) { transform: translateY(2px); }
-  .choice-btn:disabled { opacity: .5; cursor: not-allowed; }
-  .choice-correct { background: linear-gradient(135deg, #6FE3A8 0%, #4FD89A 100%) !important; color: white !important; border-color: transparent !important; box-shadow: 0 6px 20px rgba(111, 227, 168, 0.5) !important; animation: choice-correct-pop .35s ease; }
-  .choice-wrong { background: linear-gradient(135deg, #FF9FC3 0%, #FF7BA6 100%) !important; color: white !important; border-color: transparent !important; box-shadow: 0 6px 20px rgba(255, 159, 195, 0.5) !important; animation: choice-wrong-shake .35s ease; }
-  @keyframes choice-correct-pop { 0%{transform:scale(1);} 40%{transform:scale(1.06);} 100%{transform:scale(1);} }
-  @keyframes choice-wrong-shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
-
-  /* =========================================================
-     PLAYER ZONE
-  ========================================================= */
-  .player-zone { flex: 0 0 auto; padding: clamp(.3rem,1.2dvh,.6rem) clamp(.6rem,3vw,1rem) clamp(.5rem,2dvh,1rem); }
-  .card-glass {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 248, 248, 0.75) 100%);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 8px 24px rgba(58, 51, 85, 0.08);
+  .mode-card:hover {
+    transform: translateY(-4px) scale(1.015);
+  }
+  .mode-card:active {
+    transform: translateY(2px) scale(0.99);
   }
 
-  /* =========================================================
-     OVERLAY (pause / boss-clear / defeat / victory)
-  ========================================================= */
-  .overlay {
-    position: absolute; inset: 0; z-index: 50;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity .25s ease;
-    padding: clamp(1rem,4vw,2rem);
+  /* Character animations */
+  .panda-bounce {
+    animation: panda-bounce-anim 3.2s ease-in-out infinite;
   }
-  .overlay.show { opacity: 1; pointer-events: auto; }
-  .overlay-backdrop { position: absolute; inset: 0; background: rgba(20, 10, 25, .6); backdrop-filter: blur(3px); }
-  .overlay-card {
-    position: relative; z-index: 2; width: 100%; max-width: 340px;
-    background: #FEFCF3; border-radius: 1.75rem; padding: clamp(1.2rem,4dvh,2rem) clamp(1.2rem,5vw,1.75rem);
-    text-align: center; transform: scale(.5) translateY(30px); opacity: 0;
-    box-shadow: 0 25px 50px rgba(0,0,0,.4);
-    border: 4px solid var(--overlay-accent, #6FE3A8);
+  @keyframes panda-bounce-anim {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1.5deg); }
   }
-  .overlay.show .overlay-card { animation: overlay-in .5s cubic-bezier(.34,1.56,.64,1) forwards; }
-  @keyframes overlay-in { to { transform: scale(1) translateY(0); opacity: 1; } }
-  .overlay-icon { font-size: clamp(2.2rem, 8dvh, 3.5rem); margin-bottom: .25rem; }
-  .overlay-title { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(1.2rem, 4dvh, 1.6rem); color: #3A3355; }
-  .overlay-message { font-family: 'Mali', sans-serif; color: #5C4B8A; margin-top: .35rem; font-size: clamp(.85rem, 2.4dvh, 1rem); }
-  .overlay-stats { margin-top: .85rem; background: rgba(111,227,168,.15); border-radius: 1rem; padding: .6rem .9rem; font-size: clamp(.8rem, 2.2dvh, .95rem); }
-  .overlay-buttons { margin-top: 1.1rem; display: flex; flex-direction: column; gap: .6rem; }
-  .overlay-btn {
-    font-family: 'Fredoka', sans-serif; font-weight: 600; padding: .7rem 1rem; border-radius: 999px; color: #fff;
-    transition: transform .12s ease;
-  }
-  .overlay-btn:active { transform: translateY(2px); }
-  .overlay-btn.primary { background: var(--overlay-accent, #6FE3A8); box-shadow: 0 6px 0 rgba(0,0,0,.15); }
-  .overlay-btn.secondary { background: #6FCBE8; box-shadow: 0 6px 0 rgba(0,0,0,.15); }
 
-  .confetti-piece {
-    position: absolute; top: -10%; z-index: 3; pointer-events: none;
-    animation: confetti-fall linear forwards;
+  .speech-bubble {
+    position: relative;
+    background: #FFFFFF;
+    border: 3px solid rgba(111, 227, 168, 0.4);
+    box-shadow: 0 8px 20px rgba(58, 51, 85, 0.08);
   }
-  @keyframes confetti-fall {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(120dvh) rotate(540deg); opacity: .2; }
+  .speech-bubble::before {
+    content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 12px solid #FFFFFF;
+  }
+
+  .pulse-glow {
+    animation: pulse-glow-anim 2s infinite;
+  }
+  @keyframes pulse-glow-anim {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(255, 77, 109, 0); }
+  }
+
+  /* Modal Backdrop */
+  .modal-overlay {
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  .modal-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 </style>
 </head>
 <body>
 
+<!-- Ambient background with aurora and floating elements -->
 <div class="ambient-bg" aria-hidden="true">
   <div class="aurora-blob blob1"></div>
   <div class="aurora-blob blob2"></div>
   <div class="aurora-blob blob3"></div>
 </div>
 
+<div id="stars-container" aria-hidden="true" style="position:fixed; inset:0; overflow:hidden; z-index:0; pointer-events:none;"></div>
+
+<!-- Main App Frame -->
 <div id="app-frame" class="app-frame">
 
-  <div id="danger-vignette" class="danger-vignette"></div>
-  <div id="stars-container" aria-hidden="true" style="position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none;"></div>
-
-  <!-- TOP BAR -->
-  <div class="topbar relative z-10 flex justify-between items-center gap-2">
-    <div class="status-chip rounded-full px-3 py-1.5 font-display text-ink text-xs sm:text-sm font-600 flex items-center">
-      <i class="fa-solid fa-dragon text-pinkDeep mr-1.5"></i>
-      Boss <span id="boss-progress">1</span>/<span id="boss-total">10</span>
+  <!-- TOP BAR / HEADER -->
+  <div class="relative z-20 flex justify-between items-center px-4 pt-4 pb-2">
+    <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-ink/10 shadow-sm">
+      <span class="text-xl">🐼</span>
+      <span class="font-display font-700 text-ink text-sm sm:text-base tracking-wide">Panda's Quest</span>
     </div>
-    <div class="flex items-center gap-1.5">
-      <div id="score-chip" class="status-chip rounded-full px-3 py-1.5 font-display text-ink text-xs sm:text-sm font-600 flex items-center">
-        <i class="fa-solid fa-star text-yellowDeep mr-1"></i>
-        <span id="score-value">0</span>
-        <span id="combo-badge" class="ml-2 inline-block rounded-full bg-gradient-to-r from-skyDeep to-sky text-white px-2 py-0.5 text-[10px] sm:text-xs font-700">x1</span>
-      </div>
-      <button id="stop-btn" aria-label="หยุดชั่วคราว" class="icon-btn w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-plum">
-        <i class="fa-solid fa-pause text-sm"></i>
+
+    <div class="flex items-center gap-2">
+      <button id="btn-how-to-play" class="icon-btn px-3 py-1.5 rounded-full font-display font-600 text-xs sm:text-sm text-plum flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-circle-question text-skyDeep text-base"></i>
+        <span>วิธีเล่น</span>
+      </button>
+      <button id="btn-sound-toggle" aria-label="เปิด/ปิดเสียง" class="icon-btn w-9 h-9 rounded-full flex items-center justify-center text-plum shadow-sm">
+        <i id="sound-icon" class="fa-solid fa-volume-high text-pinkDeep"></i>
       </button>
     </div>
   </div>
 
-  <!-- BOSS ZONE -->
-  <div class="boss-zone relative z-10">
-    <h2 id="boss-name" class="font-display font-700 text-ink drop-shadow-sm" style="font-size: clamp(1rem, 3.2dvh, 1.5rem);">จอมเวลา ปีศาจนาฬิกา</h2>
+  <!-- MAIN SCROLLABLE CONTENT -->
+  <div class="scroll-container flex-1 overflow-y-auto px-4 py-2 space-y-4 relative z-10">
 
-    <div id="boss-vessel-wrap" class="vessel-wrap mt-1.5">
-      <div class="vessel-row">
-        <div class="vessel-heart" style="width: clamp(1.4rem,3.6dvh,2rem); height: clamp(1.4rem,3.6dvh,2rem); color:#5C4B8A;">
-          <i class="fa-solid fa-dragon" style="font-size: clamp(1rem,2.8dvh,1.4rem);"></i>
-        </div>
-        <div class="vessel" id="boss-vessel" style="height: clamp(1.3rem,3.4dvh,1.9rem); --vessel-wall:#2A1236; --fluid-a:#C86BF2; --fluid-b:#8B2FC9;">
-          <div id="boss-hp-bar" class="vessel-fill" style="width:100%">
-            <div class="vessel-bubbles" id="boss-bubbles"></div>
-          </div>
-          <div class="vessel-text"><span id="boss-hp-text" style="font-size: clamp(.65rem,1.9dvh,.9rem);">100/100</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex justify-center mt-1">
-      <img id="boss-image" src="https://robohash.org/1?set=set3" alt="boss"
-        style="width: clamp(3.6rem, 13dvh, 7rem); height: clamp(3.6rem, 13dvh, 7rem);"
-        class="object-contain drop-shadow-2xl">
-    </div>
-  </div>
-
-  <!-- COMBO POPUP -->
-  <div id="combo-popup" class="combo-popup">
-    <div id="combo-popup-text" class="combo-card rounded-full px-5 py-3 hidden" style="font-size: clamp(.9rem,2.6dvh,1.3rem);"></div>
-  </div>
-
-  <!-- QUESTION ZONE -->
-  <div class="question-zone relative z-10">
-    <div class="speech-bubble rounded-3xl w-full" style="padding: clamp(.6rem,2dvh,1.25rem);">
-      <img id="question-image" src="https://placehold.co/200x200/png?text=Birthday" alt="question hint" class="mb-2 shadow-sm">
-      <p id="question-hanzi" class="font-hanzi text-ink font-700">生日</p>
-      <p id="question-pinyin" class="font-thai text-plum font-500 mb-2">shēngrì</p>
-
-      <button id="play-sound-btn" aria-label="ฟังเสียง"
-        class="icon-btn rounded-full text-pinkDeep shadow-btn flex items-center justify-center transition-all"
-        style="width: clamp(2.6rem,7dvh,3.5rem); height: clamp(2.6rem,7dvh,3.5rem);">
-        <i class="fa-solid fa-volume-high" style="font-size: clamp(1.1rem,3dvh,1.5rem);"></i>
-      </button>
-    </div>
-
-    <div class="w-full h-2.5 sm:h-3 bg-white/50 rounded-full overflow-hidden mt-2" style="border: 2px solid rgba(255, 211, 77, 0.25);">
-      <div id="timer-bar" class="h-full" style="width:100%"></div>
-    </div>
-  </div>
-
-  <!-- CHOICES -->
-  <div class="choices-zone relative z-10">
-    <div id="choices-grid" class="grid grid-cols-2 gap-2 sm:gap-3"></div>
-  </div>
-
-  <!-- PLAYER ZONE -->
-  <div class="player-zone relative z-10">
-    <div class="card-glass rounded-3xl" style="padding: clamp(.5rem,1.8dvh,.9rem) clamp(.7rem,3vw,1.1rem);">
-
-      <div class="flex items-center justify-between mb-2">
-        <div class="flex items-center gap-2">
-          <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1" alt="player avatar"
-            style="width: clamp(1.8rem,4.6dvh,2.6rem); height: clamp(1.8rem,4.6dvh,2.6rem);"
-            class="rounded-full bg-yellow border-2 border-ink/20 object-cover">
-          <span class="font-display font-600 text-ink" style="font-size: clamp(.75rem,2.1dvh,.95rem);">ผู้เล่น</span>
-        </div>
-        <div class="flex gap-1.5 sm:gap-2">
-          <div class="relative">
-            <button data-item="heal" aria-label="ฮีล" class="icon-btn rounded-full flex items-center justify-center" style="width: clamp(2.1rem,5.6dvh,2.7rem); height: clamp(2.1rem,5.6dvh,2.7rem);">
-              <i class="fa-solid fa-flask text-mintDeep" style="font-size: clamp(.95rem,2.6dvh,1.3rem);"></i>
-            </button>
-            <span id="item-heal-count" class="absolute -top-1.5 -right-1.5 font-display text-[9px] sm:text-[10px] bg-gradient-to-r from-mintDeep to-mint text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-700 shadow">1</span>
-          </div>
-          <div class="relative">
-            <button data-item="fifty" aria-label="50/50" class="icon-btn rounded-full flex items-center justify-center" style="width: clamp(2.1rem,5.6dvh,2.7rem); height: clamp(2.1rem,5.6dvh,2.7rem);">
-              <i class="fa-solid fa-code-branch text-skyDeep" style="font-size: clamp(.95rem,2.6dvh,1.3rem);"></i>
-            </button>
-            <span id="item-fifty-count" class="absolute -top-1.5 -right-1.5 font-display text-[9px] sm:text-[10px] bg-gradient-to-r from-skyDeep to-sky text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-700 shadow">1</span>
-          </div>
-          <div class="relative">
-            <button data-item="skip" aria-label="ข้าม" class="icon-btn rounded-full flex items-center justify-center" style="width: clamp(2.1rem,5.6dvh,2.7rem); height: clamp(2.1rem,5.6dvh,2.7rem);">
-              <i class="fa-solid fa-forward text-yellowDeep" style="font-size: clamp(.95rem,2.6dvh,1.3rem);"></i>
-            </button>
-            <span id="item-skip-count" class="absolute -top-1.5 -right-1.5 font-display text-[9px] sm:text-[10px] bg-gradient-to-r from-yellowDeep to-yellow text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-700 shadow">1</span>
-          </div>
-        </div>
+    <!-- HERO BANNER SECTION -->
+    <div class="text-center pt-2 pb-1 relative">
+      <!-- Speech Bubble Greeting -->
+      <div class="speech-bubble max-w-[340px] mx-auto rounded-2xl p-3 mb-3 text-xs sm:text-sm font-thai font-600 text-plum transition-all duration-300">
+        <p id="panda-speech">"สวัสดีครับเพื่อนๆ! เลือกระดับความยาก แล้วไปผจญภัยภาษาจีนกับแพนด้ากันเลย! 🐼✨"</p>
       </div>
 
-      <div id="player-vessel-wrap" class="vessel-wrap">
-        <div class="vessel-row">
-          <div class="vessel-heart" style="width: clamp(1.4rem,3.6dvh,2rem); height: clamp(1.4rem,3.6dvh,2rem); color:#FF4D6D;">
-            <i class="fa-solid fa-heart" style="font-size: clamp(1rem,2.8dvh,1.4rem);"></i>
-          </div>
-          <div class="vessel" id="player-vessel" style="height: clamp(1.5rem,3.8dvh,2.1rem);">
-            <div id="player-hp-bar" class="vessel-fill" style="width:100%">
-              <div class="vessel-bubbles" id="player-bubbles"></div>
+      <!-- Panda Hero Avatar -->
+      <div class="relative inline-block cursor-pointer group" id="panda-hero-click">
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-mintDeep via-skyDeep to-pinkDeep blur-lg opacity-40 group-hover:opacity-75 transition-opacity duration-300"></div>
+        <img src="public/panda_hero.jpg" alt="Panda Mascot" 
+             class="panda-bounce relative z-10 w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full border-4 border-white shadow-lg mx-auto transform transition duration-300 group-hover:scale-105">
+        <span class="absolute bottom-0 right-1 z-20 bg-yellowDeep text-ink text-[10px] font-display font-700 px-2 py-0.5 rounded-full shadow border border-white">
+          คลิกเพื่อทักทาย 🔊
+        </span>
+      </div>
+
+      <!-- Title & Subtitle -->
+      <h1 class="font-display font-700 text-2xl sm:text-3xl text-ink tracking-tight mt-2 drop-shadow-sm">
+        Panda's Chinese Quest
+      </h1>
+      <p class="font-hanzi text-sm sm:text-base font-700 text-pinkDeep tracking-wider mt-0.5">
+        熊猫汉语大冒险 · ภารกิจพิชิตภาษาจีน
+      </p>
+    </div>
+
+    <!-- MODE SELECTION TITLE -->
+    <div class="flex items-center justify-between px-1">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-gamepad text-plum text-lg"></i>
+        <h2 class="font-display font-700 text-ink text-base sm:text-lg">เลือกระดับความยาก</h2>
+      </div>
+      <span class="text-xs font-display font-500 text-plum/70 bg-white/60 px-2.5 py-1 rounded-full border border-ink/5">3 Modes</span>
+    </div>
+
+    <!-- MODE CARDS LIST -->
+    <div class="space-y-3.5 pb-3">
+
+      <!-- MODE 1: EASY MODE -->
+      <a href="Mode_ez.html" class="mode-card block bg-gradient-to-br from-white via-mint/20 to-mint/40 rounded-3xl p-4 border-2 border-mintDeep/40 shadow-card hover:border-mintDeep relative overflow-hidden group">
+        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-mintDeep/10 rounded-full blur-xl group-hover:bg-mintDeep/20 transition-all"></div>
+        <div class="flex items-center justify-between gap-3 relative z-10">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-mint to-mintDeep flex items-center justify-center text-white text-2xl shadow-md flex-shrink-0">
+              🌱
             </div>
-            <div class="vessel-text"><span id="player-hp-text" style="font-size: clamp(.7rem,2dvh,.95rem);">100/100</span></div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-display font-700 text-ink text-lg sm:text-xl">โหมดง่าย (Easy)</h3>
+                <span class="bg-mintDeep/20 text-ink font-display text-[11px] font-700 px-2 py-0.5 rounded-full border border-mintDeep/30">⭐ 1 ดาว</span>
+              </div>
+              <p class="font-thai text-xs sm:text-sm text-plum/90 mt-0.5">
+                คำศัพท์เบื้องต้น 15 วินาที/ข้อ สบายๆ สำหรับผู้เริ่มต้น
+              </p>
+              <div class="flex items-center gap-3 mt-2 text-[11px] font-display text-plum/80">
+                <span><i class="fa-solid fa-clock text-mintDeep mr-1"></i>15s</span>
+                <span><i class="fa-solid fa-dragon text-mintDeep mr-1"></i>10 บอส</span>
+                <span id="best-easy" class="text-mintDeep font-700"><i class="fa-solid fa-trophy mr-1"></i>สถิติ: -</span>
+              </div>
+            </div>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-mintDeep text-white flex items-center justify-center shadow group-hover:translate-x-1 transition-transform flex-shrink-0">
+            <i class="fa-solid fa-play text-xs ml-0.5"></i>
           </div>
         </div>
-      </div>
+      </a>
+
+      <!-- MODE 2: MEDIUM MODE -->
+      <a href="Mode_Normal.html" class="mode-card block bg-gradient-to-br from-white via-yellow/20 to-amber/30 rounded-3xl p-4 border-2 border-yellowDeep/40 shadow-card hover:border-yellowDeep relative overflow-hidden group">
+        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-yellowDeep/10 rounded-full blur-xl group-hover:bg-yellowDeep/20 transition-all"></div>
+        <div class="flex items-center justify-between gap-3 relative z-10">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-yellow to-yellowDeep flex items-center justify-center text-ink text-2xl shadow-md flex-shrink-0">
+              ⚡
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-display font-700 text-ink text-lg sm:text-xl">โหมดปานกลาง (Medium)</h3>
+                <span class="bg-yellowDeep/20 text-ink font-display text-[11px] font-700 px-2 py-0.5 rounded-full border border-yellowDeep/30">⭐⭐ 2 ดาว</span>
+              </div>
+              <p class="font-thai text-xs sm:text-sm text-plum/90 mt-0.5">
+                คำศัพท์ระดับกลาง มีหมวดหมู่เวลา & ปฏิทิน ท้าทายฝีมือ
+              </p>
+              <div class="flex items-center gap-3 mt-2 text-[11px] font-display text-plum/80">
+                <span><i class="fa-solid fa-clock text-amberDeep mr-1"></i>12s</span>
+                <span><i class="fa-solid fa-image text-amberDeep mr-1"></i>มีรูปคำถาม</span>
+                <span id="best-normal" class="text-amberDeep font-700"><i class="fa-solid fa-trophy mr-1"></i>สถิติ: -</span>
+              </div>
+            </div>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-yellowDeep text-ink flex items-center justify-center shadow group-hover:translate-x-1 transition-transform flex-shrink-0 font-700">
+            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+          </div>
+        </div>
+      </a>
+
+      <!-- MODE 3: HARDCORE MODE -->
+      <a href="Mode_Hardcore.html" class="mode-card block bg-gradient-to-br from-white via-pink/20 to-blood/20 rounded-3xl p-4 border-2 border-blood/40 shadow-card hover:border-blood relative overflow-hidden group">
+        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blood/10 rounded-full blur-xl group-hover:bg-blood/20 transition-all"></div>
+        <div class="flex items-center justify-between gap-3 relative z-10">
+          <div class="flex items-center gap-3.5">
+            <div class="pulse-glow w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blood to-bloodDeep flex items-center justify-center text-white text-2xl shadow-md flex-shrink-0">
+              🔥
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-display font-700 text-ink text-lg sm:text-xl">โหมดฮาร์ดคอร์ (Hardcore)</h3>
+                <span class="bg-blood/20 text-bloodDeep font-display text-[11px] font-700 px-2 py-0.5 rounded-full border border-blood/30">⭐⭐⭐ 3 ดาว</span>
+              </div>
+              <p class="font-thai text-xs sm:text-sm text-plum/90 mt-0.5">
+                คำศัพท์ระดับสูง เวลาจำกัด สำหรับผู้เชี่ยวชาญภาษาจีน!
+              </p>
+              <div class="flex items-center gap-3 mt-2 text-[11px] font-display text-plum/80">
+                <span><i class="fa-solid fa-fire text-bloodDeep mr-1"></i>10s</span>
+                <span><i class="fa-solid fa-bolt text-bloodDeep mr-1"></i>ดาเมจแรง</span>
+                <span id="best-hard" class="text-bloodDeep font-700"><i class="fa-solid fa-trophy mr-1"></i>สถิติ: -</span>
+              </div>
+            </div>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-blood text-white flex items-center justify-center shadow group-hover:translate-x-1 transition-transform flex-shrink-0">
+            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+          </div>
+        </div>
+      </a>
 
     </div>
+
+    <!-- QUICK STATS CARD & FOOTER -->
+    <div class="bg-white/80 backdrop-blur-md rounded-2xl p-3.5 border border-ink/10 shadow-sm text-center">
+      <div class="flex justify-around items-center text-xs font-display">
+        <div>
+          <p class="text-plum/70">คลังคำศัพท์</p>
+          <p class="font-700 text-ink text-sm sm:text-base">100+ คำ</p>
+        </div>
+        <div class="h-6 w-px bg-ink/10"></div>
+        <div>
+          <p class="text-plum/70">ระดับความยาก</p>
+          <p class="font-700 text-ink text-sm sm:text-base">3 โหมด</p>
+        </div>
+        <div class="h-6 w-px bg-ink/10"></div>
+        <div>
+          <p class="text-plum/70">ผู้ช่วย</p>
+          <p class="font-700 text-ink text-sm sm:text-base">3 ไอเทม</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER CREDIT -->
+    <div class="text-center py-2">
+      <p class="text-[11px] font-thai text-plum/60">
+        🐼 Panda's Chinese Quest · สื่อการเรียนรู้ภาษาจีนแสนสนุก
+      </p>
+    </div>
+
   </div>
 
 </div><!-- /app-frame -->
 
+<!-- HOW TO PLAY MODAL -->
+<div id="how-to-play-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" id="modal-backdrop"></div>
+  
+  <div class="relative z-10 bg-white rounded-3xl w-full max-w-md p-5 border-4 border-mintDeep shadow-2xl overflow-hidden max-h-[85vh] flex flex-direction-column">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center pb-3 border-b border-ink/10">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">📖</span>
+        <h3 class="font-display font-700 text-ink text-lg sm:text-xl">วิธีเล่นเกม (How to Play)</h3>
+      </div>
+      <button id="btn-close-modal" aria-label="ปิด" class="w-8 h-8 rounded-full bg-ink/5 hover:bg-ink/10 flex items-center justify-center text-ink text-sm font-700 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Modal Content Scroll -->
+    <div class="overflow-y-auto py-3 space-y-4 text-xs sm:text-sm font-thai text-plum">
+      
+      <!-- Rule 1 -->
+      <div class="flex gap-3 items-start bg-mint/20 p-3 rounded-2xl border border-mintDeep/30">
+        <div class="w-8 h-8 rounded-xl bg-mintDeep text-white flex items-center justify-center font-display font-700 text-sm flex-shrink-0">
+          1
+        </div>
+        <div>
+          <h4 class="font-display font-700 text-ink text-sm">ตอบคำถามศัพท์ภาษาจีน</h4>
+          <p class="mt-0.5">เลือกคำแปลภาษาไทยที่ถูกต้องตรงกับคำศัพท์ภาษาจีน (Hanzi / Pinyin) ที่ปรากฏเพื่อโจมตีบอส</p>
+        </div>
+      </div>
+
+      <!-- Rule 2 -->
+      <div class="flex gap-3 items-start bg-yellow/30 p-3 rounded-2xl border border-yellowDeep/30">
+        <div class="w-8 h-8 rounded-xl bg-yellowDeep text-ink flex items-center justify-center font-display font-700 text-sm flex-shrink-0">
+          2
+        </div>
+        <div>
+          <h4 class="font-display font-700 text-ink text-sm">รักษาพลังชีวิต (HP) & ทำ Combo</h4>
+          <p class="mt-0.5">ตอบผิดหรือเวลาหมดจะถูกบอสโจมตีหัก HP ตอบถูกต่อเนื่องรับโบนัสคะแนนคูณสูงสุด x5!</p>
+        </div>
+      </div>
+
+      <!-- Rule 3 -->
+      <div class="flex gap-3 items-start bg-sky/30 p-3 rounded-2xl border border-skyDeep/30">
+        <div class="w-8 h-8 rounded-xl bg-skyDeep text-white flex items-center justify-center font-display font-700 text-sm flex-shrink-0">
+          3
+        </div>
+        <div>
+          <h4 class="font-display font-700 text-ink text-sm">ใช้ไอเทมช่วยเหลือ (Items)</h4>
+          <ul class="mt-1 space-y-1 text-xs">
+            <li>💚 <strong>ฮีล HP</strong>: ฟื้นฟูพลังชีวิต +30 HP</li>
+            <li>🌿 <strong>50/50</strong>: ตัดตัวเลือกคำตอบที่ไม่ใช่ออก 2 ข้อ</li>
+            <li>⏩ <strong>ข้ามข้อ</strong>: ผ่านข้อนี้ทันทีโดยไม่เสีย HP</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Rule 4 -->
+      <div class="flex gap-3 items-start bg-pink/30 p-3 rounded-2xl border border-pinkDeep/30">
+        <div class="w-8 h-8 rounded-xl bg-pinkDeep text-white flex items-center justify-center font-display font-700 text-sm flex-shrink-0">
+          4
+        </div>
+        <div>
+          <h4 class="font-display font-700 text-ink text-sm">ปราบ 10 บอสเพื่อคว้าชัยชนะ</h4>
+          <p class="mt-0.5">เมื่อลด HP บอสเหลือ 0 จะได้เข้าสู่ด่านบอสตัวถัดไป จนกระทั่งพิชิตครบทุกด่าน!</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer Button -->
+    <div class="pt-3 border-t border-ink/10">
+      <button id="btn-understand" class="w-full py-2.5 rounded-2xl bg-mintDeep text-white font-display font-700 text-sm shadow-btn hover:bg-mintDeep/90 active:translate-y-0.5 transition">
+        เข้าใจแล้ว! ออกลุยกันเลย 🚀
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <script>
 /* =========================================================
-   BOSS & QUESTION DATA
-========================================================= */
-const bossData = [
-  {
-    id: 1,
-    name: 'จอมเวลา ปีศาจนาฬิกา',
-    hp: 100,
-    color: '#FF9FC3',
-    questions: [
-      { hanzi: '十点十五分', pinyin: 'shí diǎn shíwǔ fēn', meaning: '10:15 น.' },
-      { hanzi: '早上', pinyin: 'zǎoshang', meaning: 'เช้า' },
-      { hanzi: '下午', pinyin: 'xiàwǔ', meaning: 'บ่าย' },
-      { hanzi: '晚上', pinyin: 'wǎnshang', meaning: 'เย็น' },
-      { hanzi: '现在几点', pinyin: 'xiànzài jǐ diǎn', meaning: 'ตอนนี้กี่โมง' },
-    ]
-  },
-  // ... เพิ่มบอสอื่นตามต้องการ
-];
-
-// Extra generic distractors so multiple-choice options never look like placeholders,
-// even if a boss has very few unique meanings.
-const FALLBACK_DISTRACTORS = ['เที่ยงคืน', 'พรุ่งนี้', 'เมื่อวาน', 'สัปดาห์หน้า', 'ปีที่แล้ว', 'ตอนเช้าตรู่'];
-
-const TOTAL_BOSSES = bossData.length;
-const WRONG_DAMAGE = 20;
-const HEAL_AMOUNT = 30;
-
-let state = {
-  bossIndex: 0,
-  questionIndex: 0,
-  bossHP: 100,
-  bossMaxHP: 100,
-  playerHP: 100,
-  score: 0,
-  scoreMultiplier: 1,
-  comboCount: 0,
-  items: { heal: 1, fifty: 1, skip: 1 },
-  currentQuestions: [],
-  answered: false,
-  paused: false,
-  gameOver: false,
-  victory: false,
-  bossesDefeated: 0,
-  timer: null,
-  damagePerHit: 25,
-};
-
-const el = {
-  appFrame: document.getElementById('app-frame'),
-  bossName: document.getElementById('boss-name'),
-  bossHPBar: document.getElementById('boss-hp-bar'),
-  bossHPText: document.getElementById('boss-hp-text'),
-  bossVesselWrap: document.getElementById('boss-vessel-wrap'),
-  bossBubbles: document.getElementById('boss-bubbles'),
-  playerHPBar: document.getElementById('player-hp-bar'),
-  playerHPText: document.getElementById('player-hp-text'),
-  playerVesselWrap: document.getElementById('player-vessel-wrap'),
-  playerBubbles: document.getElementById('player-bubbles'),
-  scoreValue: document.getElementById('score-value'),
-  comboBadge: document.getElementById('combo-badge'),
-  questionHanzi: document.getElementById('question-hanzi'),
-  questionPinyin: document.getElementById('question-pinyin'),
-  playSoundBtn: document.getElementById('play-sound-btn'),
-  choicesGrid: document.getElementById('choices-grid'),
-  timerBar: document.getElementById('timer-bar'),
-  bossProgress: document.getElementById('boss-progress'),
-  bossTotal: document.getElementById('boss-total'),
-  comboPopupText: document.getElementById('combo-popup-text'),
-  dangerVignette: document.getElementById('danger-vignette'),
-};
-
-el.bossTotal.textContent = TOTAL_BOSSES;
-
-/* =========================================================
-   UTILITIES
-========================================================= */
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-
-function speak(text) {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
-  }
-}
-
-function getComboMultiplier() {
-  if (state.comboCount >= 10) return 5;
-  if (state.comboCount >= 5) return 3;
-  if (state.comboCount >= 3) return 2;
-  return 1;
-}
-
-function resetCombo() {
-  state.comboCount = 0;
-  state.scoreMultiplier = 1;
-}
-
-/* =========================================================
-   AMBIENT BACKGROUND EFFECTS (sparkles + drifting bamboo leaves)
+   AMBIENT BACKGROUND EFFECTS (Sparkles & Bamboo Leaves)
 ========================================================= */
 function initAmbientEffects() {
   const container = document.getElementById('stars-container');
+  if (!container) return;
+  
   const sparkleGlyphs = ['✦', '✧', '⋆'];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 12; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle';
     s.textContent = sparkleGlyphs[Math.floor(Math.random() * sparkleGlyphs.length)];
@@ -635,7 +510,8 @@ function initAmbientEffects() {
     s.style.animationDelay = Math.random() * 4 + 's';
     container.appendChild(s);
   }
-  for (let i = 0; i < 5; i++) {
+
+  for (let i = 0; i < 6; i++) {
     const b = document.createElement('i');
     b.className = 'fa-solid fa-leaf bamboo-drift';
     b.style.left = Math.random() * 100 + '%';
@@ -647,513 +523,209 @@ function initAmbientEffects() {
 }
 
 /* =========================================================
-   VESSEL BUBBLES
+   AUDIO & SPEECH SYSTEM
 ========================================================= */
-function spawnVesselBubbles(containerEl) {
-  if (state.answered || state.paused) return;
-  const bubble = document.createElement('div');
-  const size = 3 + Math.random() * 5;
-  bubble.className = 'vessel-bubble';
-  bubble.style.width = size + 'px';
-  bubble.style.height = size + 'px';
-  bubble.style.left = Math.random() * 90 + '%';
-  bubble.style.animationDuration = (1 + Math.random() * 1) + 's';
-  containerEl.appendChild(bubble);
-  setTimeout(() => bubble.remove(), 2200);
-}
-setInterval(() => spawnVesselBubbles(el.playerBubbles), 350);
-setInterval(() => spawnVesselBubbles(el.bossBubbles), 420);
+let soundEnabled = true;
 
-/* =========================================================
-   FLOATING DAMAGE / HEAL NUMBERS
-========================================================= */
-function showFloatNumber(anchorEl, text, colorClass) {
-  const rect = anchorEl.getBoundingClientRect();
-  const frameRect = el.appFrame.getBoundingClientRect();
-  const num = document.createElement('div');
-  num.className = 'float-number ' + colorClass;
-  num.textContent = text;
-  num.style.left = (rect.left - frameRect.left + rect.width / 2) + 'px';
-  num.style.top = (rect.top - frameRect.top) + 'px';
-  num.style.fontSize = 'clamp(1rem, 3dvh, 1.4rem)';
-  el.appFrame.appendChild(num);
-  setTimeout(() => num.remove(), 1150);
+let chineseVoice = null;
+function loadVoices() {
+  if ('speechSynthesis' in window) {
+    const voices = speechSynthesis.getVoices();
+    chineseVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN') || (v.name && v.name.toLowerCase().includes('chinese'))) || null;
+  }
 }
-
-/* =========================================================
-   PARTICLE BURST (combo celebrations + confetti)
-========================================================= */
-function spawnBurst(originEl, count, colors, shapes) {
-  const rect = originEl.getBoundingClientRect();
-  const frameRect = el.appFrame.getBoundingClientRect();
-  const originX = rect.left - frameRect.left + rect.width / 2;
-  const originY = rect.top - frameRect.top + rect.height / 2;
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('div');
-    p.className = 'burst-particle';
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 40 + Math.random() * 70;
-    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-    p.style.setProperty('--rot', (Math.random() * 360) + 'deg');
-    p.style.left = originX + 'px';
-    p.style.top = originY + 'px';
-    p.style.color = colors[Math.floor(Math.random() * colors.length)];
-    p.style.fontSize = (10 + Math.random() * 8) + 'px';
-    p.textContent = shapes[Math.floor(Math.random() * shapes.length)];
-    el.appFrame.appendChild(p);
-    setTimeout(() => p.remove(), 850);
+if ('speechSynthesis' in window) {
+  loadVoices();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
   }
 }
 
-function spawnConfetti() {
-  const colors = ['#FFD34D', '#FF9FC3', '#6FE3A8', '#6FCBE8', '#FFD6E8'];
-  for (let i = 0; i < 40; i++) {
-    const c = document.createElement('div');
-    c.className = 'confetti-piece';
-    c.style.left = Math.random() * 100 + '%';
-    c.style.width = (5 + Math.random() * 5) + 'px';
-    c.style.height = (8 + Math.random() * 8) + 'px';
-    c.style.background = colors[Math.floor(Math.random() * colors.length)];
-    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    c.style.animationDuration = (2 + Math.random() * 2) + 's';
-    c.style.animationDelay = (Math.random() * 1.5) + 's';
-    el.appFrame.appendChild(c);
-    setTimeout(() => c.remove(), 4200);
-  }
-}
+let currentOnlineAudio = null;
 
-/* =========================================================
-   HP & DAMAGE DISPLAY
-========================================================= */
-function updatePlayerHP(delta) {
-  const percent = Math.max(0, (state.playerHP / 100) * 100);
-  el.playerHPBar.style.width = percent + '%';
-  el.playerHPText.textContent = `${Math.max(0, state.playerHP)}/100`;
+async function playOnlineTTS(text) {
+  if (!soundEnabled) return;
+  try {
+    const cleanText = text.trim();
+    if (!cleanText) return;
 
-  el.playerVesselWrap.classList.toggle('low-hp', state.playerHP <= 30 && state.playerHP > 0);
-  el.dangerVignette.classList.toggle('active', state.playerHP <= 30 && state.playerHP > 0);
-
-  const heart = el.playerVesselWrap.querySelector('.vessel-heart');
-  heart.style.animationDuration = state.playerHP <= 30 ? '.55s' : '1s';
-
-  if (delta) {
-    const cls = delta > 0 ? 'healed' : 'damaged';
-    el.playerVesselWrap.classList.remove('damaged', 'healed');
-    void el.playerVesselWrap.offsetWidth;
-    el.playerVesselWrap.classList.add(cls);
-    setTimeout(() => el.playerVesselWrap.classList.remove(cls), 500);
-    showFloatNumber(el.playerVesselWrap.querySelector('.vessel'), (delta > 0 ? '+' : '') + delta, delta > 0 ? 'text-mintDeep' : 'text-bloodDeep');
-  }
-}
-
-function updateBossHP(delta) {
-  const percent = Math.max(0, (state.bossHP / state.bossMaxHP) * 100);
-  el.bossHPBar.style.width = percent + '%';
-  el.bossHPText.textContent = `${Math.max(0, state.bossHP)}/${state.bossMaxHP}`;
-
-  if (delta) {
-    el.bossVesselWrap.classList.remove('damaged');
-    void el.bossVesselWrap.offsetWidth;
-    el.bossVesselWrap.classList.add('damaged');
-    setTimeout(() => el.bossVesselWrap.classList.remove('damaged'), 400);
-    showFloatNumber(el.bossVesselWrap.querySelector('.vessel'), '-' + delta, 'text-plum');
-  }
-}
-
-function updateScoreUI() {
-  el.scoreValue.textContent = state.score;
-  el.comboBadge.textContent = `x${state.scoreMultiplier}`;
-
-  if (state.comboCount >= 10) {
-    el.comboBadge.style.background = 'linear-gradient(135deg, #FFD34D, #FFC94D)';
-  } else if (state.comboCount >= 5) {
-    el.comboBadge.style.background = 'linear-gradient(135deg, #FF9FC3, #FF7BA6)';
-  } else {
-    el.comboBadge.style.background = 'linear-gradient(135deg, #6FCBE8, #5CB8DD)';
-  }
-}
-
-function updateItemUI() {
-  for (const [type, count] of Object.entries(state.items)) {
-    const countEl = document.getElementById(`item-${type}-count`);
-    if (countEl) countEl.textContent = count;
-    const btn = document.querySelector(`[data-item="${type}"]`);
-    if (btn) btn.disabled = count <= 0;
-  }
-}
-
-function showComboPopup(title) {
-  const popupText = el.comboPopupText;
-  popupText.textContent = title;
-  popupText.classList.remove('hidden', 'show', 'float-away');
-  void popupText.offsetWidth;
-  popupText.classList.add('show');
-
-  spawnBurst(el.comboPopupText, 14, ['#FFD34D', '#FF9FC3', '#6FE3A8', '#6FCBE8'], ['★', '✦', '●']);
-
-  setTimeout(() => {
-    popupText.classList.add('float-away');
-    setTimeout(() => {
-      popupText.classList.remove('show', 'float-away');
-      popupText.classList.add('hidden');
-    }, 700);
-  }, 900);
-}
-
-/* =========================================================
-   SCREEN SHAKE
-========================================================= */
-function shakeScreen() {
-  el.appFrame.classList.add('shake-once');
-  setTimeout(() => el.appFrame.classList.remove('shake-once'), 500);
-}
-
-function hitBoss() {
-  const img = document.getElementById('boss-image');
-  img.style.animation = 'none';
-  void img.offsetWidth;
-  img.style.animation = '';
-  img.classList.add('shake-once');
-  setTimeout(() => img.classList.remove('shake-once'), 350);
-}
-
-function disableChoices() {
-  document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
-}
-
-/* =========================================================
-   BOSS & QUESTION LOADING
-========================================================= */
-function buildMeaningPool() {
-  const set = new Set();
-  bossData.forEach(b => b.questions.forEach(q => set.add(q.meaning)));
-  FALLBACK_DISTRACTORS.forEach(m => set.add(m));
-  return [...set];
-}
-const MEANING_POOL = buildMeaningPool();
-
-function generateFakeAnswers(correct) {
-  const pool = MEANING_POOL.filter(m => m !== correct);
-  return shuffle(pool).slice(0, 3);
-}
-
-function loadBoss(index) {
-  const boss = bossData[index];
-  state.bossIndex = index;
-  state.bossHP = boss.hp;
-  state.bossMaxHP = boss.hp;
-  state.playerHP = 100;
-  state.questionIndex = 0;
-  state.bossesDefeated = index;
-  state.comboCount = 0;
-  state.scoreMultiplier = 1;
-
-  el.bossName.textContent = boss.name;
-  el.bossProgress.textContent = (index + 1);
-  el.appFrame.style.borderColor = boss.color;
-
-  const count = Math.floor(Math.random() * 3) + 3;
-  state.currentQuestions = shuffle(boss.questions).slice(0, count);
-  state.damagePerHit = Math.ceil(boss.hp / count);
-
-  updatePlayerHP();
-  updateBossHP();
-  updateItemUI();
-  updateScoreUI();
-  loadQuestion();
-}
-
-function loadQuestion() {
-  state.answered = false;
-  el.choicesGrid.innerHTML = '';
-  const q = state.currentQuestions[state.questionIndex];
-
-  el.questionHanzi.textContent = q.hanzi;
-  el.questionPinyin.textContent = q.pinyin;
-
-  const meanings = shuffle([q.meaning, ...generateFakeAnswers(q.meaning)]);
-  meanings.forEach(meaning => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn rounded-xl px-3 py-2.5 sm:py-3 font-display font-600 shadow-card';
-    btn.textContent = meaning;
-    btn.addEventListener('click', () => handleChoice(btn, q.meaning));
-    el.choicesGrid.appendChild(btn);
-  });
-
-  startTimer();
-}
-
-function startTimer() {
-  let time = 15;
-  el.timerBar.style.width = '100%';
-  el.timerBar.style.backgroundColor = '#FFD34D';
-
-  clearInterval(state.timer);
-  state.timer = setInterval(() => {
-    time--;
-    const percent = (time / 15) * 100;
-    el.timerBar.style.width = percent + '%';
-
-    if (time <= 5) {
-      el.timerBar.style.backgroundColor = '#FF9FC3';
+    if (currentOnlineAudio) {
+      currentOnlineAudio.pause();
+      currentOnlineAudio = null;
     }
 
-    if (time <= 0) {
-      clearInterval(state.timer);
-      state.answered = true;
-      state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
-      resetCombo();
-      updateScoreUI();
-      updatePlayerHP(-WRONG_DAMAGE);
-      shakeScreen();
-      checkOutcomeThenNext();
-    }
-  }, 1000);
-}
+    const encoded = encodeURIComponent(cleanText);
+    const stripped = encodeURIComponent(cleanText.replace(/[！!？?，,。. ]/g, ''));
 
-/* =========================================================
-   CHOICE HANDLING
-========================================================= */
-function handleChoice(btn, correctMeaning) {
-  if (state.answered) return;
-  state.answered = true;
-  clearInterval(state.timer);
-  disableChoices();
+    const sources = [
+      `public/audio/${cleanText}.mp3`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=tw-ob`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=gtx`,
+      `https://dict.youdao.com/dictvoice?audio=${stripped}&le=zh`,
+      `https://fanyi.baidu.com/gettts?lan=zh&text=${encoded}&spd=5&source=web`
+    ];
 
-  const isCorrect = btn.textContent === correctMeaning;
+    for (let i = 0; i < sources.length; i++) {
+      const src = sources[i];
+      const success = await new Promise((resolve) => {
+        const audio = new Audio();
+        audio.referrerPolicy = 'no-referrer';
+        audio.src = src;
+        currentOnlineAudio = audio;
 
-  if (isCorrect) {
-    btn.classList.add('choice-correct');
-    const dmg = Math.min(state.bossHP, state.damagePerHit);
-    state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
-    state.comboCount += 1;
-    state.scoreMultiplier = getComboMultiplier();
-    state.score += 100 * state.scoreMultiplier;
-    updateScoreUI();
-    if (state.comboCount === 3 || state.comboCount === 5 || state.comboCount === 10) {
-      showComboPopup(`🎯 COMBO ${state.comboCount}! x${state.scoreMultiplier}`);
-    }
-    updateBossHP(dmg);
-    hitBoss();
-  } else {
-    btn.classList.add('choice-wrong');
-    document.querySelectorAll('.choice-btn').forEach(b => {
-      if (b.textContent === correctMeaning) b.classList.add('choice-correct');
-    });
-    state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
-    resetCombo();
-    updateScoreUI();
-    updatePlayerHP(-WRONG_DAMAGE);
-    shakeScreen();
-  }
+        let resolved = false;
+        const cleanupAndResolve = (isOk) => {
+          if (!resolved) {
+            resolved = true;
+            audio.onplaying = null;
+            audio.onerror = null;
+            resolve(isOk);
+          }
+        };
 
-  updateItemUI();
-  checkOutcomeThenNext();
-}
+        audio.onplaying = () => cleanupAndResolve(true);
+        audio.onerror = () => cleanupAndResolve(false);
 
-function checkOutcomeThenNext() {
-  setTimeout(() => {
-    if (state.playerHP <= 0) return gameOver();
-    if (state.bossHP <= 0) return bossDefeated();
-
-    state.questionIndex++;
-    if (state.questionIndex >= state.currentQuestions.length) {
-      const boss = bossData[state.bossIndex];
-      const count = Math.floor(Math.random() * 3) + 3;
-      state.currentQuestions = shuffle(boss.questions).slice(0, count);
-      state.questionIndex = 0;
-      state.damagePerHit = Math.ceil(state.bossHP / count) || 1;
-    }
-    loadQuestion();
-  }, 900);
-}
-
-/* =========================================================
-   OVERLAY SYSTEM (pause / boss-clear / defeat / victory)
-========================================================= */
-const overlayEl = document.createElement('div');
-overlayEl.className = 'overlay';
-overlayEl.innerHTML = `
-  <div class="overlay-backdrop"></div>
-  <div class="overlay-card" id="overlay-card">
-    <div class="overlay-icon" id="overlay-icon"></div>
-    <h2 class="overlay-title" id="overlay-title"></h2>
-    <p class="overlay-message" id="overlay-message"></p>
-    <div class="overlay-stats hidden" id="overlay-stats"></div>
-    <div class="overlay-buttons" id="overlay-buttons"></div>
-  </div>
-`;
-el.appFrame.appendChild(overlayEl);
-const ovIcon = overlayEl.querySelector('#overlay-icon');
-const ovTitle = overlayEl.querySelector('#overlay-title');
-const ovMessage = overlayEl.querySelector('#overlay-message');
-const ovStats = overlayEl.querySelector('#overlay-stats');
-const ovButtons = overlayEl.querySelector('#overlay-buttons');
-const ovCard = overlayEl.querySelector('#overlay-card');
-
-function showOverlay({ icon, title, message, stats, accent, buttons, shake, confetti }) {
-  ovIcon.textContent = icon || '';
-  ovTitle.textContent = title || '';
-  ovMessage.textContent = message || '';
-  if (stats) {
-    ovStats.innerHTML = stats;
-    ovStats.classList.remove('hidden');
-  } else {
-    ovStats.classList.add('hidden');
-  }
-  ovCard.style.setProperty('--overlay-accent', accent || '#6FE3A8');
-  ovButtons.innerHTML = '';
-  (buttons || []).forEach(b => {
-    const btn = document.createElement('button');
-    btn.className = 'overlay-btn ' + (b.type || 'primary');
-    btn.textContent = b.label;
-    btn.addEventListener('click', () => { hideOverlay(); b.action && b.action(); });
-    ovButtons.appendChild(btn);
-  });
-  overlayEl.classList.add('show');
-  if (shake) shakeScreen();
-  if (confetti) spawnConfetti();
-}
-
-function hideOverlay() {
-  overlayEl.classList.remove('show');
-}
-
-/* =========================================================
-   OUTCOMES
-========================================================= */
-function bossDefeated() {
-  state.bossesDefeated++;
-  state.score += (state.playerHP * 10);
-  updateScoreUI();
-  showOverlay({
-    icon: '⚔️🎉',
-    title: 'ปราบบอสสำเร็จ!',
-    message: 'ไปลุยบอสตัวต่อไปกันเลย!',
-    accent: '#6FE3A8',
-    buttons: [
-      { label: 'ไปต่อ', type: 'primary', action: () => {
-        const next = state.bossIndex + 1;
-        if (next >= TOTAL_BOSSES) victory(); else loadBoss(next);
-      }}
-    ]
-  });
-}
-
-function gameOver() {
-  clearInterval(state.timer);
-  el.dangerVignette.classList.remove('active');
-  showOverlay({
-    icon: '💔',
-    title: 'พ่ายแพ้!',
-    message: 'พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!',
-    accent: '#FF7BA6',
-    stats: `ปราบบอสได้ <strong>${state.bossesDefeated}</strong>/${TOTAL_BOSSES} &nbsp;·&nbsp; คะแนน <strong>${state.score}</strong>`,
-    shake: true,
-    buttons: [
-      { label: 'ลองอีกครั้ง', type: 'primary', action: () => location.reload() },
-      { label: 'กลับหน้าแรก', type: 'secondary', action: () => location.href = 'index.html' },
-    ]
-  });
-}
-
-function victory() {
-  state.score += (state.playerHP * 10);
-  updateScoreUI();
-  showOverlay({
-    icon: '🏆',
-    title: `ชนะครบ ${TOTAL_BOSSES} บอส!`,
-    message: 'สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน',
-    accent: '#FFD34D',
-    stats: `🎯 ปราบบอสได้ <strong>${state.bossesDefeated}</strong>/${TOTAL_BOSSES} &nbsp;·&nbsp; ⭐ คะแนนรวม <strong>${state.score}</strong>`,
-    confetti: true,
-    buttons: [
-      { label: 'เล่นอีกครั้ง', type: 'primary', action: () => location.reload() },
-      { label: 'กลับหน้าแรก', type: 'secondary', action: () => location.href = 'index.html' },
-    ]
-  });
-}
-
-function pauseGame() {
-  if (state.gameOver || state.victory || overlayEl.classList.contains('show')) return;
-  state.paused = true;
-  clearInterval(state.timer);
-  disableChoices();
-
-  showOverlay({
-    icon: '⏸️',
-    title: 'หยุดชั่วคราว',
-    message: 'เลือกสิ่งที่คุณต้องการ',
-    accent: '#6FCBE8',
-    buttons: [
-      { label: 'เล่นต่อ', type: 'primary', action: () => {
-        state.paused = false;
-        document.querySelectorAll('.choice-btn').forEach(b => b.disabled = false);
-        startTimer();
-      }},
-      { label: 'กลับหน้าแรก', type: 'secondary', action: () => location.href = 'index.html' },
-    ]
-  });
-}
-
-/* =========================================================
-   ITEMS & BUTTONS
-========================================================= */
-document.getElementById('stop-btn').addEventListener('click', pauseGame);
-
-document.querySelectorAll('[data-item]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const type = btn.getAttribute('data-item');
-    if (state.items[type] <= 0 || state.answered) return;
-
-    if (type === 'heal') {
-      state.items.heal--;
-      const before = state.playerHP;
-      state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
-      updatePlayerHP(state.playerHP - before);
-      showComboPopup(`💚 ฮีล! +${HEAL_AMOUNT} HP`);
-    }
-
-    if (type === 'fifty') {
-      state.items.fifty--;
-      const q = state.currentQuestions[state.questionIndex];
-      const wrongButtons = [...document.querySelectorAll('.choice-btn')]
-        .filter(b => b.textContent !== q.meaning);
-      shuffle(wrongButtons).slice(0, 2).forEach(b => {
-        b.disabled = true;
-        b.style.visibility = 'hidden';
+        audio.play().then(() => cleanupAndResolve(true)).catch(() => cleanupAndResolve(false));
       });
-    }
 
-    if (type === 'skip') {
-      state.items.skip--;
-      state.answered = true;
-      clearInterval(state.timer);
-      disableChoices();
-      checkOutcomeThenNext();
+      if (success) return;
     }
+  } catch (e) {
+    console.error("playOnlineTTS error:", e);
+  }
+}
 
-    updateItemUI();
+function speak(text, lang = 'zh-CN') {
+  if (!soundEnabled || !text) return;
+  if ('speechSynthesis' in window && !chineseVoice) {
+    loadVoices();
+  }
+  if ('speechSynthesis' in window && chineseVoice) {
+    try {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = chineseVoice;
+      utterance.lang = chineseVoice.lang || lang;
+      utterance.rate = 0.95;
+      speechSynthesis.speak(utterance);
+      return;
+    } catch (e) {
+      console.warn("Speech error, switching to online TTS:", e);
+    }
+  }
+  playOnlineTTS(text);
+}
+
+function playUiClickSound() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.09);
+  } catch (e) {
+    // AudioContext fallback ignored if blocked by autoplay policy
+  }
+}
+
+/* Dynamic Panda greetings on click */
+const pandaQuotes = [
+  "你好！(Nǐ hǎo) ยินดีต้อนรับสู่ภารกิจฝึกภาษาจีนครับ!",
+  "加油！(Jiāyóu) สู้ๆ นะครับ เลือกระดับความยากได้เลย!",
+  "熊猫汉语大冒险！สนุกกับคำศัพท์จีนกันเถอะ!",
+  "อย่าลืมใช้ไอเทมช่วยในการเล่นด้วยนะ 🐼✨",
+  "พร้อมพิชิตครบทั้ง 10 บอสหรือยังครับ?"
+];
+
+/* =========================================================
+   LOCAL STORAGE & HIGH SCORES
+========================================================= */
+function loadHighScores() {
+  const easyBest = localStorage.getItem('panda_quest_easy_best') || '0';
+  const normalBest = localStorage.getItem('panda_quest_normal_best') || '0';
+  const hardBest = localStorage.getItem('panda_quest_hard_best') || '0';
+
+  const easyEl = document.getElementById('best-easy');
+  const normalEl = document.getElementById('best-normal');
+  const hardEl = document.getElementById('best-hard');
+
+  if (easyEl && easyBest !== '0') easyEl.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i>สถิติ: ${easyBest}`;
+  if (normalEl && normalBest !== '0') normalEl.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i>สถิติ: ${normalBest}`;
+  if (hardEl && hardBest !== '0') hardEl.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i>สถิติ: ${hardBest}`;
+}
+
+/* =========================================================
+   MODAL EVENT LISTENERS
+========================================================= */
+const modal = document.getElementById('how-to-play-modal');
+const btnHowToPlay = document.getElementById('btn-how-to-play');
+const btnCloseModal = document.getElementById('btn-close-modal');
+const btnUnderstand = document.getElementById('btn-understand');
+const modalBackdrop = document.getElementById('modal-backdrop');
+
+function openModal() {
+  playUiClickSound();
+  modal.classList.remove('hidden');
+}
+
+function closeModal() {
+  playUiClickSound();
+  modal.classList.add('hidden');
+}
+
+btnHowToPlay.addEventListener('click', openModal);
+btnCloseModal.addEventListener('click', closeModal);
+btnUnderstand.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', closeModal);
+
+/* Sound Toggle */
+const soundBtn = document.getElementById('btn-sound-toggle');
+const soundIcon = document.getElementById('sound-icon');
+
+soundBtn.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+  if (soundEnabled) {
+    soundIcon.className = 'fa-solid fa-volume-high text-pinkDeep';
+    playUiClickSound();
+    speak('你好');
+  } else {
+    soundIcon.className = 'fa-solid fa-volume-xmark text-plum/40';
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+  }
+});
+
+/* Panda Mascot Click Interactive Greeting */
+const pandaClickArea = document.getElementById('panda-hero-click');
+const pandaSpeech = document.getElementById('panda-speech');
+
+pandaClickArea.addEventListener('click', () => {
+  playUiClickSound();
+  const randomQuote = pandaQuotes[Math.floor(Math.random() * pandaQuotes.length)];
+  pandaSpeech.textContent = `"${randomQuote}"`;
+  speak(randomQuote.replace(/[^\u4e00-\u9fa5]/g, ''), 'zh-CN');
+});
+
+/* Button Sound effects for mode cards */
+document.querySelectorAll('.mode-card').forEach(card => {
+  card.addEventListener('click', () => {
+    playUiClickSound();
   });
 });
 
-el.playSoundBtn.addEventListener('click', () => {
-  speak(el.questionHanzi.textContent);
-  el.playSoundBtn.classList.remove('speaking');
-  void el.playSoundBtn.offsetWidth;
-  el.playSoundBtn.classList.add('speaking');
+/* Initialize */
+document.addEventListener('DOMContentLoaded', () => {
+  initAmbientEffects();
+  loadHighScores();
 });
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-initAmbientEffects();
-updatePlayerHP();
-updateBossHP();
-updateItemUI();
-updateScoreUI();
-loadBoss(0);
 </script>
 
 </body>

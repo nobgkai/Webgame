@@ -37,7 +37,14 @@
 </script>
 
 <style>
-  * { box-sizing: border-box; }
+  * { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
   body { 
     font-family:'Mali',sans-serif; 
     background-color:#FBFBF6; 
@@ -606,13 +613,93 @@ const el = {
 
 // Utility
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function speak(text) {
+let chineseVoice = null;
+function loadVoices() {
   if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
+    const voices = speechSynthesis.getVoices();
+    chineseVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN') || (v.name && v.name.toLowerCase().includes('chinese'))) || null;
   }
+}
+if ('speechSynthesis' in window) {
+  loadVoices();
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+}
+
+let currentOnlineAudio = null;
+
+async function playOnlineTTS(text) {
+  try {
+    const cleanText = text.trim();
+    if (!cleanText) return;
+
+    if (currentOnlineAudio) {
+      currentOnlineAudio.pause();
+      currentOnlineAudio = null;
+    }
+
+    const encoded = encodeURIComponent(cleanText);
+    const stripped = encodeURIComponent(cleanText.replace(/[！!？?，,。. ]/g, ''));
+
+    const sources = [
+      `public/audio/${cleanText}.mp3`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=tw-ob`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=zh-CN&client=gtx`,
+      `https://dict.youdao.com/dictvoice?audio=${stripped}&le=zh`,
+      `https://fanyi.baidu.com/gettts?lan=zh&text=${encoded}&spd=5&source=web`
+    ];
+
+    for (let i = 0; i < sources.length; i++) {
+      const src = sources[i];
+      const success = await new Promise((resolve) => {
+        const audio = new Audio();
+        audio.referrerPolicy = 'no-referrer';
+        audio.src = src;
+        currentOnlineAudio = audio;
+
+        let resolved = false;
+        const cleanupAndResolve = (isOk) => {
+          if (!resolved) {
+            resolved = true;
+            audio.onplaying = null;
+            audio.onerror = null;
+            resolve(isOk);
+          }
+        };
+
+        audio.onplaying = () => cleanupAndResolve(true);
+        audio.onerror = () => cleanupAndResolve(false);
+
+        audio.play().then(() => cleanupAndResolve(true)).catch(() => cleanupAndResolve(false));
+      });
+
+      if (success) return;
+    }
+  } catch (e) {
+    console.error("playOnlineTTS error:", e);
+  }
+}
+
+function speak(text) {
+  if (!text) return;
+  if ('speechSynthesis' in window && !chineseVoice) {
+    loadVoices();
+  }
+  if ('speechSynthesis' in window && chineseVoice) {
+    try {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = chineseVoice;
+      utterance.lang = chineseVoice.lang;
+      utterance.rate = 0.85;
+      speechSynthesis.speak(utterance);
+      return;
+    } catch (e) {
+      console.warn("Speech error, switching to online TTS:", e);
+    }
+  }
+  playOnlineTTS(text);
 }
 
 function getComboMultiplier() {
@@ -762,6 +849,9 @@ function loadQuestion() {
   el.questionHanzi.textContent = q.hanzi;
   el.questionPinyin.textContent = q.pinyin;
   
+  // Auto-play Chinese pronunciation
+  speak(q.hanzi);
+  
   // Create choice buttons
   const meanings = shuffle([q.meaning, ...generateFakeAnswers(q.meaning)]);
   meanings.forEach(meaning => {
@@ -905,15 +995,24 @@ function bossDefeated() {
   });
 }
 
+function saveHighScore() {
+  const currentBest = parseInt(localStorage.getItem('panda_quest_easy_best') || '0', 10);
+  if (state.score > currentBest) {
+    localStorage.setItem('panda_quest_easy_best', state.score.toString());
+  }
+}
+
 function gameOver() {
   clearInterval(state.timer);
   stopHeartbeat();
+  saveHighScore();
   Swal.fire({
     title: '💔 พ่ายแพ้!',
     html: `<p>พลังชีวิตหมดแล้ว</p>
            <p style="font-size: 18px; margin-top: 10px;">ปราบบอสได้: <strong>${state.bossesDefeated}</strong>/10</p>
            <p style="font-size: 16px; margin-top: 5px;">คะแนน: <strong>${state.score}</strong></p>`,
     confirmButtonText: 'เริ่มใหม่',
+    showDenyButton: true,
     denyButtonText: 'กลับหน้าแรก',
     confirmButtonColor: '#FF9FC3',
     denyButtonColor: '#6FCBE8',
@@ -922,6 +1021,8 @@ function gameOver() {
   }).then((result) => {
     if (result.isConfirmed) {
       location.reload();
+    } else {
+      window.location.href = 'index.html';
     }
   });
 }
@@ -929,6 +1030,7 @@ function gameOver() {
 function victory() {
   stopHeartbeat();
   state.score += (state.playerHP * 10);
+  saveHighScore();
   Swal.fire({
     title: '🏆 ชนะครบ 10 บอส!',
     html: `<p>สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน</p>
@@ -937,6 +1039,7 @@ function victory() {
              <p style="font-size: 18px; margin: 5px 0;">⭐ คะแนนรวม: <strong>${state.score}</strong></p>
            </div>`,
     confirmButtonText: 'เล่นอีกครั้ง',
+    showDenyButton: true,
     denyButtonText: 'กลับหน้าแรก',
     confirmButtonColor: '#FFD34D',
     denyButtonColor: '#6FCBE8',
@@ -945,6 +1048,8 @@ function victory() {
   }).then((result) => {
     if (result.isConfirmed) {
       location.reload();
+    } else {
+      window.location.href = 'index.html';
     }
   });
 }
