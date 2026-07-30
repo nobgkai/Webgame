@@ -1,1242 +1,874 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hard Mode | Panda's Chinese Quest</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hard Mode | Panda's Chinese Quest</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800;900&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              mint: "#B8F2D4",
-              mintDeep: "#6FE3A8",
-              sky: "#BEE7F5",
-              skyDeep: "#6FCBE8",
-              pink: "#FFD6E8",
-              pinkDeep: "#FF9FC3",
-              yellow: "#FFF3B0",
-              yellowDeep: "#FFD34D",
-              amber: "#FFE1B8",
-              amberDeep: "#FF9F45",
-              bamboo: "#E9F7D8",
-              ink: "#3A3355",
-              plum: "#5C4B8A",
-            },
-            fontFamily: {
-              display: ["Fredoka", "Mali", "sans-serif"],
-              thai: ["Mali", "sans-serif"],
-              hanzi: ["'Noto Sans SC'", "sans-serif"],
-            },
-            boxShadow: {
-              soft: "0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)",
-              card: "0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)",
-              btn: "0 6px 0 0 rgba(0,0,0,0.15)",
-            },
-          },
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          purpleBg: '#9871FA',
+          purpleDark: '#7A4FE2',
+          bossHp: '#8A32D2',
+          playerHp: '#F33B6D',
+          mintDeep: '#53D797',
+          skyLight: '#90E2FF',
+          yellowBar: '#F3CE38',
+          ink: '#3A3355',
+          plum: '#5C4B8A',
         },
-      };
-    </script>
+        fontFamily: { 
+          display: ['Fredoka','Mali','sans-serif'], 
+          thai: ['Mali','sans-serif'], 
+          hanzi: ["'Noto Sans SC'",'sans-serif'] 
+        },
+        boxShadow: {
+          card: '0 8px 20px rgba(0,0,0,0.12)',
+          btn: '0 4px 0 rgba(0,0,0,0.15)',
+        }
+      }
+    }
+  }
+</script>
 
-    <style>
-      * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-      body {
-        font-family: "Mali", sans-serif;
-        background-color: #fbfbf6;
-        color: #3a3355;
-      }
-      .font-display {
-        font-family: "Fredoka", "Mali", sans-serif;
-      }
-      .font-hanzi {
-        font-family: "'Noto Sans SC'", sans-serif;
-      }
+<style>
+  body { 
+    font-family: 'Mali', sans-serif; 
+    background-color: #9871FA; 
+    color: #3A3355; 
+  }
+  .font-display { font-family: 'Fredoka','Mali',sans-serif; }
+  .font-hanzi { font-family: "'Noto Sans SC'",sans-serif; }
 
-      @keyframes shake {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        20% {
-          transform: translateX(-14px) rotate(-1deg);
-        }
-        40% {
-          transform: translateX(12px) rotate(1deg);
-        }
-        60% {
-          transform: translateX(-8px);
-        }
-        80% {
-          transform: translateX(8px);
-        }
-      }
-      .shake {
-        animation: shake 0.4s ease;
-      }
+  /* Background Circles Pattern & Moving Animation */
+  .bg-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 8%, transparent 8%),
+      radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.15) 12%, transparent 12%),
+      radial-gradient(circle at 15% 65%, rgba(255, 255, 255, 0.12) 15%, transparent 15%),
+      radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.15) 10%, transparent 10%);
+    background-size: 100% 100%;
+    animation: moveBg 12s ease-in-out infinite alternate;
+  }
 
-      @keyframes hit {
-        0% {
-          transform: scale(1);
-          filter: brightness(1);
-        }
-        30% {
-          transform: scale(0.92);
-          filter: brightness(1.6) saturate(2);
-        }
-        100% {
-          transform: scale(1);
-          filter: brightness(1);
-        }
-      }
-      .hit {
-        animation: hit 0.35s ease;
-      }
+  @keyframes moveBg {
+    0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+    50% { background-position: 30px -20px, -20px 30px, 25px 25px, -30px -15px; }
+    100% { background-position: -20px 25px, 25px -20px, -15px -30px, 20px 20px; }
+  }
 
-      @keyframes floaty {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-8px);
-        }
-      }
-      .float-slow {
-        animation: floaty 3.5s ease-in-out infinite;
-      }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-12px) rotate(-1deg); }
+    40% { transform: translateX(10px) rotate(1deg); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+  .shake { animation: shake 0.4s ease; }
 
-      @keyframes popIn {
-        0% {
-          opacity: 0;
-          transform: translateY(6px) scale(0.96);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-      .pop-in {
-        animation: popIn 0.25s ease;
-      }
+  @keyframes hit {
+    0% { transform: scale(1); filter: brightness(1); }
+    30% { transform: scale(0.92); filter: brightness(1.6) saturate(2); }
+    100% { transform: scale(1); filter: brightness(1); }
+  }
+  .hit { animation: hit 0.35s ease; }
 
-      @keyframes heartbeatPulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        40% {
-          transform: scale(1.03);
-        }
-        60% {
-          transform: scale(0.97);
-        }
-      }
-      body.low-health {
-        background: linear-gradient(
-          135deg,
-          #120d24 0%,
-          #2c1233 45%,
-          #0f1424 100%
-        );
-        color: #fdf2f8;
-        transition: background 0.35s ease;
-      }
-      body.low-health #game-container {
-        box-shadow:
-          0 0 0 1px rgba(255, 255, 255, 0.08),
-          0 20px 45px rgba(0, 0, 0, 0.3);
-      }
-      body.low-health .speech-bubble,
-      body.low-health .bg-white\/70,
-      body.low-health .bg-white\/80 {
-        background-color: rgba(255, 255, 255, 0.92) !important;
-        color: #3a3355;
-      }
-      body.low-health .float-slow {
-        animation: heartbeatPulse 0.55s ease-in-out infinite;
-      }
+  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
+  .float-slow { animation: floaty 3.5s ease-in-out infinite; }
 
-      .combo-popup {
-        position: absolute;
-        top: 12%;
-        left: 50%;
-        transform: translate(-50%, -30px) scale(0.92);
-        opacity: 0;
-        pointer-events: none;
-        z-index: 50;
-        transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .combo-popup.show {
-        opacity: 1;
-        transform: translate(-50%, -70px) scale(1);
-      }
-      .combo-popup .combo-card {
-        background: linear-gradient(135deg, #ff8dbb 0%, #ffd34d 100%);
-        color: white;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      }
+  @keyframes popIn {
+    0% { opacity: 0; transform: translateY(6px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .pop-in { animation: popIn 0.25s ease; }
 
-      .icon-btn {
-        transition: transform 0.12s ease;
-      }
-      .icon-btn:hover:not(:disabled) {
-        transform: translateY(-2px) scale(1.05);
-      }
-      .icon-btn:active:not(:disabled) {
-        transform: translateY(1px) scale(0.97);
-      }
-      .icon-btn:disabled {
-        opacity: 0.35;
-        cursor: not-allowed;
-        transform: none !important;
-      }
+  .icon-btn { transition: transform .12s ease; }
+  .icon-btn:hover:not(:disabled) { transform: scale(1.08); }
+  .icon-btn:active:not(:disabled) { transform: scale(.95); }
+  .icon-btn:disabled { opacity:.4; cursor:not-allowed; transform:none !important; }
 
-      #timer-bar {
-        transition:
-          width 0.1s linear,
-          background-color 0.3s;
-      }
-      #boss-hp-bar,
-      #player-hp-bar {
-        transition: width 0.35s ease;
-      }
+  #timer-bar { transition: width 0.1s linear; }
+  #boss-hp-bar, #player-hp-bar { transition: width .35s ease; }
 
-      #answer-input {
-        transition:
-          box-shadow 0.15s ease,
-          border-color 0.15s ease;
-      }
-      #answer-input.ring-correct {
-        border-color: #6fe3a8 !important;
-        box-shadow: 0 0 0 4px rgba(111, 227, 168, 0.35);
-      }
-      #answer-input.ring-wrong {
-        border-color: #ff9fc3 !important;
-        box-shadow: 0 0 0 4px rgba(255, 159, 195, 0.35);
-      }
-      #answer-input:disabled {
-        opacity: 0.7;
-      }
+  /* SPEECH BUBBLE */
+  .speech-bubble { position: relative; }
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 15px solid white;
+  }
 
-      /* Speech bubble pointing up toward the boss */
-      .speech-bubble {
-        position: relative;
-      }
-      .speech-bubble::before {
-        content: "";
-        position: absolute;
-        top: -14px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 14px solid transparent;
-        border-right: 14px solid transparent;
-        border-bottom: 16px solid white;
-      }
-    </style>
-  </head>
-  <body class="min-h-screen bg-gradient-to-b from-sky via-mint to-bamboo">
-    <div id="game-container" class="relative max-w-2xl mx-auto p-4 md:p-6">
-      <div id="combo-popup" class="combo-popup">
-        <div
-          id="combo-popup-text"
-          class="combo-card rounded-full px-5 py-3 shadow-2xl font-display text-lg md:text-2xl font-700"
-        ></div>
+  /* INPUT RING STYLING */
+  #answer-input {
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  #answer-input.ring-correct {
+    border-color: #53D797 !important;
+    box-shadow: 0 0 0 4px rgba(83, 215, 151, 0.35);
+  }
+  #answer-input.ring-wrong {
+    border-color: #F33B6D !important;
+    box-shadow: 0 0 0 4px rgba(243, 59, 109, 0.35);
+  }
+  #answer-input:disabled { opacity: 0.8; }
+</style>
+</head>
+<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6">
+
+<div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-2">
+
+  <!-- ZONE: BOSS HEADER & IMAGE -->
+  <div class="relative w-full flex flex-col items-center mb-2 min-h-[260px]">
+    
+    <!-- LAYER 1: รูปบอสขนาดใหญ่ ซ้อนอยู่ตรงกลางด้านหลัง -->
+    <div class="absolute inset-0 flex justify-center items-center z-10 pointer-events-none -top-4">
+      <img id="boss-image" src="public/1.png" alt="boss"
+        class="w-72 h-72 md:w-80 md:h-80 object-contain drop-shadow-2xl float-slow">
+    </div>
+
+    <!-- LAYER 2: TOP BAR -->
+    <div class="w-full flex items-center justify-between gap-2 mb-2 z-20 relative px-1">
+      <!-- Boss Badge -->
+      <div class="bg-white/90 rounded-full px-3 py-1 shadow-md flex items-center gap-1.5 text-xs md:text-sm font-display text-pink-500 font-bold">
+        <i class="fa-solid fa-dragon text-pink-400"></i>
+        <span>Boss <span id="boss-progress">1</span>/<span id="boss-total">5</span></span>
       </div>
 
-      <!-- Status row -->
-      <div class="flex justify-between items-center mb-3 gap-2">
-        <div
-          class="bg-white/80 rounded-full px-4 py-1.5 shadow-card font-display text-ink text-sm"
-        >
-          <i class="fa-solid fa-dragon text-pinkDeep mr-1"></i>
-          Boss <span id="boss-progress">1</span>/5
+      <!-- Boss Title -->
+      <h2 id="boss-name" class="font-display font-bold text-lg md:text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-center truncate">
+        จอมเวลา ปีศาจนาฬิกา
+      </h2>
+
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2">
+        <div class="bg-white/90 rounded-full px-2.5 py-1 shadow-md flex items-center gap-1 text-xs font-display font-bold text-amber-500">
+          <i class="fa-solid fa-star text-yellow-400"></i>
+          <span id="score-value">0</span>
+          <span id="combo-badge" class="text-[10px] text-gray-400">x1</span>
         </div>
-        <div class="flex items-center gap-2">
-          <div
-            id="score-chip"
-            class="bg-white/80 rounded-full px-3 py-1.5 shadow-card font-display text-ink text-xs md:text-sm"
-          >
-            <i class="fa-solid fa-star text-yellowDeep mr-1"></i>
-            Score <span id="score-value">0</span>
-            <span
-              id="combo-badge"
-              class="ml-2 rounded-full bg-pinkDeep text-white px-2 py-0.5"
-              >x1</span
-            >
-          </div>
-          <div
-            class="bg-pinkDeep text-white rounded-full px-3 py-1.5 shadow-card font-display text-xs"
-          >
-            <i class="fa-solid fa-fire mr-1"></i>HARD
-          </div>
+        <div class="bg-pink-500 text-white rounded-full px-2.5 py-1 shadow-md font-display font-bold text-[10px] md:text-xs">
+          HARD
         </div>
-      </div>
-
-      <!-- ===================== TOP SECTION: BOSS ===================== -->
-      <div class="text-center mb-2">
-        <h2
-          id="boss-name"
-          class="font-display font-700 text-xl md:text-2xl text-ink drop-shadow-sm"
-        >
-          จอมเวลา ปีศาจนาฬิกา
-        </h2>
-      </div>
-
-      <div
-        class="relative w-full h-10 md:h-11 bg-gray-200 border-4 border-gray-800 rounded-full overflow-hidden mb-3"
-      >
-        <div
-          id="boss-hp-bar"
-          class="h-full bg-pinkDeep"
-          style="width: 100%"
-        ></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <span
-            id="boss-hp-text"
-            class="font-display font-700 text-white text-sm md:text-base"
-            style="text-shadow: 1px 1.5px 2px rgba(0, 0, 0, 0.55)"
-            >100/100</span
-          >
-        </div>
-      </div>
-
-      <div class="flex justify-center mb-1">
-        <img
-          id="boss-image"
-          src="public/1.png"
-          alt="boss"
-          class="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-xl float-slow"
-        />
-      </div>
-
-      <!-- ===================== MIDDLE SECTION: QUESTION (speech bubble) ===================== -->
-      <div
-        class="speech-bubble bg-white rounded-3xl p-5 md:p-6 shadow-card text-center mt-5 mb-4"
-      >
-        <img
-          id="question-image"
-          src=""
-          alt=""
-          class="w-24 h-24 md:w-28 md:h-28 object-contain mx-auto mb-3 rounded-lg shadow-sm hidden"
-        />
-
-        <p
-          id="question-hanzi"
-          class="font-hanzi text-4xl md:text-5xl text-ink mb-2"
-        >
-          生日
-        </p>
-        <p
-          id="question-pinyin"
-          class="text-base md:text-lg font-thai text-plum mb-3"
-        >
-          shēngrì
-        </p>
-
-        <button
-          id="play-sound-btn"
-          aria-label="ฟังเสียง"
-          class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-skyDeep hover:bg-sky-400 text-white shadow-btn flex items-center justify-center mx-auto mb-5"
-        >
-          <i class="fa-solid fa-volume-high text-lg md:text-xl"></i>
-        </button>
-
-        <form id="answer-form" class="flex flex-col items-center gap-2">
-          <input
-            type="text"
-            id="answer-input"
-            placeholder="พิมพ์คำตอบที่นี่..."
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            class="w-full max-w-md text-center font-thai text-xl md:text-2xl border-4 border-plum/20 rounded-2xl px-4 py-3 outline-none focus:border-skyDeep bg-white shadow-card"
-          />
-          <button
-            type="submit"
-            id="submit-btn"
-            class="font-display font-600 bg-mintDeep hover:bg-mint-400 text-white rounded-full px-8 py-2.5 shadow-btn transition hover:scale-105"
-          >
-            ตอบ
-          </button>
-        </form>
-
-        <div
-          id="feedback-box"
-          class="hidden mt-4 rounded-2xl px-4 py-3 font-thai text-sm md:text-base items-center justify-center gap-2 pop-in"
-        ></div>
-      </div>
-
-      <!-- Timer -->
-      <div class="w-full h-2.5 bg-white/70 rounded-full overflow-hidden mb-6">
-        <div
-          id="timer-bar"
-          class="h-full bg-yellowDeep"
-          style="width: 100%"
-        ></div>
-      </div>
-
-      <!-- ===================== BOTTOM SECTION: PLAYER ===================== -->
-      <div class="bg-white/70 rounded-3xl p-4 md:p-5 shadow-card mb-4">
-        <div class="flex items-center gap-3 mb-2">
-          <img
-            src="https://api.dicebear.com/7.x/adventurer/svg?seed=player1"
-            alt="player avatar"
-            class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-yellow border-4 border-gray-800 object-cover"
-          />
-          <span class="font-display font-600 text-ink text-sm md:text-base"
-            >ผู้เล่น</span
-          >
-        </div>
-        <div
-          class="relative w-full h-9 md:h-10 bg-gray-200 border-4 border-gray-800 rounded-full overflow-hidden"
-        >
-          <div
-            id="player-hp-bar"
-            class="h-full bg-mintDeep"
-            style="width: 100%"
-          ></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <span
-              id="player-hp-text"
-              class="font-display font-700 text-white text-xs md:text-sm"
-              style="text-shadow: 1px 1.5px 2px rgba(0, 0, 0, 0.55)"
-              >100/100</span
-            >
-          </div>
-        </div>
-      </div>
-
-      <!-- Helper items (icon-only) -->
-      <div class="flex justify-center gap-4 md:gap-5">
-        <div class="relative">
-          <button
-            data-item="heal"
-            aria-label="ฮีล"
-            class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center"
-          >
-            <i class="fa-solid fa-heart text-pinkDeep text-lg md:text-xl"></i>
-          </button>
-          <span
-            id="item-heal-count"
-            class="absolute -top-1 -right-1 font-display text-xs bg-mintDeep text-white rounded-full w-5 h-5 flex items-center justify-center"
-            >1</span
-          >
-        </div>
-        <div class="relative">
-          <button
-            data-item="hint"
-            aria-label="คำใบ้"
-            class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center"
-          >
-            <i
-              class="fa-solid fa-lightbulb text-amberDeep text-lg md:text-xl"
-            ></i>
-          </button>
-          <span
-            id="item-hint-count"
-            class="absolute -top-1 -right-1 font-display text-xs bg-amberDeep text-white rounded-full w-5 h-5 flex items-center justify-center"
-            >1</span
-          >
-        </div>
-        <div class="relative">
-          <button
-            data-item="skip"
-            aria-label="ข้าม"
-            class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center"
-          >
-            <i
-              class="fa-solid fa-forward text-yellowDeep text-lg md:text-xl"
-            ></i>
-          </button>
-          <span
-            id="item-skip-count"
-            class="absolute -top-1 -right-1 font-display text-xs bg-yellowDeep text-white rounded-full w-5 h-5 flex items-center justify-center"
-            >1</span
-          >
-        </div>
-        <button
-          id="stop-btn"
-          aria-label="หยุด"
-          class="icon-btn w-12 h-12 md:w-14 md:h-14 rounded-full bg-white shadow-card flex items-center justify-center hover:bg-gray-100"
-        >
-          <i class="fa-solid fa-stop text-red-500 text-lg md:text-xl"></i>
+        <button id="stop-btn" aria-label="หยุด" class="w-8 h-8 rounded-full bg-white text-purpleDark flex items-center justify-center shadow-md hover:bg-gray-100 transition active:scale-95">
+          <i class="fa-solid fa-pause text-xs"></i>
         </button>
       </div>
     </div>
 
-    <script>
-      /* =========================================================
-   BOSS & QUESTION DATA
-   5 Bosses x 5 unique questions each = 25 total (HSK 1-2).
-   questionImage is left as "" — plug in your own art later;
-   the <img id="question-image"> tag stays hidden until a
-   non-empty URL is provided.
-========================================================= */
+    <!-- LAYER 2: BOSS HP BAR -->
+    <div class="w-full z-20 relative px-1">
+      <div class="w-full h-8 bg-black/40 border-2 border-white/80 rounded-full overflow-hidden shadow-md relative flex items-center">
+        <div id="boss-hp-bar" class="h-full bg-bossHp rounded-full" style="width:100%"></div>
+        <i class="fa-solid fa-dragon text-sm text-white/80 absolute left-2.5 z-10 pointer-events-none"></i>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <span id="boss-hp-text" class="font-display font-bold text-white text-xs drop-shadow">100/100</span>
+        </div>
+      </div>
+    </div>
 
-      const bossData = [
-        {
-          id: 1,
-          name: "จอมเวลา ปีศาจนาฬิกา",
-          theme: "Time — ชั่วโมงและนาที",
-          questions: [
-            {
-              hanzi: "八点",
-              pinyin: "bā diǎn",
-              meaning: "8:00 น.",
-              questionImage: "public/Clock/08_00.png",
-            },
-            {
-              hanzi: "十点十五分",
-              pinyin: "shí diǎn shíwǔ fēn",
-              meaning: "10:15 น.",
-              questionImage: "public/Clock/10_15.png",
-            },
-            {
-              hanzi: "三点半",
-              pinyin: "sān diǎn bàn",
-              meaning: "3:30 น.",
-              questionImage: "public/Clock/03_30.png",
-            },
-            {
-              hanzi: "早上",
-              pinyin: "zǎoshang",
-              meaning: "ตอนเช้า",
-              questionImage: "public/Clock/morning.png",
-            },
-            {
-              hanzi: "晚上",
-              pinyin: "wǎnshang",
-              meaning: "ตอนเย็น",
-              questionImage: "public/Clock/evening.png",
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "อสูรปฏิทิน",
-          theme: "Calendar / Dates — วัน วันที่ สัปดาห์",
-          questions: [
-            {
-              hanzi: "一月一号",
-              pinyin: "yī yuè yī hào",
-              meaning: "วันที่ 1 มกราคม",
-              questionImage: "public/Calendar/1jan.png",
-            },
-            {
-              hanzi: "星期一",
-              pinyin: "xīngqīyī",
-              meaning: "วันจันทร์",
-              questionImage: "public/Calendar/Monday.png",
-            },
-            {
-              hanzi: "星期天",
-              pinyin: "xīngqītiān",
-              meaning: "วันอาทิตย์",
-              questionImage: "public/Calendar/Sunday.png",
-            },
-            {
-              hanzi: "今天几号",
-              pinyin: "jīntiān jǐ hào",
-              meaning: "วันนี้วันที่เท่าไหร่",
-              questionImage: "public/Calendar/Whatdate.png",
-            },
-            {
-              hanzi: "昨天",
-              pinyin: "zuótiān",
-              meaning: "เมื่อวาน",
-              questionImage: "public/Calendar/Yesterday.png",
-            },
-            {
-              hanzi: "明天",
-              pinyin: "míngtiān",
-              meaning: "พรุ่งนี้",
-              questionImage: "public/Calendar/Tomorrow.png",
-            },
-            {
-              hanzi: "五月四日",
-              pinyin: "wǔ yuè sì rì",
-              meaning: "วันที่ 4 พฤษภาคม",
-              questionImage: "public/Calendar/4May.png",
-            },
-            {
-              hanzi: "星期六",
-              pinyin: "xīngqīliù",
-              meaning: "วันเสาร์",
-              questionImage: "public/Calendar/Saturday.png",
-            },
-            {
-              hanzi: "生日",
-              pinyin: "shēngrì",
-              meaning: "วันเกิด",
-              questionImage: "public/Calendar/HappyBirthday.png",
-            },
-            {
-              hanzi: "假日",
-              pinyin: "jiàrì",
-              meaning: "วันหยุด",
-              questionImage: "public/Calendar/Holiday.png",
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: "ราชาสไลม์กิจวัตร",
-          theme: "Daily Activities — กิจวัตรประจำวันและคำกริยา",
-          questions: [
-            {
-              hanzi: "起床",
-              pinyin: "qǐchuáng",
-              meaning: "ตื่นนอน",
-              questionImage: "public/Daily/wakeup.png",
-            },
-            {
-              hanzi: "睡觉",
-              pinyin: "shuìjiào",
-              meaning: "นอนหลับ",
-              questionImage: "public/Daily/sleep.png",
-            },
-            {
-              hanzi: "吃饭",
-              pinyin: "chīfàn",
-              meaning: "กินข้าว",
-              questionImage: "public/Daily/beatrice.png",
-            },
-            {
-              hanzi: "看书",
-              pinyin: "kànshū",
-              meaning: "อ่านหนังสือ",
-              questionImage: "public/Daily/readabook.png",
-            },
-            {
-              hanzi: "工作",
-              pinyin: "gōngzuò",
-              meaning: "ทำงาน",
-              questionImage: "public/Daily/work.png",
-            },
-          ],
-        },
-        {
-          id: 4,
-          name: "ก็อบลินเส้นทาง",
-          theme: "Locations — สถานที่และทิศทาง",
-          questions: [
-            {
-              hanzi: "医院",
-              pinyin: "yīyuàn",
-              meaning: "โรงพยาบาล",
-              questionImage: "public/Locations/hospital.png",
-            },
-            {
-              hanzi: "学校",
-              pinyin: "xuéxiào",
-              meaning: "โรงเรียน",
-              questionImage: "public/Locations/school.png",
-            },
-            {
-              hanzi: "商店",
-              pinyin: "shāngdiàn",
-              meaning: "ร้านค้า",
-              questionImage: "public/Locations/store.png",
-            },
-            {
-              hanzi: "前面",
-              pinyin: "qiánmiàn",
-              meaning: "ข้างหน้า",
-              questionImage: "public/Locations/front.png",
-            },
-            {
-              hanzi: "后面",
-              pinyin: "hòumiàn",
-              meaning: "ข้างหลัง",
-              questionImage: "public/Locations/back.png",
-            },
-          ],
-        },
-        {
-          id: 5,
-          name: "มังกรลมฟ้าอากาศ",
-          theme: "Weather — อากาศ",
-          questions: [
-            {
-              hanzi: "天气",
-              pinyin: "tiānqì",
-              meaning: "อากาศ",
-              questionImage: "public/Weather/weather.png",
-            },
-            {
-              hanzi: "冷",
-              pinyin: "lěng",
-              meaning: "หนาว",
-              questionImage: "public/Weather/cold.png",
-            },
-            {
-              hanzi: "热",
-              pinyin: "rè",
-              meaning: "ร้อน",
-              questionImage: "public/Weather/hot.png",
-            },
-          ],
-        },
-      ];
+    <!-- Spacer เพื่อเว้นพื้นที่รูปบอส -->
+    <div class="h-36 md:h-40 w-full"></div>
+  </div>
 
-      /* =========================================================
-   GAME STATE
-========================================================= */
-      const TOTAL_BOSSES = 5;
-      const QUESTIONS_PER_BOSS = 5;
-      const QUESTION_TIME = 18; // seconds (typing needs more time than tapping a choice)
-      const WRONG_DAMAGE = 15;
-      const HEAL_AMOUNT = 20;
-      const DAMAGE_PER_HIT = 100 / QUESTIONS_PER_BOSS; // fixed: exactly 5 questions defeat a boss
+  <!-- ===================== MIDDLE SECTION: QUESTION CARD ===================== -->
+  <div class="speech-bubble bg-white rounded-3xl p-4 md:p-5 shadow-card text-center relative z-30 mb-3">
+    
+    <!-- Audio Button Top-Right -->
+    <button id="play-sound-btn" aria-label="ฟังเสียง"
+      class="absolute top-3 right-3 w-9 h-9 rounded-full bg-red-50 hover:bg-red-100 text-pink-500 flex items-center justify-center transition active:scale-90 z-20">
+      <i class="fa-solid fa-volume-high text-sm"></i>
+    </button>
 
-      let state = {
-        bossIndex: 0,
-        playerHP: 100,
-        bossHP: 100,
-        currentQuestions: [],
-        questionIndex: 0,
-        timer: null,
-        timeLeft: QUESTION_TIME,
-        items: { heal: 1, hint: 1, skip: 1 },
-        answered: false,
-        hintUsedThisQuestion: false,
-        paused: false,
-        comboCount: 0,
-        score: 0,
-        scoreMultiplier: 1,
-        comboPopupTimer: null,
-        heartbeatInterval: null,
-        audioContext: null,
-      };
+    <!-- Question Image -->
+    <div class="flex justify-center my-2">
+      <img id="question-image" src="" alt="" 
+        class="max-h-32 md:max-h-36 w-auto object-contain drop-shadow-md rounded-xl transition-all duration-200 hidden">
+    </div>
 
-      /* =========================================================
-   DOM refs
-========================================================= */
-      const el = {
-        container: document.getElementById("game-container"),
-        bossProgress: document.getElementById("boss-progress"),
-        bossName: document.getElementById("boss-name"),
-        bossImage: document.getElementById("boss-image"),
-        bossHpBar: document.getElementById("boss-hp-bar"),
-        bossHpText: document.getElementById("boss-hp-text"),
-        playerHpBar: document.getElementById("player-hp-bar"),
-        playerHpText: document.getElementById("player-hp-text"),
-        timerBar: document.getElementById("timer-bar"),
-        questionImage: document.getElementById("question-image"),
-        questionHanzi: document.getElementById("question-hanzi"),
-        questionPinyin: document.getElementById("question-pinyin"),
-        playSoundBtn: document.getElementById("play-sound-btn"),
-        answerForm: document.getElementById("answer-form"),
-        answerInput: document.getElementById("answer-input"),
-        feedbackBox: document.getElementById("feedback-box"),
-        scoreValue: document.getElementById("score-value"),
-        comboBadge: document.getElementById("combo-badge"),
-        comboPopup: document.getElementById("combo-popup"),
-        comboPopupText: document.getElementById("combo-popup-text"),
-        itemHealCount: document.getElementById("item-heal-count"),
-        itemHintCount: document.getElementById("item-hint-count"),
-        itemSkipCount: document.getElementById("item-skip-count"),
-      };
+    <!-- Question Text -->
+    <p id="question-hanzi" class="font-hanzi text-3xl md:text-4xl font-bold text-gray-800 mb-0.5">生日</p>
+    <p id="question-pinyin" class="text-xs md:text-sm font-thai text-plum mb-3">shēngrì</p>
 
-      /* =========================================================
-   HELPERS
-========================================================= */
-      function shuffle(arr) {
-        const a = [...arr];
-        for (let i = a.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
+    <!-- FORM INPUT (HARD MODE) -->
+    <form id="answer-form" class="flex flex-col items-center gap-2 mt-2">
+      <input
+        type="text"
+        id="answer-input"
+        placeholder="พิมพ์คำตอบที่นี่..."
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        class="w-full text-center font-thai text-base md:text-lg border-2 border-purple-200 rounded-2xl px-3 py-2 outline-none focus:border-purpleDark bg-gray-50 text-gray-800 shadow-inner"
+      />
+      <button
+        type="submit"
+        id="submit-btn"
+        class="w-full font-display font-bold bg-mintDeep hover:bg-emerald-500 active:scale-95 text-white rounded-2xl py-2.5 shadow-md transition text-sm"
+      >
+        ส่งคำตอบ
+      </button>
+    </form>
+
+    <div id="feedback-box" class="hidden mt-3 rounded-xl px-3 py-2 font-thai text-xs md:text-sm items-center justify-center gap-1.5 pop-in"></div>
+  </div>
+
+  <!-- Timer Bar -->
+  <div class="w-full h-2 bg-black/20 rounded-full overflow-hidden mb-3 relative z-30">
+    <div id="timer-bar" class="h-full bg-yellowBar rounded-full" style="width:100%"></div>
+  </div>
+
+  <!-- ===================== BOTTOM SECTION: PLAYER CARD ===================== -->
+  <div class="bg-white rounded-2xl p-3 shadow-card relative z-30">
+    <div class="flex items-center justify-between mb-2">
+      <!-- Player Profile -->
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-base overflow-hidden">
+          🐼
+        </div>
+        <span class="font-display font-bold text-gray-700 text-xs md:text-sm">Panda ภาษาจีน</span>
+      </div>
+
+      <!-- Helper Items -->
+      <div class="flex items-center gap-2">
+        <div class="relative">
+          <button data-item="heal" aria-label="ฮีล" class="icon-btn w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-flask"></i>
+          </button>
+          <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
+        </div>
+
+        <div class="relative">
+          <button data-item="hint" aria-label="คำใบ้" class="icon-btn w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-lightbulb"></i>
+          </button>
+          <span id="item-hint-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
+        </div>
+
+        <div class="relative">
+          <button data-item="skip" aria-label="ข้าม" class="icon-btn w-7 h-7 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-forward font-bold"></i>
+          </button>
+          <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player HP Bar -->
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-heart text-playerHp text-sm"></i>
+      <div class="relative w-full h-6 bg-gray-200 border-2 border-gray-700 rounded-full overflow-hidden">
+        <div id="player-hp-bar" class="h-full bg-playerHp rounded-full" style="width:100%"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span id="player-hp-text" class="font-display font-bold text-white text-[11px] drop-shadow">100/100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== CUSTOM POPUP MODAL ===================== -->
+<div id="game-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  
+  <div id="modal-card" class="relative w-full max-w-xs md:max-w-sm bg-white rounded-[36px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 border-[#68cbf8] transition-all duration-200 scale-100">
+    
+    <!-- ริบบิ้นด้านบน -->
+    <div id="modal-ribbon" class="absolute -top-7 left-1/2 -translate-x-1/2 w-[82%] py-2 bg-[#68cbf8] border-2 border-white rounded-2xl shadow-md flex items-center justify-center
+      before:content-[''] before:absolute before:top-2 before:-left-5 before:w-6 before:h-full before:bg-[#46b3e3] before:-z-10 before:rounded-l-md before:[clip-path:polygon(100%_0,0_0,40%_50%,0_100%,100%_100%)]
+      after:content-[''] after:absolute after:top-2 after:-right-5 after:w-6 after:h-full after:bg-[#46b3e3] after:-z-10 after:rounded-r-md after:[clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]">
+      <span id="modal-ribbon-text" class="font-display font-extrabold text-2xl md:text-3xl text-white tracking-wider uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]">BRAKE TIME</span>
+    </div>
+
+    <!-- รูปแพนด้า -->
+    <div class="flex justify-center items-center my-3 h-28">
+      <img id="modal-panda-img" src="public/Alert/2.png" alt="Panda Status" 
+           onerror="this.style.display='none';" 
+           class="h-full object-contain drop-shadow-md">
+    </div>
+
+    <!-- ข้อความหลัก -->
+    <h3 id="modal-title" class="font-display font-extrabold text-2xl md:text-3xl text-[#4b4b4b] mb-2">หยุดชั่วคราว</h3>
+    
+    <!-- ข้อความย่อย -->
+    <div class="flex justify-center mb-5">
+      <div id="modal-subtitle-box" class="bg-[#eef9ed] rounded-full px-5 py-1.5 inline-block">
+        <p id="modal-subtitle" class="font-thai text-xs md:text-sm text-[#618a66] font-semibold">บางทีการพักก็ทำให้ดีขึ้น</p>
+      </div>
+    </div>
+
+    <!-- บล็อกสถิติคะแนน -->
+    <div id="modal-stats" class="bg-emerald-50 rounded-2xl py-1.5 px-4 mb-4 text-xs font-thai text-emerald-800 font-semibold hidden">
+      ปราบบอสได้ <span id="modal-boss-count">0/5</span> • คะแนน <span id="modal-score">0</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div id="modal-actions" class="flex gap-3 justify-center mt-2">
+      <button id="modal-btn-home" class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#58cbf5] hover:bg-[#45bce7] active:translate-y-0.5 shadow-[0_4px_0_#3aa1c7] transition text-sm md:text-base">
+        กลับหน้าแรก
+      </button>
+      <button id="modal-btn-primary" class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#ff6f9f] hover:bg-[#f05a8c] active:translate-y-0.5 shadow-[0_4px_0_#d84674] transition text-sm md:text-base">
+        เล่นต่อ
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* BOSS & QUESTION DATA (HARD MODE) */
+  const bossData = [
+    {
+      id: 1,
+      name: "จอมเวลา ปีศาจนาฬิกา",
+      questions: [
+        { hanzi: "八点", pinyin: "bā diǎn", meaning: "8:00 น.", questionImage: "public/Clock/08_00.png" },
+        { hanzi: "十点十五分", pinyin: "shí diǎn shíwǔ fēn", meaning: "10:15 น.", questionImage: "public/Clock/10_15.png" },
+        { hanzi: "三点半", pinyin: "sān diǎn bàn", meaning: "3:30 น.", questionImage: "public/Clock/03_30.png" },
+        { hanzi: "早上", pinyin: "zǎoshang", meaning: "ตอนเช้า", questionImage: "public/Clock/morning.png" },
+        { hanzi: "晚上", pinyin: "wǎnshang", meaning: "ตอนเย็น", questionImage: "public/Clock/evening.png" },
+      ],
+    },
+    {
+      id: 2,
+      name: "อสูรปฏิทิน",
+      questions: [
+        { hanzi: "一月一号", pinyin: "yī yuè yī hào", meaning: "วันที่ 1 มกราคม", questionImage: "public/Calendar/1jan.png" },
+        { hanzi: "星期一", pinyin: "xīngqīyī", meaning: "วันจันทร์", questionImage: "public/Calendar/Monday.png" },
+        { hanzi: "星期天", pinyin: "xīngqītiān", meaning: "วันอาทิตย์", questionImage: "public/Calendar/Sunday.png" },
+        { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
+        { hanzi: "昨天", pinyin: "zuótiān", meaning: "เมื่อวาน", questionImage: "public/Calendar/Yesterday.png" },
+      ],
+    },
+    {
+      id: 3,
+      name: "ราชาสไลม์กิจวัตร",
+      questions: [
+        { hanzi: "起床", pinyin: "qǐchuáng", meaning: "ตื่นนอน", questionImage: "public/Daily/wakeup.png" },
+        { hanzi: "睡觉", pinyin: "shuìjiào", meaning: "นอนหลับ", questionImage: "public/Daily/sleep.png" },
+        { hanzi: "吃饭", pinyin: "chīfàn", meaning: "กินข้าว", questionImage: "public/Daily/beatrice.png" },
+        { hanzi: "看书", pinyin: "kànshū", meaning: "อ่านหนังสือ", questionImage: "public/Daily/readabook.png" },
+        { hanzi: "工作", pinyin: "gōngzuò", meaning: "ทำงาน", questionImage: "public/Daily/work.png" },
+      ],
+    },
+    {
+      id: 4,
+      name: "ก็อบลินเส้นทาง",
+      questions: [
+        { hanzi: "医院", pinyin: "yīyuàn", meaning: "โรงพยาบาล", questionImage: "public/Locations/hospital.png" },
+        { hanzi: "学校", pinyin: "xuéxiào", meaning: "โรงเรียน", questionImage: "public/Locations/school.png" },
+        { hanzi: "商店", pinyin: "shāngdiàn", meaning: "ร้านค้า", questionImage: "public/Locations/store.png" },
+        { hanzi: "前面", pinyin: "qiánmiàn", meaning: "ข้างหน้า", questionImage: "public/Locations/front.png" },
+        { hanzi: "后面", pinyin: "hòumiàn", meaning: "ข้างหลัง", questionImage: "public/Locations/back.png" },
+      ],
+    },
+    {
+      id: 5,
+      name: "มังกรลมฟ้าอากาศ",
+      questions: [
+        { hanzi: "天气", pinyin: "tiānqì", meaning: "อากาศ", questionImage: "public/Weather/weather.png" },
+        { hanzi: "冷", pinyin: "lěng", meaning: "หนาว", questionImage: "public/Weather/cold.png" },
+        { hanzi: "热", pinyin: "rè", meaning: "ร้อน", questionImage: "public/Weather/hot.png" },
+        { hanzi: "下雨", pinyin: "xià yǔ", meaning: "ฝนตก", questionImage: "public/Weather/weather.png" },
+        { hanzi: "晴天", pinyin: "qíngtiān", meaning: "แจ่มใส", questionImage: "public/Weather/weather.png" },
+      ],
+    },
+  ];
+
+  /* GAME STATE & CONFIG */
+  const TOTAL_BOSSES = 5;
+  const QUESTION_TIME = 18000; // 18 seconds
+  const WRONG_DAMAGE = 20;
+  const HEAL_AMOUNT = 30;
+
+  let state = {
+    bossIndex: 0,
+    bossHP: 100,
+    bossMaxHP: 100,
+    playerHP: 100,
+    score: 0,
+    comboCount: 0,
+    scoreMultiplier: 1,
+    bossesDefeated: 0,
+    items: { heal: 1, hint: 1, skip: 1 },
+    currentQuestions: [],
+    questionIndex: 0,
+    damagePerHit: 20,
+    answered: false,
+    hintUsedThisQuestion: false,
+    paused: false,
+  };
+
+  let timerState = {
+    reqFrame: null,
+    endTime: 0,
+    remaining: QUESTION_TIME,
+    isPlaying: false,
+  };
+
+  const el = {
+    container: document.getElementById("game-container"),
+    bossProgress: document.getElementById("boss-progress"),
+    bossTotal: document.getElementById("boss-total"),
+    bossName: document.getElementById("boss-name"),
+    bossImage: document.getElementById("boss-image"),
+    bossHPBar: document.getElementById("boss-hp-bar"),
+    bossHPText: document.getElementById("boss-hp-text"),
+    playerHPBar: document.getElementById("player-hp-bar"),
+    playerHPText: document.getElementById("player-hp-text"),
+    timerBar: document.getElementById("timer-bar"),
+    questionImage: document.getElementById("question-image"),
+    questionHanzi: document.getElementById("question-hanzi"),
+    questionPinyin: document.getElementById("question-pinyin"),
+    playSoundBtn: document.getElementById("play-sound-btn"),
+    answerForm: document.getElementById("answer-form"),
+    answerInput: document.getElementById("answer-input"),
+    feedbackBox: document.getElementById("feedback-box"),
+    scoreValue: document.getElementById("score-value"),
+    comboBadge: document.getElementById("combo-badge"),
+  };
+
+  el.bossTotal.textContent = TOTAL_BOSSES;
+
+  /* HELPER FUNCTION: SHUFFLE ARRAY */
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function normalize(str) {
+    return str.trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  function updatePlayerHP(delta) {
+    const hp = Math.max(0, state.playerHP);
+    el.playerHPBar.style.width = hp + "%";
+    el.playerHPText.textContent = `${hp}/100`;
+
+    if (delta && delta < 0) {
+      el.container.classList.add("shake");
+      setTimeout(() => el.container.classList.remove("shake"), 400);
+    }
+  }
+
+  function updateBossHP() {
+    const hp = Math.max(0, state.bossHP);
+    const percent = (hp / state.bossMaxHP) * 100;
+    el.bossHPBar.style.width = percent + "%";
+    el.bossHPText.textContent = `${hp}/${state.bossMaxHP}`;
+  }
+
+  function updateScoreUI() {
+    el.scoreValue.textContent = state.score;
+    el.comboBadge.textContent = `x${state.scoreMultiplier}`;
+  }
+
+  function updateItemUI() {
+    document.getElementById("item-heal-count").textContent = state.items.heal;
+    document.getElementById("item-hint-count").textContent = state.items.hint;
+    document.getElementById("item-skip-count").textContent = state.items.skip;
+
+    ["heal", "hint", "skip"].forEach((type) => {
+      const btn = document.querySelector(`[data-item="${type}"]`);
+      if (btn) btn.disabled = state.items[type] <= 0 || state.answered;
+    });
+  }
+
+  let currentLocalAudio = null;
+  function speak(text) {
+    if (!text) return;
+    try {
+      if (currentLocalAudio) {
+        currentLocalAudio.pause();
+        currentLocalAudio.currentTime = 0;
       }
+      const cleanText = text.trim();
+      const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
+      const audio = new Audio(audioPath);
+      audio.referrerPolicy = "no-referrer";
+      currentLocalAudio = audio;
+      audio.play().catch((err) => {
+        console.warn(`Local audio playback failed for "${cleanText}":`, err);
+      });
+    } catch (e) {
+      console.error("Audio playback error:", e);
+    }
+  }
 
-      function normalize(str) {
-        return str.trim().replace(/\s+/g, " ");
+  function hitBoss() {
+    el.bossImage.classList.add("hit");
+    setTimeout(() => el.bossImage.classList.remove("hit"), 350);
+  }
+
+  function showFeedback(correct, correctAnswer) {
+    el.feedbackBox.classList.remove("hidden", "bg-emerald-100", "text-emerald-800", "bg-rose-100", "text-rose-800");
+    if (correct) {
+      el.feedbackBox.classList.add("flex", "bg-emerald-100", "text-emerald-800");
+      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง!`;
+    } else {
+      el.feedbackBox.classList.add("flex", "bg-rose-100", "text-rose-800");
+      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctAnswer}"`;
+    }
+  }
+
+  function hideFeedback() {
+    el.feedbackBox.classList.add("hidden");
+    el.feedbackBox.classList.remove("flex");
+    el.feedbackBox.innerHTML = "";
+  }
+
+  function loadBoss(index) {
+    const boss = bossData[index];
+    state.bossIndex = index;
+    state.bossHP = 100;
+    state.bossMaxHP = 100;
+    state.playerHP = 100;
+    state.questionIndex = 0;
+
+    el.bossName.textContent = boss.name;
+    el.bossProgress.textContent = index + 1;
+    el.bossImage.src = `public/${boss.id}.png?v=${Date.now()}`;
+    
+    // สุ่มคำถามตั้งแต่โหลดบอส
+    state.currentQuestions = shuffle(boss.questions);
+    state.damagePerHit = Math.ceil(100 / boss.questions.length) || 20;
+
+    updatePlayerHP();
+    updateBossHP();
+    updateItemUI();
+    updateScoreUI();
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    state.answered = false;
+    state.hintUsedThisQuestion = false;
+    hideFeedback();
+
+    const q = state.currentQuestions[state.questionIndex];
+
+    el.questionHanzi.textContent = q.hanzi;
+    el.questionPinyin.textContent = q.pinyin;
+
+    if (q.questionImage) {
+      el.questionImage.src = `${q.questionImage}?v=${Date.now()}`;
+      el.questionImage.classList.remove("hidden");
+    } else {
+      el.questionImage.classList.add("hidden");
+    }
+
+    el.answerInput.value = "";
+    el.answerInput.disabled = false;
+    el.answerInput.classList.remove("ring-correct", "ring-wrong");
+    el.answerInput.focus();
+
+    updateItemUI();
+    startTimer();
+  }
+
+  function updateClockDisplay() {
+    let percent = (timerState.remaining / QUESTION_TIME) * 100;
+    if (percent < 0) percent = 0;
+    el.timerBar.style.width = percent + "%";
+  }
+
+  function startTimer(isResume = false) {
+    if (!isResume) {
+      timerState.remaining = QUESTION_TIME;
+    }
+    timerState.endTime = Date.now() + timerState.remaining;
+    timerState.isPlaying = true;
+    cancelAnimationFrame(timerState.reqFrame);
+
+    function tick() {
+      if (!timerState.isPlaying || state.paused) return;
+      timerState.remaining = timerState.endTime - Date.now();
+      updateClockDisplay();
+
+      if (timerState.remaining <= 0) {
+        timerState.remaining = 0;
+        timerState.isPlaying = false;
+        cancelAnimationFrame(timerState.reqFrame);
+        updateClockDisplay();
+
+        handleTimeout();
+      } else {
+        timerState.reqFrame = requestAnimationFrame(tick);
       }
+    }
+    timerState.reqFrame = requestAnimationFrame(tick);
+  }
 
-      function updatePlayerHP() {
-        const hp = Math.max(state.playerHP, 0);
-        el.playerHpBar.style.width = hp + "%";
-        el.playerHpText.textContent = `${hp}/100`;
-        updateVisualState();
+  function stopTimer() {
+    timerState.isPlaying = false;
+    cancelAnimationFrame(timerState.reqFrame);
+  }
+
+  function handleTimeout() {
+    const q = state.currentQuestions[state.questionIndex];
+    state.answered = true;
+    el.answerInput.disabled = true;
+    el.answerInput.classList.add("ring-wrong");
+    
+    state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+    state.comboCount = 0;
+    state.scoreMultiplier = 1;
+    updateScoreUI();
+    updatePlayerHP(-WRONG_DAMAGE);
+    showFeedback(false, q.meaning);
+    updateItemUI();
+
+    setTimeout(checkOutcome, 1200);
+  }
+
+  function submitAnswer(typed) {
+    if (state.answered) return;
+    const q = state.currentQuestions[state.questionIndex];
+    state.answered = true;
+    stopTimer();
+    el.answerInput.disabled = true;
+
+    const isCorrect = normalize(typed) === normalize(q.meaning);
+
+    if (isCorrect) {
+      el.answerInput.classList.add("ring-correct");
+      state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
+      state.comboCount++;
+      state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
+      state.score += 100 * state.scoreMultiplier;
+      hitBoss();
+      updateBossHP();
+      showFeedback(true, q.meaning);
+    } else {
+      el.answerInput.classList.add("ring-wrong");
+      state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+      state.comboCount = 0;
+      state.scoreMultiplier = 1;
+      updatePlayerHP(-WRONG_DAMAGE);
+      showFeedback(false, q.meaning);
+    }
+
+    updateScoreUI();
+    updateItemUI();
+    setTimeout(checkOutcome, 1200);
+  }
+
+  el.answerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    submitAnswer(el.answerInput.value);
+  });
+
+  function checkOutcome() {
+    if (state.playerHP <= 0) return gameOver();
+    if (state.bossHP <= 0) return bossDefeated();
+
+    state.questionIndex++;
+    
+    // หากสุ่มถามจนหมดชุดแต่บอสยังไม่ตาย ให้สุ่มชุดคำถามใหม่แล้ววนลูปต่อไปเรื่อยๆ
+    if (state.questionIndex >= state.currentQuestions.length) {
+      const originalQuestions = bossData[state.bossIndex].questions;
+      state.currentQuestions = shuffle(originalQuestions);
+      state.questionIndex = 0;
+    }
+
+    loadQuestion();
+  }
+
+  /* POPUP MODAL SYSTEM */
+  function showGameModal(config) {
+    const modal = document.getElementById('game-modal');
+    const card = document.getElementById('modal-card');
+    const ribbon = document.getElementById('modal-ribbon');
+    const ribbonText = document.getElementById('modal-ribbon-text');
+    const pandaImg = document.getElementById('modal-panda-img');
+    const title = document.getElementById('modal-title');
+    const subtitle = document.getElementById('modal-subtitle');
+    const statsBox = document.getElementById('modal-stats');
+    const btnHome = document.getElementById('modal-btn-home');
+    const btnPrimary = document.getElementById('modal-btn-primary');
+
+    const themes = {
+      pause: {
+        ribbonClass: 'bg-sky-400 border-sky-200',
+        cardBorder: 'border-sky-300',
+        ribbonText: 'BRAKE TIME',
+        pandaImg: 'public/Alert/2.png',
+        title: 'หยุดชั่วคราว',
+        subtitle: 'บางทีการพักก็ทำให้ดีขึ้น',
+        showStats: false,
+        btnPrimaryText: 'เล่นต่อ',
+        btnPrimaryBg: 'bg-pink-400 hover:bg-pink-500 shadow-[0_4px_0_#db2777]',
+        btnHomeShow: true
+      },
+      gameover: {
+        ribbonClass: 'bg-rose-500 border-rose-300',
+        cardBorder: 'border-rose-400',
+        ribbonText: 'GAME OVER',
+        pandaImg: 'public/Alert/1.png',
+        title: 'พ่ายแพ้!',
+        subtitle: 'พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!',
+        showStats: true,
+        btnPrimaryText: 'ลองอีกครั้ง',
+        btnPrimaryBg: 'bg-pink-400 hover:bg-pink-500 shadow-[0_4px_0_#db2777]',
+        btnHomeShow: true
+      },
+      win: {
+        ribbonClass: 'bg-emerald-500 border-emerald-300',
+        cardBorder: 'border-emerald-400',
+        ribbonText: 'YOU WIN',
+        pandaImg: 'public/Alert/3.png',
+        title: 'ชนะแล้ว',
+        subtitle: 'คุณคือแชมป์คำศัพท์จีน Mode Hard!',
+        showStats: true,
+        btnPrimaryText: 'กลับหน้าแรก',
+        btnPrimaryBg: 'bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_#15803d]',
+        btnHomeShow: false
+      },
+      defeated: {
+        ribbonClass: 'bg-emerald-500 border-emerald-300',
+        cardBorder: 'border-emerald-400',
+        ribbonText: 'You defeated',
+        pandaImg: 'public/Alert/4.png',
+        title: 'ผ่านแล้ว',
+        subtitle: 'ไปสู้ต่อที่ด่านต่อไป',
+        showStats: true,
+        btnPrimaryText: 'ไปต่อ',
+        btnPrimaryBg: 'bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_#15803d]',
+        btnHomeShow: false
       }
+    };
 
-      function updateBossHP() {
-        const hp = Math.max(state.bossHP, 0);
-        el.bossHpBar.style.width = hp + "%";
-        el.bossHpText.textContent = `${hp}/100`;
+    const theme = themes[config.type];
+
+    ribbon.className = `absolute -top-6 left-1/2 -translate-x-1/2 w-[85%] py-2 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
+    card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-10 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100`;
+    ribbonText.textContent = theme.ribbonText;
+    pandaImg.src = `${theme.pandaImg}?v=${Date.now()}`;
+    title.textContent = theme.title;
+    subtitle.textContent = theme.subtitle;
+
+    if (theme.showStats) {
+      statsBox.classList.remove('hidden');
+      document.getElementById('modal-boss-count').textContent = `${state.bossesDefeated}/${TOTAL_BOSSES}`;
+      document.getElementById('modal-score').textContent = `${state.score}`;
+    } else {
+      statsBox.classList.add('hidden');
+    }
+
+    btnPrimary.textContent = theme.btnPrimaryText;
+    btnPrimary.className = `flex-1 py-2.5 px-4 rounded-2xl font-display font-bold text-white transition text-sm active:translate-y-0.5 ${theme.btnPrimaryBg}`;
+    
+    if (theme.btnHomeShow) {
+      btnHome.classList.remove('hidden');
+    } else {
+      btnHome.classList.add('hidden');
+    }
+
+    btnHome.onclick = () => {
+      window.location.href = 'index.html';
+    };
+
+    btnPrimary.onclick = () => {
+      modal.classList.add('hidden');
+      if (config.onPrimary) config.onPrimary();
+    };
+
+    modal.classList.remove('hidden');
+  }
+
+  function pauseGame() {
+    state.paused = true;
+    stopTimer();
+    showGameModal({
+      type: 'pause',
+      onPrimary: () => {
+        state.paused = false;
+        startTimer(true);
       }
+    });
+  }
 
-      function updateItemUI() {
-        el.itemHealCount.textContent = state.items.heal;
-        el.itemHintCount.textContent = state.items.hint;
-        el.itemSkipCount.textContent = state.items.skip;
-        document.querySelectorAll("[data-item]").forEach((btn) => {
-          const type = btn.getAttribute("data-item");
-          btn.disabled = state.items[type] <= 0 || state.answered;
-        });
+  function gameOver() {
+    stopTimer();
+    showGameModal({
+      type: 'gameover',
+      onPrimary: () => {
+        loadBoss(state.bossIndex);
       }
+    });
+  }
 
-      let currentLocalAudio = null;
+  function bossDefeated() {
+    stopTimer();
+    state.bossesDefeated++;
+    const next = state.bossIndex + 1;
+    const isWin = next >= TOTAL_BOSSES;
 
-      function speak(text) {
-        if (!text) return;
-        try {
-          if (currentLocalAudio) {
-            currentLocalAudio.pause();
-            currentLocalAudio.currentTime = 0;
-          }
-          const cleanText = text.trim();
-          const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
-          const audio = new Audio(audioPath);
-          audio.referrerPolicy = "no-referrer";
-          currentLocalAudio = audio;
-          audio.play().catch((err) => {
-            console.warn(
-              `Local audio playback failed for "${cleanText}":`,
-              err,
-            );
-          });
-        } catch (e) {
-          console.error("Audio playback error:", e);
-        }
-      }
-
-      function getComboMultiplier() {
-        if (state.comboCount >= 5) return 3;
-        if (state.comboCount >= 3) return 2;
-        return 1;
-      }
-
-      function updateScoreUI() {
-        el.scoreValue.textContent = state.score;
-        const multiplier = getComboMultiplier();
-        el.comboBadge.textContent = `x${multiplier}`;
-        el.comboBadge.className = `ml-2 rounded-full px-2 py-0.5 text-white ${multiplier > 1 ? "bg-amberDeep" : "bg-pinkDeep"}`;
-      }
-
-      function showComboPopup(label, subLabel) {
-        el.comboPopupText.innerHTML = `<div>${label}</div><div class="text-sm md:text-base font-thai mt-1 opacity-90">${subLabel}</div>`;
-        el.comboPopup.classList.add("show");
-        clearTimeout(state.comboPopupTimer);
-        state.comboPopupTimer = setTimeout(() => {
-          el.comboPopup.classList.remove("show");
-        }, 900);
-      }
-
-      function resetCombo() {
-        state.comboCount = 0;
-        state.scoreMultiplier = 1;
-        updateScoreUI();
-      }
-
-      function ensureAudioContext() {
-        if (!window.AudioContext && !window.webkitAudioContext) return null;
-        if (!state.audioContext) {
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
-          state.audioContext = new AudioCtx();
-        }
-        if (state.audioContext.state === "suspended") {
-          state.audioContext.resume();
-        }
-        return state.audioContext;
-      }
-
-      function startHeartbeat() {
-        const ctx = ensureAudioContext();
-        if (!ctx || state.heartbeatInterval) return;
-
-        const playBeat = () => {
-          if (state.playerHP > 20) return;
-          const now = ctx.currentTime;
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(90, now + 0.14);
-          gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.exponentialRampToValueAtTime(0.06, now + 0.03);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
-          osc.connect(gain).connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.18);
-        };
-
-        playBeat();
-        state.heartbeatInterval = setInterval(playBeat, 700);
-      }
-
-      function stopHeartbeat() {
-        clearInterval(state.heartbeatInterval);
-        state.heartbeatInterval = null;
-      }
-
-      function updateVisualState() {
-        const lowHP = state.playerHP <= 20;
-        document.body.classList.toggle("low-health", lowHP);
-        if (lowHP) {
-          startHeartbeat();
+    showGameModal({
+      type: isWin ? 'win' : 'defeated',
+      onPrimary: () => {
+        if (isWin) {
+          window.location.reload();
         } else {
-          stopHeartbeat();
+          loadBoss(next);
         }
       }
+    });
+  }
 
-      function shakeScreen() {
-        el.container.classList.add("shake");
-        setTimeout(() => el.container.classList.remove("shake"), 400);
-      }
+  document.getElementById("stop-btn").addEventListener("click", pauseGame);
 
-      function hitBoss() {
-        el.bossImage.classList.add("hit");
-        setTimeout(() => el.bossImage.classList.remove("hit"), 350);
-      }
+  /* HELPERS / ITEMS */
+  document.querySelectorAll("[data-item]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const type = btn.getAttribute("data-item");
+      if (state.items[type] <= 0 || state.answered) return;
+      state.items[type]--;
 
-      function showFeedback(correct, correctAnswer) {
-        if (correct) {
-          el.feedbackBox.className =
-            "flex mt-4 rounded-2xl px-4 py-3 font-thai text-sm md:text-base items-center justify-center gap-2 pop-in bg-mint text-ink";
-          el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-mintDeep"></i> ถูกต้อง!`;
-        } else {
-          el.feedbackBox.className =
-            "flex mt-4 rounded-2xl px-4 py-3 font-thai text-sm md:text-base items-center justify-center gap-2 pop-in bg-pink text-ink";
-          el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-pinkDeep"></i> คำตอบที่ถูกคือ "${correctAnswer}"`;
-        }
-      }
-
-      function hideFeedback() {
-        el.feedbackBox.className = "hidden";
-        el.feedbackBox.innerHTML = "";
-      }
-
-      /* =========================================================
-   GAME FLOW
-========================================================= */
-      function loadBoss(index) {
-        state.bossIndex = index;
-        const boss = bossData[index];
-
-        state.bossHP = 100;
-        state.answered = false;
-
-        // Play through all 5 assigned questions for this boss, in order — no random sampling.
-        state.currentQuestions = boss.questions;
-        state.questionIndex = 0;
-
-        el.bossProgress.textContent = index + 1;
-        el.bossName.textContent = boss.name;
-
-        updateBossHP();
-
-        loadQuestion();
-      }
-
-      function loadQuestion() {
-        state.answered = false;
-        state.hintUsedThisQuestion = false;
-        hideFeedback();
-
+      if (type === "heal") {
+        state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
+        updatePlayerHP(0);
+      } else if (type === "hint" && !state.hintUsedThisQuestion) {
+        state.hintUsedThisQuestion = true;
         const q = state.currentQuestions[state.questionIndex];
-
-        el.questionHanzi.textContent = q.hanzi;
-        el.questionPinyin.textContent = q.pinyin;
-        speak(q.hanzi);
-
-        if (q.questionImage) {
-          el.questionImage.src = q.questionImage;
-          el.questionImage.alt = q.meaning;
-          el.questionImage.classList.remove("hidden");
-        } else {
-          el.questionImage.src = "";
-          el.questionImage.classList.add("hidden");
-        }
-
-        el.answerInput.value = "";
-        el.answerInput.disabled = false;
-        el.answerInput.classList.remove("ring-correct", "ring-wrong");
+        el.answerInput.value = q.meaning.charAt(0);
         el.answerInput.focus();
-
-        updateItemUI();
-        startTimer();
-      }
-
-      function startTimer() {
-        clearInterval(state.timer);
-        state.timeLeft = QUESTION_TIME;
-        el.timerBar.style.width = "100%";
-        el.timerBar.classList.remove("bg-pinkDeep");
-        el.timerBar.classList.add("bg-yellowDeep");
-
-        state.timer = setInterval(() => {
-          if (state.paused) return;
-          state.timeLeft -= 0.1;
-          const pct = Math.max((state.timeLeft / QUESTION_TIME) * 100, 0);
-          el.timerBar.style.width = pct + "%";
-          if (pct < 25) {
-            el.timerBar.classList.remove("bg-yellowDeep");
-            el.timerBar.classList.add("bg-pinkDeep");
-          }
-          if (state.timeLeft <= 0) {
-            clearInterval(state.timer);
-            if (!state.answered) handleTimeout();
-          }
-        }, 100);
-      }
-
-      function handleTimeout() {
-        const q = state.currentQuestions[state.questionIndex];
+        const len = el.answerInput.value.length;
+        el.answerInput.setSelectionRange(len, len);
+      } else if (type === "skip") {
         state.answered = true;
+        stopTimer();
         el.answerInput.disabled = true;
-        el.answerInput.classList.add("ring-wrong");
-        state.playerHP -= WRONG_DAMAGE;
-        resetCombo();
-        updatePlayerHP();
-        shakeScreen();
-        showFeedback(false, q.meaning);
-        updateItemUI();
-        checkOutcomeThenNext();
+        setTimeout(checkOutcome, 500);
       }
-
-      function submitAnswer(typed) {
-        if (state.answered) return;
-        const q = state.currentQuestions[state.questionIndex];
-        state.answered = true;
-        clearInterval(state.timer);
-        el.answerInput.disabled = true;
-
-        const isCorrect = normalize(typed) === normalize(q.meaning);
-
-        if (isCorrect) {
-          el.answerInput.classList.add("ring-correct");
-          state.bossHP -= DAMAGE_PER_HIT;
-          state.comboCount += 1;
-          state.scoreMultiplier = getComboMultiplier();
-          state.score += 100 * state.scoreMultiplier;
-          updateScoreUI();
-          if (state.comboCount === 3 || state.comboCount === 5) {
-            showComboPopup(
-              `COMBO ${state.comboCount}`,
-              `คะแนนคูณ x${state.scoreMultiplier}`,
-            );
-          }
-          updateBossHP();
-          hitBoss();
-          showFeedback(true, q.meaning);
-        } else {
-          el.answerInput.classList.add("ring-wrong");
-          state.playerHP -= WRONG_DAMAGE;
-          resetCombo();
-          updatePlayerHP();
-          shakeScreen();
-          showFeedback(false, q.meaning);
-        }
-
-        updateItemUI();
-        checkOutcomeThenNext();
-      }
-
-      el.answerForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (state.answered) return;
-        submitAnswer(el.answerInput.value);
-      });
-
-      function checkOutcomeThenNext() {
-        setTimeout(() => {
-          if (state.playerHP <= 0) return gameOver();
-          if (state.bossHP <= 0) return bossDefeated();
-
-          state.questionIndex++;
-          if (state.questionIndex >= state.currentQuestions.length) {
-            // All 5 assigned questions for this boss have been answered — boss quest complete.
-            return bossDefeated();
-          }
-          loadQuestion();
-        }, 1100);
-      }
-
-      function bossDefeated() {
-        stopHeartbeat();
-        Swal.fire({
-          title: "⚔️ ปราบบอสสำเร็จ!",
-          text: "ไปลุยบอสตัวต่อไปกันเลย!",
-          confirmButtonText: "ไปต่อ",
-          confirmButtonColor: "#6FE3A8",
-          background: "#FEFCF3",
-          color: "#3A3355",
-        }).then(() => {
-          const next = state.bossIndex + 1;
-          if (next >= TOTAL_BOSSES) {
-            victory();
-          } else {
-            loadBoss(next);
-          }
-        });
-      }
-
-      function saveHighScore() {
-        const currentBest = parseInt(
-          localStorage.getItem("panda_quest_hard_best") || "0",
-          10,
-        );
-        if (state.score > currentBest) {
-          localStorage.setItem("panda_quest_hard_best", state.score.toString());
-        }
-      }
-
-      function gameOver() {
-        clearInterval(state.timer);
-        stopHeartbeat();
-        saveHighScore();
-        Swal.fire({
-          title: "💔 พ่ายแพ้!",
-          text: "พลังชีวิตหมดแล้ว",
-          confirmButtonText: "เริ่มใหม่",
-          showDenyButton: true,
-          denyButtonText: "กลับหน้าแรก",
-          confirmButtonColor: "#FF9FC3",
-          denyButtonColor: "#6FCBE8",
-          background: "#FEFCF3",
-          color: "#3A3355",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          } else {
-            window.location.href = "index.html";
-          }
-        });
-      }
-
-      function victory() {
-        stopHeartbeat();
-        state.score += state.playerHP * 10;
-        saveHighScore();
-        Swal.fire({
-          title: "🏆 ชนะครบ 5 บอส!",
-          text: "สุดยอดไปเลย! คุณคือแชมป์คำศัพท์จีน (Hardcore Mode)",
-          confirmButtonText: "เล่นอีกครั้ง",
-          showDenyButton: true,
-          denyButtonText: "กลับหน้าแรก",
-          confirmButtonColor: "#FFD34D",
-          denyButtonColor: "#6FCBE8",
-          background: "#FEFCF3",
-          color: "#3A3355",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          } else {
-            window.location.href = "index.html";
-          }
-        });
-      }
-
-      /* =========================================================
-   ITEMS
-========================================================= */
-      document.querySelectorAll("[data-item]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const type = btn.getAttribute("data-item");
-          if (state.items[type] <= 0 || state.answered) return;
-
-          if (type === "heal") {
-            state.items.heal--;
-            state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
-            updatePlayerHP();
-          }
-
-          if (type === "hint" && !state.hintUsedThisQuestion) {
-            state.items.hint--;
-            state.hintUsedThisQuestion = true;
-            const q = state.currentQuestions[state.questionIndex];
-            el.answerInput.value = q.meaning.charAt(0);
-            el.answerInput.focus();
-            // move cursor to the end
-            const len = el.answerInput.value.length;
-            el.answerInput.setSelectionRange(len, len);
-          }
-
-          if (type === "skip") {
-            state.items.skip--;
-            state.answered = true;
-            clearInterval(state.timer);
-            el.answerInput.disabled = true;
-            checkOutcomeThenNext();
-          }
-
-          updateItemUI();
-        });
-      });
-
-      // ===== PAUSE/STOP GAME FUNCTION =====
-      function pauseGame() {
-        state.paused = true;
-        clearInterval(state.timer);
-
-        Swal.fire({
-          title: "⏸️ หยุดการเล่น",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonText: "ต่อเล่น",
-          cancelButtonText: "กลับหน้าแรก",
-          confirmButtonColor: "#6FE3A8",
-          cancelButtonColor: "#FF9FC3",
-          reverseButtons: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Continue playing
-            state.paused = false;
-            startTimer();
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Go back to home
-            window.location.href = "index.html";
-          } else {
-            // If cancelled (X button), resume
-            state.paused = false;
-            startTimer();
-          }
-        });
-      }
-
-      // Event listener for stop button
-      document.getElementById("stop-btn").addEventListener("click", pauseGame);
-
-      /* =========================================================
-   SOUND BUTTON
-========================================================= */
-      el.playSoundBtn.addEventListener("click", () => {
-        speak(el.questionHanzi.textContent);
-      });
-
-      /* =========================================================
-   INIT
-========================================================= */
-      updatePlayerHP();
       updateItemUI();
-      updateScoreUI();
-      loadBoss(0);
-    </script>
-  </body>
+    });
+  });
+
+  document.getElementById("play-sound-btn").addEventListener("click", () => {
+    speak(el.questionHanzi.textContent);
+  });
+
+  loadBoss(0);
+</script>
+</body>
 </html>
