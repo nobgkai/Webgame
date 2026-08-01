@@ -1,1232 +1,710 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-    />
-    <title>
-      Panda's Chinese Quest | หน้าหลัก - ภารกิจพิชิตภาษาจีนกับแพนด้า
-    </title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panda's Chinese Quest 🐼 | RPG Typing Quiz</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap"
-      rel="stylesheet"
-    />
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              mint: "#B8F2D4",
-              mintDeep: "#6FE3A8",
-              sky: "#BEE7F5",
-              skyDeep: "#6FCBE8",
-              pink: "#FFD6E8",
-              pinkDeep: "#FF9FC3",
-              yellow: "#FFF3B0",
-              yellowDeep: "#FFD34D",
-              amber: "#FFE1B8",
-              amberDeep: "#FF9F45",
-              bamboo: "#E9F7D8",
-              ink: "#3A3355",
-              plum: "#5C4B8A",
-              blood: "#FF4D6D",
-              bloodDeep: "#E0184A",
-              vein: "#3A1622",
-            },
-            fontFamily: {
-              display: ["Fredoka", "Mali", "sans-serif"],
-              thai: ["Mali", "sans-serif"],
-              hanzi: ["'Noto Sans SC'", "sans-serif"],
-            },
-            boxShadow: {
-              soft: "0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)",
-              card: "0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)",
-              btn: "0 6px 0 0 rgba(0,0,0,0.15)",
-              glow: "0 0 25px rgba(111, 227, 168, 0.5)",
-            },
-          },
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- AOS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          mint: '#B8F2D4',
+          mintDeep: '#6FE3A8',
+          sky: '#BEE7F5',
+          skyDeep: '#6FCBE8',
+          pink: '#FFD6E8',
+          pinkDeep: '#FF9FC3',
+          yellow: '#FFF3B0',
+          yellowDeep: '#FFD34D',
+          bamboo: '#E9F7D8',
+          ink: '#3A3355',
+          plum: '#5C4B8A',
         },
-      };
-    </script>
+        fontFamily: {
+          display: ['Fredoka', 'Mali', 'sans-serif'],
+          thai: ['Mali', 'sans-serif'],
+        },
+        borderRadius: {
+          '3xl': '1.75rem',
+          '4xl': '2.5rem',
+        },
+        boxShadow: {
+          soft: '0 10px 0 0 rgba(58,51,85,0.08), 0 15px 30px -5px rgba(58,51,85,0.15)',
+          card: '0 8px 0 0 rgba(58,51,85,0.06), 0 10px 25px -5px rgba(58,51,85,0.12)',
+          btn: '0 6px 0 0 rgba(0,0,0,0.15)',
+        }
+      }
+    }
+  }
+</script>
 
-    <style>
-      * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-      html {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-      }
-      body {
-        font-family: "Mali", sans-serif;
-        color: #3a3355;
-        background: #201830;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100dvh;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-      .font-display {
-        font-family: "Fredoka", "Mali", sans-serif;
-      }
-      .font-hanzi {
-        font-family: "'Noto Sans SC'", sans-serif;
-      }
+<style>
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
 
-      .scroll-container {
-        min-height: 0 !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
-        overscroll-behavior-y: contain;
-      }
+  body {
+    font-family: 'Mali', sans-serif;
+    background-color: #FBFBF6;
+    color: #3A3355;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
 
-      button {
-        font-family: inherit;
-      }
-      button:focus-visible,
-      a:focus-visible {
-        outline: 3px solid #ffd34d;
-        outline-offset: 2px;
-      }
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-      /* Floating title */
-      @keyframes floaty {
-        0%,
-        100% {
-          transform: translateY(0px) rotate(-1deg);
-        }
-        50% {
-          transform: translateY(-16px) rotate(1deg);
-        }
-      }
-      .float-title {
-        animation: floaty 4s ease-in-out infinite;
-      }
+  .font-display { font-family: 'Fredoka', 'Mali', sans-serif; }
 
-      /* =========================================================
-     AMBIENT BACKGROUND
-  ========================================================= */
-      .ambient-bg {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        overflow: hidden;
-        background: radial-gradient(
-          circle at 20% 15%,
-          #2c2145 0%,
-          #201830 55%,
-          #170f24 100%
-        );
-      }
-      .aurora-blob {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(60px);
-        opacity: 0.55;
-        animation: aurora-drift 18s ease-in-out infinite alternate;
-      }
-      .blob1 {
-        width: 46vh;
-        height: 46vh;
-        background: radial-gradient(circle, #6fe3a8, transparent 70%);
-        top: -10%;
-        left: -12%;
-        animation-delay: 0s;
-      }
-      .blob2 {
-        width: 40vh;
-        height: 40vh;
-        background: radial-gradient(circle, #ff9fc3, transparent 70%);
-        bottom: -14%;
-        right: -10%;
-        animation-delay: 3s;
-      }
-      .blob3 {
-        width: 34vh;
-        height: 34vh;
-        background: radial-gradient(circle, #6fcbe8, transparent 70%);
-        top: 45%;
-        left: 55%;
-        animation-delay: 6s;
-      }
-      @keyframes aurora-drift {
-        0% {
-          transform: translate(0, 0) scale(1);
-        }
-        100% {
-          transform: translate(4%, 6%) scale(1.15);
-        }
-      }
-      .sparkle {
-        position: absolute;
-        color: #fff3b0;
-        opacity: 0;
-        pointer-events: none;
-        animation: sparkle-twinkle linear infinite;
-        text-shadow: 0 0 8px rgba(255, 243, 176, 0.9);
-      }
-      @keyframes sparkle-twinkle {
-        0%,
-        100% {
-          opacity: 0;
-          transform: scale(0.4) rotate(0deg);
-        }
-        50% {
-          opacity: 0.9;
-          transform: scale(1) rotate(90deg);
-        }
-      }
-      .bamboo-drift {
-        position: absolute;
-        color: rgba(184, 242, 212, 0.22);
-        pointer-events: none;
-        animation: bamboo-fall linear infinite;
-      }
-      @keyframes bamboo-fall {
-        0% {
-          transform: translateY(-10vh) translateX(0) rotate(0deg);
-          opacity: 0;
-        }
-        10% {
-          opacity: 1;
-        }
-        90% {
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(110vh) translateX(20px) rotate(180deg);
-          opacity: 0;
-        }
-      }
-      .float-slow {
-        animation: floaty-slow 5s ease-in-out infinite;
-      }
+  /* Floating title */
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-16px) rotate(1deg); }
+  }
+  .float-title { animation: floaty 4s ease-in-out infinite; }
 
-      /* =========================================================
-     GAME FRAME
-  ========================================================= */
-      .app-frame {
-        position: relative;
-        z-index: 1;
-        width: 100%;
-        height: 100dvh;
-        max-width: 480px;
-        max-height: 900px;
-        margin: auto;
-        background: #fbfbf6;
-        background-image:
-          radial-gradient(
-            circle at 100% 0%,
-            rgba(255, 211, 77, 0.18),
-            transparent 45%
-          ),
-          radial-gradient(
-            circle at 0% 100%,
-            rgba(111, 203, 232, 0.18),
-            transparent 45%
-          );
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-      }
-      .quest-btn:active {
-        transform: translateY(6px);
-        box-shadow: 0 0px 0 0 rgba(0, 0, 0, 0.15) !important;
-      }
+  @keyframes floaty-slow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .float-slow { animation: floaty-slow 5s ease-in-out infinite; }
 
-      /* Custom Scrollbar */
-      .scroll-container::-webkit-scrollbar {
-        width: 5px;
-      }
-      .scroll-container::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .scroll-container::-webkit-scrollbar-thumb {
-        background: rgba(58, 51, 85, 0.15);
-        border-radius: 999px;
-      }
-      .scroll-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(58, 51, 85, 0.3);
-      }
+  /* Cloud drift */
+  @keyframes drift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(40px); }
+  }
+  .drift { animation: drift 6s ease-in-out infinite alternate; }
 
-      /* Buttons & Cards */
-      .icon-btn {
-        background: linear-gradient(
-          135deg,
-          #ffffff 0%,
-          #f8f8f8 100%
-        ) !important;
-        border: 2px solid rgba(58, 51, 85, 0.1) !important;
-        transition:
-          transform 0.12s ease,
-          box-shadow 0.12s ease;
-      }
-      .icon-btn:hover {
-        transform: translateY(-2px) scale(1.06);
-        box-shadow: 0 6px 15px rgba(58, 51, 85, 0.15);
-      }
-      .icon-btn:active {
-        transform: translateY(1px) scale(0.97);
-      }
+  /* Bamboo sway for decorative bits */
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  .sway { transform-origin: bottom center; animation: sway 3.5s ease-in-out infinite; }
 
-      .mode-card {
-        transition:
-          transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-          box-shadow 0.2s ease,
-          border-color 0.2s ease;
-        cursor: pointer;
-      }
-      .mode-card:hover {
-        transform: translateY(-4px) scale(1.015);
-      }
-      .mode-card:active {
-        transform: translateY(2px) scale(0.99);
-      }
+  /* Difficulty buttons */
+  .quest-btn {
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .quest-btn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0px 0 0 rgba(0,0,0,0.15) !important;
+  }
+  .quest-btn:hover {
+    transform: translateY(-4px) scale(1.04);
+  }
 
-      /* Character animations */
-      .panda-bounce {
-        animation: panda-bounce-anim 3.2s ease-in-out infinite;
-      }
-      @keyframes panda-bounce-anim {
-        0%,
-        100% {
-          transform: translateY(0) rotate(0deg);
-        }
-        50% {
-          transform: translateY(-10px) rotate(1.5deg);
-        }
-      }
+  /* HP bar decorative header rule */
+  .hp-rule {
+    height: 14px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(90deg, #FF9FC3 0 18px, #FFD6E8 18px 36px);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 3px 0 rgba(58,51,85,0.1);
+  }
 
-      .speech-bubble {
-        position: relative;
-        background: #ffffff;
-        border: 3px solid rgba(111, 227, 168, 0.4);
-        box-shadow: 0 8px 20px rgba(58, 51, 85, 0.08);
-      }
-      .speech-bubble::before {
-        content: "";
-        position: absolute;
-        bottom: -12px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-top: 12px solid #ffffff;
-      }
+  .paper-scroll {
+    background: #FEFCF3;
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(255,211,77,0.15), transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(111,203,232,0.15), transparent 40%);
+    border: 3px dashed #E4DABE;
+  }
 
-      .pulse-glow {
-        animation: pulse-glow-anim 2s infinite;
-      }
-      @keyframes pulse-glow-anim {
-        0%,
-        100% {
-          box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.4);
-        }
-        50% {
-          box-shadow: 0 0 0 12px rgba(255, 77, 109, 0);
-        }
-      }
+  ::selection { background: #FFD34D; color: #3A3355; }
 
-      /* Modal Backdrop */
-      .modal-overlay {
-        transition:
-          opacity 0.25s ease,
-          visibility 0.25s ease;
-      }
-      .modal-overlay.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-      }
-      .bounce-hint {
-        animation: bounce-hint 1.6s ease-in-out infinite;
-      }
-    </style>
-  </head>
-  <body class="antialiased">
-    <!-- Ambient background with aurora and floating elements -->
-    <div class="ambient-bg" aria-hidden="true">
-      <div class="aurora-blob blob1"></div>
-      <div class="aurora-blob blob2"></div>
-      <div class="aurora-blob blob3"></div>
+  .step-number {
+    font-family: 'Fredoka', sans-serif;
+    -webkit-text-stroke: 2px #3A3355;
+    paint-order: stroke fill;
+  }
+
+  .scroll-cloud path { fill: white; }
+
+  /* subtle bounce loop for CTA hint */
+  @keyframes bounce-hint {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .bounce-hint { animation: bounce-hint 1.6s ease-in-out infinite; }
+
+  /* Prevent horizontal overflow on all elements */
+  header,
+  section,
+  footer {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  /* Mobile-friendly responsive enhancements */
+  @media (max-width: 640px) {
+    body,
+    html {
+      padding-bottom: env(safe-area-inset-bottom);
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    header {
+      min-height: 100svh;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: calc(1.25rem + env(safe-area-inset-top));
+      padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+      width: 100%;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 8vw, 3rem) !important;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      font-size: clamp(0.95rem, 3.2vw, 1.1rem) !important;
+      line-height: 1.7;
+    }
+
+    .quest-btn {
+      width: 100%;
+      max-width: 100%;
+      font-size: 1rem;
+      padding: 0.95rem 1rem;
+      justify-content: center;
+    }
+
+    .quest-btn span {
+      display: inline-block;
+      margin-top: 0.15rem;
+    }
+
+    section {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+      width: 100% !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
+    }
+
+    section h2 {
+      font-size: clamp(1.55rem, 6vw, 2.2rem) !important;
+      line-height: 1.2;
+    }
+
+    section p,
+    section li,
+    footer p {
+      font-size: 0.95rem !important;
+      line-height: 1.75;
+      overflow-wrap: anywhere;
+    }
+
+    .step-number {
+      -webkit-text-stroke: 1.4px #3A3355;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .rounded-3xl,
+    .rounded-4xl {
+      border-radius: 1.2rem !important;
+    }
+
+    .paper-scroll {
+      padding: 1rem !important;
+    }
+
+    .shadow-card,
+    .shadow-soft,
+    .shadow-btn {
+      box-shadow: 0 6px 0 0 rgba(58,51,85,0.06), 0 8px 18px -5px rgba(58,51,85,0.1) !important;
+    }
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- =========================================
+     HERO SECTION
+========================================= -->
+<header class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-sky via-mint to-bamboo pb-16 pt-10 px-4">
+
+  <!-- decorative clouds -->
+  <div class="absolute top-6 left-3 w-14 sm:w-24 md:w-36 opacity-90 drift">
+    <svg viewBox="0 0 100 60" class="scroll-cloud"><path d="M20 45 Q5 45 5 32 Q5 20 18 20 Q20 8 35 8 Q50 8 53 20 Q68 18 70 32 Q72 45 58 45 Z"/></svg>
+  </div>
+  <div class="absolute top-16 sm:top-24 right-3 sm:right-8 w-12 sm:w-20 md:w-32 opacity-80 drift" style="animation-delay:1s;">
+    <svg viewBox="0 0 100 60" class="scroll-cloud"><path d="M20 45 Q5 45 5 32 Q5 20 18 20 Q20 8 35 8 Q50 8 53 20 Q68 18 70 32 Q72 45 58 45 Z"/></svg>
+  </div>
+
+  <!-- bamboo decorations -->
+  <div class="absolute bottom-0 left-1 sm:left-2 md:left-10 w-10 sm:w-16 md:w-24 sway opacity-70 sm:opacity-80">
+    <i class="fa-solid fa-leaf text-mintDeep text-3xl sm:text-6xl md:text-8xl"></i>
+  </div>
+  <div class="absolute bottom-0 right-1 sm:right-2 md:right-10 w-10 sm:w-16 md:w-24 sway opacity-70 sm:opacity-80" style="animation-delay:1.5s;">
+    <i class="fa-solid fa-leaf text-mintDeep text-3xl sm:text-6xl md:text-8xl scale-x-[-1] inline-block"></i>
+  </div>
+
+  <div class="relative z-10 flex flex-col items-center text-center max-w-4xl">
+
+    <!-- Panda mascot -->
+    <div class="text-6xl sm:text-7xl md:text-8xl mb-4 float-slow">🐼</div>
+
+    <p class="font-thai text-plum bg-white/70 px-4 sm:px-5 py-1.5 rounded-full text-xs sm:text-sm md:text-base font-medium mb-4 shadow-sm">
+      เกมทายศัพท์จีน สไตล์ RPG ✨
+    </p>
+
+    <h1 class="float-title font-display font-700 text-4xl sm:text-5xl md:text-7xl leading-tight text-ink drop-shadow-[0_4px_0_rgba(255,255,255,0.8)] sm:drop-shadow-[0_6px_0_rgba(255,255,255,0.8)] px-2">
+      Panda's <span class="text-pinkDeep">Chinese</span> Quest
+    </h1>
+
+    <p class="font-thai text-base sm:text-lg md:text-xl text-plum mt-5 max-w-xl px-2">
+      พิมพ์คำศัพท์ให้ถูก ปราบมอนสเตอร์ให้ราบ 🗡️ พร้อมเลเวลอัพภาษาจีนไปกับคุณแพนด้า!
+    </p>
+
+<!-- 3 Adventure Quest Cards (แทนที่ปุ่มเดิม) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-10 w-full max-w-5xl mx-auto px-2">
+
+  <!-- Easy Card -->
+  <div class="quest-btn bg-white rounded-3xl p-6 pt-11 sm:pt-12 shadow-card border-4 border-mintDeep flex flex-col justify-between text-left relative group">
+    <div class="absolute top-3 right-3 z-10 bg-mint text-ink font-display font-600 px-3 py-1 rounded-full text-[10px] sm:text-xs shadow-sm whitespace-nowrap">
+      🌱 สำหรับมือใหม่
+    </div>
+    
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">🎋</span>
+        <div>
+          <h3 class="font-display font-700 text-xl sm:text-2xl text-ink">ป่าไผ่เริ่มต้น</h3>
+          <p class="font-thai text-xs text-emerald-600 font-semibold">Easy Mode · ระดับง่าย</p>
+        </div>
+      </div>
+      
+      <p class="font-thai text-xs sm:text-sm text-plum mb-4 leading-relaxed">
+        เริ่มต้นการเดินทาง! เหมาะสำหรับผู้ที่เพิ่งเริ่มเรียนรู้ภาษาจีน เน้นศัพท์พื้นฐานรอบตัว ตอบสบาย ไม่กดดัน
+      </p>
+
+      <ul class="font-thai text-xs text-plum/80 space-y-2 mb-6 bg-bamboo/50 p-3 rounded-2xl">
+        <li><i class="fa-solid fa-book-bookmark text-mintDeep mr-2"></i><b>เนื้อหา:</b> HSK 1 - ศัพท์พื้นฐาน</li>
+        <li><i class="fa-solid fa-clock text-mintDeep mr-2"></i><b>เวลา:</b> 15 วินาที / ข้อ</li>
+        <li><i class="fa-solid fa-shield-halved text-mintDeep mr-2"></i><b>ความเด็ดขาด:</b> มอนสเตอร์โจมตีเบา</li>
+      </ul>
     </div>
 
-    <div
-      id="stars-container"
-      aria-hidden="true"
-      style="
-        position: fixed;
-        inset: 0;
-        overflow: hidden;
-        z-index: 0;
-        pointer-events: none;
-      "
-    ></div>
+    <button data-level="ง่าย (Easy)" data-url="./Mode_ez-1.html"
+      class="w-full font-display font-600 text-base text-white bg-mintDeep hover:bg-emerald-400 py-3 rounded-2xl shadow-btn transition-colors text-center">
+      <i class="fa-solid fa-play mr-1"></i> เข้าสู่ด่านป่าไผ่
+    </button>
+  </div>
 
-    <!-- Main App Frame -->
-    <div id="app-frame" class="app-frame">
-      <!-- TOP BAR / HEADER -->
-      <div
-        class="relative z-20 flex justify-between items-center px-4 pt-4 pb-2"
-      >
-        <div
-          class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-ink/10 shadow-sm"
-        >
-          <span class="text-xl">🐼</span>
-          <span
-            class="font-display font-700 text-ink text-sm sm:text-base tracking-wide"
-            >Panda's Quest</span
-          >
-        </div>
+  <!-- Medium Card -->
+  <div class="quest-btn bg-white rounded-3xl p-6 pt-11 sm:pt-12 shadow-card border-4 border-yellowDeep flex flex-col justify-between text-left relative group">
+    <div class="absolute top-3 right-3 z-10 bg-yellow text-ink font-display font-600 px-3 py-1 rounded-full text-[10px] sm:text-xs shadow-sm whitespace-nowrap">
+      🐉 ท้าทายฝีมือ
+    </div>
 
-        <div class="flex items-center gap-2">
-          <button
-            id="btn-how-to-play"
-            class="icon-btn px-3 py-1.5 rounded-full font-display font-600 text-xs sm:text-sm text-plum flex items-center gap-1.5 shadow-sm"
-          >
-            <i class="fa-solid fa-circle-question text-skyDeep text-base"></i>
-            <span>วิธีเล่น</span>
-          </button>
-          <button
-            id="btn-sound-toggle"
-            aria-label="เปิด/ปิดเสียง"
-            class="icon-btn w-9 h-9 rounded-full flex items-center justify-center text-plum shadow-sm"
-          >
-            <i
-              id="sound-icon"
-              class="fa-solid fa-volume-high text-pinkDeep"
-            ></i>
-          </button>
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">⛩️</span>
+        <div>
+          <h3 class="font-display font-700 text-xl sm:text-2xl text-ink">อารามโบราณ</h3>
+          <p class="font-thai text-xs text-amber-600 font-semibold">Medium Mode · ระดับปานกลาง</p>
         </div>
       </div>
 
-      <!-- MAIN SCROLLABLE CONTENT -->
-      <div
-        class="scroll-container flex-1 min-h-0 overflow-y-auto px-4 py-2 space-y-4 relative z-10"
-      >
-        <!-- HERO BANNER SECTION -->
-        <div class="text-center pt-2 pb-1 relative">
-          <!-- Speech Bubble Greeting -->
-          <div
-            class="speech-bubble max-w-[340px] mx-auto rounded-2xl p-3 mb-3 text-xs sm:text-sm font-thai font-600 text-plum transition-all duration-300"
-          >
-            <p id="panda-speech">
-              "สวัสดีครับเพื่อนๆ! เลือกระดับความยาก
-              แล้วไปผจญภัยภาษาจีนกับแพนด้ากันเลย! 🐼✨"
-            </p>
-          </div>
+      <p class="font-thai text-xs sm:text-sm text-plum mb-4 leading-relaxed">
+        ทดสอบความแม่นยำ! สำหรับผู้ที่มีพื้นฐานแล้ว มอนสเตอร์เริ่มอึดขึ้นและไวยิ่งขึ้น ต้องตัดสินใจอย่างรวดเร็ว
+      </p>
 
-          <!-- Panda Hero Avatar -->
-          <div
-            class="relative inline-block cursor-pointer group"
-            id="panda-hero-click"
-          >
-            <div
-              class="absolute inset-0 rounded-full bg-gradient-to-r from-mintDeep via-skyDeep to-pinkDeep blur-lg opacity-40 group-hover:opacity-75 transition-opacity duration-300"
-            ></div>
-            <img
-              src="public/panda_hero.jpg"
-              alt="Panda Mascot"
-              class="panda-bounce relative z-10 w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full border-4 border-white shadow-lg mx-auto transform transition duration-300 group-hover:scale-105"
-            />
-            <span
-              class="absolute bottom-0 right-1 z-20 bg-yellowDeep text-ink text-[10px] font-display font-700 px-2 py-0.5 rounded-full shadow border border-white"
-            >
-              คลิกเพื่อทักทาย 🔊
-            </span>
-          </div>
+      <ul class="font-thai text-xs text-plum/80 space-y-2 mb-6 bg-yellow/30 p-3 rounded-2xl">
+        <li><i class="fa-solid fa-book-bookmark text-amber-500 mr-2"></i><b>เนื้อหา:</b> HSK 2 - ศัพท์ชีวิตประจำวัน</li>
+        <li><i class="fa-solid fa-clock text-amber-500 mr-2"></i><b>เวลา:</b> 10 วินาที / ข้อ</li>
+        <li><i class="fa-solid fa-bolt text-amber-500 mr-2"></i><b>ความเด็ดขาด:</b> มอนสเตอร์โจมตีปานกลาง</li>
+      </ul>
+    </div>
 
-          <!-- Title & Subtitle -->
-          <h1
-            class="font-display font-700 text-2xl sm:text-3xl text-ink tracking-tight mt-2 drop-shadow-sm"
-          >
-            Panda's Chinese Quest
-          </h1>
-          <p
-            class="font-hanzi text-sm sm:text-base font-700 text-pinkDeep tracking-wider mt-0.5"
-          >
-            熊猫汉语大冒险 · ภารกิจพิชิตภาษาจีน
-          </p>
+    <button data-level="ปานกลาง (Medium)" data-url="./Mode_Normal.html"
+      class="w-full font-display font-600 text-base text-white bg-yellowDeep hover:bg-amber-400 py-3 rounded-2xl shadow-btn transition-colors text-center">
+      <i class="fa-solid fa-play mr-1"></i> เข้าสู่อารามโบราณ
+    </button>
+  </div>
+
+  <!-- Hard Card -->
+  <div class="quest-btn bg-white rounded-3xl p-6 pt-11 sm:pt-12 shadow-card border-4 border-pinkDeep flex flex-col justify-between text-left relative group">
+    <div class="absolute top-3 right-3 z-10 bg-pink text-ink font-display font-600 px-3 py-1 rounded-full text-[10px] sm:text-xs shadow-sm whitespace-nowrap">
+      🔥 ระดับเซียน
+    </div>
+
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">🌋</span>
+        <div>
+          <h3 class="font-display font-700 text-xl sm:text-2xl text-ink">หุบเขาพญามังกร</h3>
+          <p class="font-thai text-xs text-rose-600 font-semibold">Hard Mode · ระดับยาก</p>
         </div>
+      </div>
 
-        <!-- MODE SELECTION TITLE -->
-        <div class="flex items-center justify-between px-1">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-gamepad text-plum text-lg"></i>
-            <h2 class="font-display font-700 text-ink text-base sm:text-lg">
-              เลือกระดับความยาก
-            </h2>
-          </div>
-          <span
-            class="text-xs font-display font-500 text-plum/70 bg-white/60 px-2.5 py-1 rounded-full border border-ink/5"
-            >3 Modes</span
-          >
+      <p class="font-thai text-xs sm:text-sm text-plum mb-4 leading-relaxed">
+        ศึกตัดสินของจอมยุทธ์! ศัพท์ขั้นสูง เวลาจำกัดมาก ตอบผิดเพียงนิดเดียวอาจแพ้พ่ายได้ทันที
+      </p>
+
+      <ul class="font-thai text-xs text-plum/80 space-y-2 mb-6 bg-pink/30 p-3 rounded-2xl">
+        <li><i class="fa-solid fa-book-bookmark text-pinkDeep mr-2"></i><b>เนื้อหา:</b> HSK 3 - ศัพท์ซับซ้อน/ประโยค</li>
+        <li><i class="fa-solid fa-clock text-pinkDeep mr-2"></i><b>เวลา:</b> 5 วินาที / ข้อ (สปีดรัน)</li>
+        <li><i class="fa-solid fa-skull text-pinkDeep mr-2"></i><b>ความเด็ดขาด:</b> มอนสเตอร์โจมตีแรงมาก</li>
+      </ul>
+    </div>
+
+    <button data-level="ยาก (Hard)" data-url="./Mode_Hardcore.html"
+      class="w-full font-display font-600 text-base text-white bg-pinkDeep hover:bg-rose-500 py-3 rounded-2xl shadow-btn transition-colors text-center">
+      <i class="fa-solid fa-play mr-1"></i> ท้าทายพญามังกร
+    </button>
+  </div>
+
+</div>
+
+    <div class="mt-8 sm:mt-10 text-plum/70 bounce-hint">
+      <i class="fa-solid fa-chevron-down text-xl sm:text-2xl"></i>
+      <p class="font-thai text-xs sm:text-sm mt-1">เลื่อนลงเพื่อดูวิธีเล่น</p>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================
+     ABOUT & GAME DESCRIPTION
+========================================= -->
+<section class="py-14 sm:py-20 px-4 bg-white">
+  <div class="max-w-4xl mx-auto" data-aos="fade-up">
+    <div class="bg-pink/40 rounded-3xl sm:rounded-4xl p-6 sm:p-8 md:p-12 shadow-card border-4 border-white relative">
+
+      <div class="absolute -top-6 sm:-top-8 left-1/2 -translate-x-1/2 bg-pinkDeep text-white font-display font-600 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full shadow-btn text-xs sm:text-sm md:text-base whitespace-nowrap">
+        <i class="fa-solid fa-scroll mr-1"></i> เนื้อเรื่องเกม
+      </div>
+
+      <h2 class="font-display font-700 text-2xl sm:text-3xl md:text-4xl text-center text-ink mt-6 mb-6">
+        ผจญภัยไปกับคุณแพนด้า!
+      </h2>
+
+      <div class="hp-rule w-32 sm:w-40 mx-auto mb-8"></div>
+
+      <p class="font-thai text-base sm:text-lg md:text-xl text-plum text-center leading-relaxed max-w-2xl mx-auto">
+        Panda's Chinese Quest คือเกมพิมพ์ศัพท์แนว RPG ที่จะพาคุณไปปราบ
+        <span class="font-semibold text-pinkDeep">มอนสเตอร์ทั้งหมด 10 ตัว</span>
+        ด้วยพลังคำศัพท์ภาษาจีน! ทุกครั้งที่ตอบถูก คุณจะโจมตีมอนสเตอร์ได้เต็มแรง
+        แต่ถ้าตอบผิด... <span class="font-semibold text-pinkDeep">เลือด (HP) ของคุณจะลดลง!</span>
+        ฝึกฝนศัพท์ให้แม่น แล้วมาดูกันว่าใครจะรอดถึงบอสตัวสุดท้าย 🐉
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mt-8 sm:mt-10">
+        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="100">
+          <i class="fa-solid fa-heart text-pinkDeep text-xl"></i>
+          <span class="font-thai text-plum">ระบบ HP สุดตื่นเต้น</span>
         </div>
-
-        <!-- MODE CARDS LIST -->
-        <div class="space-y-3.5 pb-3">
-          <!-- MODE 1: EASY MODE -->
-          <a
-            href="Mode_ez.html"
-            class="mode-card block bg-gradient-to-br from-white via-mint/20 to-mint/40 rounded-3xl p-4 border-2 border-mintDeep/40 shadow-card hover:border-mintDeep relative overflow-hidden group"
-          >
-            <div
-              class="absolute -right-6 -bottom-6 w-24 h-24 bg-mintDeep/10 rounded-full blur-xl group-hover:bg-mintDeep/20 transition-all"
-            ></div>
-            <div class="flex items-center justify-between gap-3 relative z-10">
-              <div class="flex items-center gap-3.5">
-                <div
-                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-mint to-mintDeep flex items-center justify-center text-white text-2xl shadow-md flex-shrink-0"
-                >
-                  🌱
-                </div>
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h3
-                      class="font-display font-700 text-ink text-lg sm:text-xl"
-                    >
-                      โหมดง่าย (Easy)
-                    </h3>
-                    <span
-                      class="bg-mintDeep/20 text-ink font-display text-[11px] font-700 px-2 py-0.5 rounded-full border border-mintDeep/30"
-                      >⭐ 1 ดาว</span
-                    >
-                  </div>
-                  <p class="font-thai text-xs sm:text-sm text-plum/90 mt-0.5">
-                    คำศัพท์เบื้องต้น 15 วินาที/ข้อ สบายๆ สำหรับผู้เริ่มต้น
-                  </p>
-                  <div
-                    class="flex items-center gap-3 mt-2 text-[11px] font-display text-plum/80"
-                  >
-                    <span
-                      ><i class="fa-solid fa-clock text-mintDeep mr-1"></i
-                      >15s</span
-                    >
-                    <span
-                      ><i class="fa-solid fa-dragon text-mintDeep mr-1"></i>10
-                      บอส</span
-                    >
-                    <span id="best-easy" class="text-mintDeep font-700"
-                      ><i class="fa-solid fa-trophy mr-1"></i>สถิติ: -</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div
-                class="w-9 h-9 rounded-full bg-mintDeep text-white flex items-center justify-center shadow group-hover:translate-x-1 transition-transform flex-shrink-0"
-              >
-                <i class="fa-solid fa-play text-xs ml-0.5"></i>
-              </div>
-            </div>
-          </a>
-
-          <!-- MODE 2: MEDIUM MODE -->
-          <a
-            href="Mode_Normal.html"
-            class="mode-card block bg-gradient-to-br from-white via-yellow/20 to-amber/30 rounded-3xl p-4 border-2 border-yellowDeep/40 shadow-card hover:border-yellowDeep relative overflow-hidden group"
-          >
-            <div
-              class="absolute -right-6 -bottom-6 w-24 h-24 bg-yellowDeep/10 rounded-full blur-xl group-hover:bg-yellowDeep/20 transition-all"
-            ></div>
-            <div class="flex items-center justify-between gap-3 relative z-10">
-              <div class="flex items-center gap-3.5">
-                <div
-                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-yellow to-yellowDeep flex items-center justify-center text-ink text-2xl shadow-md flex-shrink-0"
-                >
-                  ⚡
-                </div>
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h3
-                      class="font-display font-700 text-ink text-lg sm:text-xl"
-                    >
-                      โหมดปานกลาง (Medium)
-                    </h3>
-                    <span
-                      class="bg-yellowDeep/20 text-ink font-display text-[11px] font-700 px-2 py-0.5 rounded-full border border-yellowDeep/30"
-                      >⭐⭐ 2 ดาว</span
-                    >
-                  </div>
-                  <p class="font-thai text-xs sm:text-sm text-plum/90 mt-0.5">
-                    คำศัพท์ระดับกลาง มีหมวดหมู่เวลา & ปฏิทิน ท้าทายฝีมือ
-                  </p>
-                  <div
-                    class="flex items-center gap-3 mt-2 text-[11px] font-display text-plum/80"
-                  >
-                    <span
-                      ><i class="fa-solid fa-clock text-amberDeep mr-1"></i
-                      >12s</span
-                    >
-                    <span
-                      ><i class="fa-solid fa-image text-amberDeep mr-1"></i
-                      >มีรูปคำถาม</span
-                    >
-                    <span id="best-normal" class="text-amberDeep font-700"
-                      ><i class="fa-solid fa-trophy mr-1"></i>สถิติ: -</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div
-                class="w-9 h-9 rounded-full bg-yellowDeep text-ink flex items-center justify-center shadow group-hover:translate-x-1 transition-transform flex-shrink-0 font-700"
-              >
-                <i class="fa-solid fa-play text-xs ml-0.5"></i>
-              </div>
-            </div>
-          </a>
-
-          <!-- MODE 3: HARDCORE MODE -->
-          <a
-            href="Mode_Hardcore.html"
-            class="mode-card block bg-gradient-to-br from-white via-pink/20 to-blood/20 rounded-3xl p-4 border-2 border-blood/40 shadow-card hover:border-blood relative overflow-hidden group"
-          >
-            <div
-              class="absolute -right-6 -bottom-6 w-24 h-24 bg-blood/10 rounded-full blur-xl group-hover:bg-blood/20 transition-all"
-            ></div>
-            <div class="flex items-center justify-between gap-3 relative z-10">
-              <div class="flex items-center gap-3.5">
-                <div
-                  class="pulse-glow w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blood to-bloodDeep flex items-center justify-center text-white text-2xl shadow-md flex-shrink-0"
-                >
-                  🔥
-                </div>
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h3
-                      class="font-display font-700 text-ink text-lg sm:text-xl"
-                    >
-                      โหมดฮาร์ดคอร์ (Hardcore)
-                    </h3>
-                    <span
-                      class="bg-blood/20 text-bloodDeep font-display text-[11px] font-700 px-2 py-0.5 rounded-full border border-blood/30"
-                      >⭐⭐⭐ 3 ดาว</span
-                    >
-                  </div>
-                  <p class="font-thai text-xs sm:text-sm text-plum/90 mt-0.5">
-                    คำศัพท์ระดับสูง เวลาจำกัด สำหรับผู้เชี่ยวชาญภาษาจีน!
-                  </p>
-                  <div
-                    class="flex items-center gap-3 mt-2 text-[11px] font-display text-plum/80"
-                  >
-                    <span
-                      ><i class="fa-solid fa-fire text-bloodDeep mr-1"></i
-                      >10s</span
-                    >
-                    <span
-                      ><i class="fa-solid fa-bolt text-bloodDeep mr-1"></i
-                      >ดาเมจแรง</span
-                    >
-                    <span id="best-hard" class="text-bloodDeep font-700"
-                      ><i class="fa-solid fa-trophy mr-1"></i>สถิติ: -</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div
-                class="w-9 h-9 rounded-full bg-blood text-white flex items-center justify-center shadow group-hover:translate-x-1 transition-transform flex-shrink-0"
-              >
-                <i class="fa-solid fa-play text-xs ml-0.5"></i>
-              </div>
-            </div>
-          </a>
+        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="200">
+          <i class="fa-solid fa-dragon text-yellowDeep text-xl"></i>
+          <span class="font-thai text-plum">บอส 10 ด่าน</span>
         </div>
-
-        <!-- QUICK STATS CARD & FOOTER -->
-        <div
-          class="bg-white/80 backdrop-blur-md rounded-2xl p-3.5 border border-ink/10 shadow-sm text-center"
-        >
-          <div class="flex justify-around items-center text-xs font-display">
-            <div>
-              <p class="text-plum/70">คลังคำศัพท์</p>
-              <p class="font-700 text-ink text-sm sm:text-base">100+ คำ</p>
-            </div>
-            <div class="h-6 w-px bg-ink/10"></div>
-            <div>
-              <p class="text-plum/70">ระดับความยาก</p>
-              <p class="font-700 text-ink text-sm sm:text-base">3 โหมด</p>
-            </div>
-            <div class="h-6 w-px bg-ink/10"></div>
-            <div>
-              <p class="text-plum/70">ผู้ช่วย</p>
-              <p class="font-700 text-ink text-sm sm:text-base">3 ไอเทม</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- FOOTER CREDIT -->
-        <div class="text-center py-2">
-          <p class="text-[11px] font-thai text-plum/60">
-            🐼 Panda's Chinese Quest · สื่อการเรียนรู้ภาษาจีนแสนสนุก
-          </p>
+        <div class="bg-white rounded-2xl px-5 py-3 shadow-card flex items-center gap-2" data-aos="zoom-in" data-aos-delay="300">
+          <i class="fa-solid fa-keyboard text-skyDeep text-xl"></i>
+          <span class="font-thai text-plum">ฝึกพิมพ์พินอิน/จีน</span>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- =========================================
+<!-- =========================================
      HOW TO PLAY
 ========================================= -->
-    <section class="py-20 px-4 bg-gradient-to-b from-bamboo to-white">
-      <div class="max-w-5xl mx-auto text-center mb-14" data-aos="fade-up">
-        <h2 class="font-display font-700 text-3xl md:text-4xl text-ink">
-          วิธีเล่นเกม
-        </h2>
-        <p class="font-thai text-plum mt-2">
-          แค่ 3 ขั้นตอนง่าย ๆ ก็ออกไปผจญภัยได้เลย!
-        </p>
+<section class="py-14 sm:py-20 px-4 bg-gradient-to-b from-bamboo to-white">
+  <div class="max-w-5xl mx-auto text-center mb-10 sm:mb-14" data-aos="fade-up">
+    <h2 class="font-display font-700 text-2xl sm:text-3xl md:text-4xl text-ink">วิธีเล่นเกม</h2>
+    <p class="font-thai text-plum mt-2 text-sm sm:text-base">แค่ 3 ขั้นตอนง่าย ๆ ก็ออกไปผจญภัยได้เลย!</p>
+  </div>
+
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-8">
+
+    <!-- Step 1 -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="0">
+      <div class="step-number absolute -top-5 sm:-top-6 left-1/2 -translate-x-1/2 bg-mintDeep text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-lg sm:text-xl font-display shadow-btn">1</div>
+      <div class="text-4xl sm:text-5xl mt-5 sm:mt-6 mb-4 text-mintDeep">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+      <h3 class="font-display font-600 text-lg sm:text-xl text-ink mb-2">ฟังและอ่าน</h3>
+      <p class="font-thai text-plum text-sm sm:text-base">ฟังเสียงและอ่านคำศัพท์จีนที่ปรากฏบนหน้าจอ</p>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="150">
+      <div class="step-number absolute -top-5 sm:-top-6 left-1/2 -translate-x-1/2 bg-yellowDeep text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-lg sm:text-xl font-display shadow-btn">2</div>
+      <div class="text-4xl sm:text-5xl mt-5 sm:mt-6 mb-4 text-yellowDeep">
+        <i class="fa-solid fa-keyboard"></i>
+      </div>
+      <h3 class="font-display font-600 text-lg sm:text-xl text-ink mb-2">พิมพ์พินอินหรือตัวอักษร</h3>
+      <p class="font-thai text-plum text-sm sm:text-base">พิมพ์คำตอบเป็นพินอินหรือตัวอักษรจีนให้ถูกต้อง</p>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-card text-center relative" data-aos="fade-up" data-aos-delay="300">
+      <div class="step-number absolute -top-5 sm:-top-6 left-1/2 -translate-x-1/2 bg-pinkDeep text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-lg sm:text-xl font-display shadow-btn">3</div>
+      <div class="text-4xl sm:text-5xl mt-5 sm:mt-6 mb-4 text-pinkDeep">
+        <i class="fa-solid fa-explosion"></i>
+      </div>
+      <h3 class="font-display font-600 text-lg sm:text-xl text-ink mb-2">โจมตีมอนสเตอร์!</h3>
+      <p class="font-thai text-plum text-sm sm:text-base">ตอบถูก = โจมตีเต็มแรง! ตอบผิด = เสีย HP ระวังด้วยนะ!</p>
+    </div>
+  </div>
+
+  <!-- =====================================
+       VISUAL GAMEPLAY MOCKUP + LEGEND
+  ====================================== -->
+  <div class="max-w-3xl mx-auto mt-16 sm:mt-20" data-aos="fade-up">
+    <div class="text-center mb-8">
+      <h3 class="font-display font-700 text-xl sm:text-2xl md:text-3xl text-ink">ตัวอย่างหน้าจอเกมจริง 👀</h3>
+      <p class="font-thai text-plum mt-2 text-sm sm:text-base px-2">ดูภาพนี้แล้วจะเข้าใจทันทีว่าต้องกดอะไรตรงไหน</p>
+    </div>
+
+    <!-- mock game screen -->
+    <div class="bg-white rounded-3xl sm:rounded-4xl p-4 sm:p-6 md:p-8 pt-7 sm:pt-8 shadow-soft border-4 border-white">
+
+      <!-- 1: player HP -->
+      <div class="relative mb-5">
+        <span class="step-number absolute -top-3 left-2 sm:-left-3 z-10 bg-mintDeep text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-display shadow-btn">1</span>
+        <div class="flex flex-wrap justify-between items-center gap-2 bg-bamboo/60 rounded-2xl px-3 sm:px-4 py-2.5">
+          <span class="font-thai text-xs sm:text-sm text-plum"><i class="fa-solid fa-dragon text-pinkDeep mr-1"></i>Boss 1/10</span>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <i class="fa-solid fa-heart text-pinkDeep text-sm"></i>
+            <div class="w-14 sm:w-20 md:w-28 h-2.5 sm:h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-mintDeep" style="width:80%"></div>
+            </div>
+            <span class="font-thai text-xs text-plum">80/100</span>
+          </div>
+        </div>
       </div>
 
-      <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Step 1 -->
-        <div
-          class="bg-white rounded-3xl p-8 shadow-card text-center relative"
-          data-aos="fade-up"
-          data-aos-delay="0"
-        >
-          <div
-            class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-mintDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn"
-          >
-            1
+      <!-- 2: boss -->
+      <div class="relative mb-5">
+        <span class="step-number absolute -top-3 left-2 sm:-left-3 z-10 bg-pinkDeep text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-display shadow-btn">2</span>
+        <div class="bg-pink/30 rounded-2xl p-4 sm:p-5 text-center">
+          <h4 class="font-display text-ink mb-2 text-sm sm:text-base">จอมเวลา ปีศาจนาฬิกา</h4>
+          <div class="w-full h-2.5 sm:h-3 bg-gray-200 rounded-full overflow-hidden mb-3">
+            <div class="h-full bg-pinkDeep" style="width:60%"></div>
           </div>
-          <div class="text-5xl mt-6 mb-4 text-mintDeep">
-            <i class="fa-solid fa-book-open"></i>
-          </div>
-          <h3 class="font-display font-600 text-xl text-ink mb-2">
-            ฟังและอ่าน
-          </h3>
-          <p class="font-thai text-plum">
-            ฟังเสียงและอ่านคำศัพท์จีนที่ปรากฏบนหน้าจอ
-          </p>
-        </div>
-
-        <!-- Step 2 -->
-        <div
-          class="bg-white rounded-3xl p-8 shadow-card text-center relative"
-          data-aos="fade-up"
-          data-aos-delay="150"
-        >
-          <div
-            class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-yellowDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn"
-          >
-            2
-          </div>
-          <div class="text-5xl mt-6 mb-4 text-yellowDeep">
-            <i class="fa-solid fa-keyboard"></i>
-          </div>
-          <h3 class="font-display font-600 text-xl text-ink mb-2">
-            พิมพ์พินอินหรือตัวอักษร
-          </h3>
-          <p class="font-thai text-plum">
-            พิมพ์คำตอบเป็นพินอินหรือตัวอักษรจีนให้ถูกต้อง
-          </p>
-        </div>
-
-        <!-- Step 3 -->
-        <div
-          class="bg-white rounded-3xl p-8 shadow-card text-center relative"
-          data-aos="fade-up"
-          data-aos-delay="300"
-        >
-          <div
-            class="step-number absolute -top-6 left-1/2 -translate-x-1/2 bg-pinkDeep text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-display shadow-btn"
-          >
-            3
-          </div>
-          <div class="text-5xl mt-6 mb-4 text-pinkDeep">
-            <i class="fa-solid fa-explosion"></i>
-          </div>
-          <h3 class="font-display font-600 text-xl text-ink mb-2">
-            โจมตีมอนสเตอร์!
-          </h3>
-          <p class="font-thai text-plum">
-            ตอบถูก = โจมตีเต็มแรง! ตอบผิด = เสีย HP ระวังด้วยนะ!
-          </p>
+          <div class="text-5xl sm:text-6xl">👹</div>
         </div>
       </div>
-    </section>
 
-    <!-- =========================================
-     KEYBOARD INSTALLATION GUIDE
-========================================= -->
-    <section class="py-20 px-4 bg-sky/30">
-      <div class="max-w-5xl mx-auto text-center mb-14" data-aos="fade-up">
-        <h2 class="font-display font-700 text-3xl md:text-4xl text-ink">
-          <i class="fa-solid fa-language text-skyDeep"></i>
-          เตรียมคีย์บอร์ดภาษาจีน
-        </h2>
-        <p class="font-thai text-plum mt-2">
-          ก่อนออกไปผจญภัย อย่าลืมติดตั้งคีย์บอร์ดพินอินกันก่อนนะ!
-        </p>
-      </div>
-
-      <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-        <!-- Computer -->
-        <div
-          class="paper-scroll rounded-3xl p-8 shadow-card"
-          data-aos="fade-right"
-        >
-          <div class="flex items-center gap-3 mb-5">
-            <div
-              class="w-14 h-14 rounded-2xl bg-skyDeep text-white flex items-center justify-center text-2xl shadow-btn"
-            >
-              <i class="fa-solid fa-computer"></i>
-            </div>
-            <h3 class="font-display font-600 text-2xl text-ink">
-              คอมพิวเตอร์ (PC/Mac)
-            </h3>
-          </div>
-          <ol
-            class="font-thai text-plum space-y-3 list-decimal list-inside text-left"
-          >
-            <li>
-              เปิด <span class="font-semibold">Settings</span> (การตั้งค่า)
-              ของเครื่อง
-            </li>
-            <li>
-              ไปที่หมวด
-              <span class="font-semibold">Language & Region</span> หรือ
-              <span class="font-semibold">Keyboard</span>
-            </li>
-            <li>
-              เลือก
-              <span class="font-semibold">Add Input Method / Keyboard</span>
-            </li>
-            <li>
-              ค้นหาและเพิ่ม
-              <span class="font-semibold text-skyDeep"
-                >Chinese (Simplified) - Pinyin</span
-              >
-            </li>
-            <li>
-              สลับคีย์บอร์ดด้วย
-              <span class="font-semibold">Win + Space</span> (Windows) หรือ
-              <span class="font-semibold">Ctrl + Space</span> (Mac)
-            </li>
-          </ol>
-        </div>
-
-        <!-- Mobile -->
-        <div
-          class="paper-scroll rounded-3xl p-8 shadow-card"
-          data-aos="fade-left"
-        >
-          <div class="flex items-center gap-3 mb-5">
-            <div
-              class="w-14 h-14 rounded-2xl bg-pinkDeep text-white flex items-center justify-center text-2xl shadow-btn"
-            >
-              <i class="fa-solid fa-mobile-screen-button"></i>
-            </div>
-            <h3 class="font-display font-600 text-2xl text-ink">
-              มือถือ (iOS/Android)
-            </h3>
-          </div>
-          <ol
-            class="font-thai text-plum space-y-3 list-decimal list-inside text-left"
-          >
-            <li>
-              เปิด <span class="font-semibold">Settings</span> (การตั้งค่า)
-              บนมือถือ
-            </li>
-            <li>
-              ไปที่ <span class="font-semibold">General → Keyboard</span> (iOS)
-              หรือ
-              <span class="font-semibold">System → Languages & Input</span>
-              (Android)
-            </li>
-            <li>เลือก <span class="font-semibold">Add New Keyboard</span></li>
-            <li>
-              ค้นหาและเพิ่ม
-              <span class="font-semibold text-pinkDeep">Chinese - Pinyin</span>
-            </li>
-            <li>กดปุ่ม 🌐 บนคีย์บอร์ดเพื่อสลับไปใช้พินอินตอนเล่นเกม</li>
-          </ol>
+      <!-- 3: question in Chinese -->
+      <div class="relative mb-5">
+        <span class="step-number absolute -top-3 left-2 sm:-left-3 z-10 bg-skyDeep text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-display shadow-btn">3</span>
+        <div class="bg-sky/30 rounded-2xl p-4 sm:p-6 text-center">
+          <p class="text-3xl sm:text-4xl font-display text-ink mb-1">生日</p>
+          <p class="font-thai text-plum mb-3 text-sm sm:text-base">shēngrì</p>
+          <span class="inline-block bg-skyDeep text-white rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-thai"><i class="fa-solid fa-volume-high mr-1"></i>ฟังเสียง</span>
         </div>
       </div>
-    </section>
 
-    <!-- =========================================
-     FINAL CTA
-========================================= -->
-    <section class="py-24 px-4 bg-gradient-to-b from-white to-mint text-center">
-      <div class="max-w-2xl mx-auto" data-aos="zoom-in">
-        <div class="text-6xl mb-4 float-slow">⚔️🐼</div>
-        <h2 class="font-display font-700 text-3xl md:text-4xl text-ink mb-4">
-          พร้อมออกผจญภัยหรือยัง?
-        </h2>
-        <p class="font-thai text-plum mb-8">
-          เลือกระดับความยากด้านบน แล้วเริ่มพิชิตศัพท์จีนไปด้วยกัน!
-        </p>
-        <a
-          href="#top"
-          onclick="
-            document
-              .querySelector('header')
-              .scrollIntoView({ behavior: 'smooth' });
-            return false;
-          "
-          class="quest-btn inline-block font-display font-600 text-xl text-white bg-plum hover:bg-ink px-10 py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower"
-        >
-          <i class="fa-solid fa-arrow-up mr-2"></i>กลับไปเลือกด่าน
-        </a>
+      <!-- 4: answer choices in Thai -->
+      <div class="relative mb-5">
+        <span class="step-number absolute -top-3 left-2 sm:-left-3 z-10 bg-yellowDeep text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-display shadow-btn">4</span>
+        <div class="grid grid-cols-2 gap-2 sm:gap-3 bg-yellow/20 rounded-2xl p-3 sm:p-4">
+          <div class="bg-white rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 text-center font-thai text-plum text-xs sm:text-sm shadow-card ring-2 ring-mintDeep">วันเกิด ✅</div>
+          <div class="bg-white rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 text-center font-thai text-plum text-xs sm:text-sm shadow-card">วันหยุด</div>
+          <div class="bg-white rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 text-center font-thai text-plum text-xs sm:text-sm shadow-card">เมื่อวาน</div>
+          <div class="bg-white rounded-xl px-2 sm:px-3 py-2.5 sm:py-3 text-center font-thai text-plum text-xs sm:text-sm shadow-card">พรุ่งนี้</div>
+        </div>
       </div>
-    </section>
 
-    <footer class="bg-ink text-white/80 text-center py-6 font-thai text-sm">
-      <p>
-        Made with 🐼🎋 for Chinese vocabulary adventurers · Panda's Chinese
-        Quest
-      </p>
-    </footer>
-
-    <!-- AOS JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-
-    <!-- HOW TO PLAY MODAL -->
-    <div
-      id="how-to-play-modal"
-      class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4"
-    >
-      <div
-        class="absolute inset-0 bg-ink/60 backdrop-blur-sm"
-        id="modal-backdrop"
-      ></div>
-
-      <div
-        class="relative z-10 bg-white rounded-3xl w-full max-w-md p-5 border-4 border-mintDeep shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
-      >
-        <!-- Modal Header -->
-        <div
-          class="flex justify-between items-center pb-3 border-b border-ink/10 flex-shrink-0"
-        >
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">📖</span>
-            <h3 class="font-display font-700 text-ink text-lg sm:text-xl">
-              วิธีเล่นเกม (How to Play)
-            </h3>
-          </div>
-          <button
-            id="btn-close-modal"
-            aria-label="ปิด"
-            class="w-8 h-8 rounded-full bg-ink/5 hover:bg-ink/10 flex items-center justify-center text-ink text-sm font-700 transition"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <!-- Modal Content Scroll -->
-        <div
-          class="flex-1 min-h-0 overflow-y-auto py-3 space-y-4 text-xs sm:text-sm font-thai text-plum"
-        >
-          <!-- Rule 1 -->
-          <div
-            class="flex gap-3 items-start bg-mint/20 p-3 rounded-2xl border border-mintDeep/30"
-          >
-            <div
-              class="w-8 h-8 rounded-xl bg-mintDeep text-white flex items-center justify-center font-display font-700 text-sm flex-shrink-0"
-            >
-              1
-            </div>
-            <div>
-              <h4 class="font-display font-700 text-ink text-sm">
-                ตอบคำถามศัพท์ภาษาจีน
-              </h4>
-              <p class="mt-0.5">
-                เลือกคำแปลภาษาไทยที่ถูกต้องตรงกับคำศัพท์ภาษาจีน (Hanzi / Pinyin)
-                ที่ปรากฏเพื่อโจมตีบอส
-              </p>
-            </div>
-          </div>
-
-          <!-- Rule 2 -->
-          <div
-            class="flex gap-3 items-start bg-yellow/30 p-3 rounded-2xl border border-yellowDeep/30"
-          >
-            <div
-              class="w-8 h-8 rounded-xl bg-yellowDeep text-ink flex items-center justify-center font-display font-700 text-sm flex-shrink-0"
-            >
-              2
-            </div>
-            <div>
-              <h4 class="font-display font-700 text-ink text-sm">
-                รักษาพลังชีวิต (HP) & ทำ Combo
-              </h4>
-              <p class="mt-0.5">
-                ตอบผิดหรือเวลาหมดจะถูกบอสโจมตีหัก HP
-                ตอบถูกต่อเนื่องรับโบนัสคะแนนคูณสูงสุด x5!
-              </p>
-            </div>
-          </div>
-
-          <!-- Rule 3 -->
-          <div
-            class="flex gap-3 items-start bg-sky/30 p-3 rounded-2xl border border-skyDeep/30"
-          >
-            <div
-              class="w-8 h-8 rounded-xl bg-skyDeep text-white flex items-center justify-center font-display font-700 text-sm flex-shrink-0"
-            >
-              3
-            </div>
-            <div>
-              <h4 class="font-display font-700 text-ink text-sm">
-                ใช้ไอเทมช่วยเหลือ (Items)
-              </h4>
-              <ul class="mt-1 space-y-1 text-xs">
-                <li>💚 <strong>ฮีล HP</strong>: ฟื้นฟูพลังชีวิต +30 HP</li>
-                <li>
-                  🌿 <strong>50/50</strong>: ตัดตัวเลือกคำตอบที่ไม่ใช่ออก 2 ข้อ
-                </li>
-                <li>
-                  ⏩ <strong>ข้ามข้อ</strong>: ผ่านข้อนี้ทันทีโดยไม่เสีย HP
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Rule 4 -->
-          <div
-            class="flex gap-3 items-start bg-pink/30 p-3 rounded-2xl border border-pinkDeep/30"
-          >
-            <div
-              class="w-8 h-8 rounded-xl bg-pinkDeep text-white flex items-center justify-center font-display font-700 text-sm flex-shrink-0"
-            >
-              4
-            </div>
-            <div>
-              <h4 class="font-display font-700 text-ink text-sm">
-                ปราบ 10 บอสเพื่อคว้าชัยชนะ
-              </h4>
-              <p class="mt-0.5">
-                เมื่อลด HP บอสเหลือ 0 จะได้เข้าสู่ด่านบอสตัวถัดไป
-                จนกระทั่งพิชิตครบทุกด่าน!
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal Footer Button -->
-        <div class="pt-3 border-t border-ink/10 flex-shrink-0">
-          <button
-            id="btn-understand"
-            class="w-full py-2.5 rounded-2xl bg-mintDeep text-white font-display font-700 text-sm shadow-btn hover:bg-mintDeep/90 active:translate-y-0.5 transition"
-          >
-            เข้าใจแล้ว! ออกลุยกันเลย 🚀
-          </button>
+      <!-- 5: items -->
+      <div class="relative">
+        <span class="step-number absolute -top-3 left-2 sm:-left-3 z-10 bg-plum text-white w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-display shadow-btn">5</span>
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3 bg-white rounded-2xl p-3 border-2 border-dashed border-plum/20">
+          <span class="bg-mint/40 rounded-full px-2.5 sm:px-3 py-1.5 text-xs font-thai text-plum"><i class="fa-solid fa-heart-circle-plus mr-1"></i>ฮีล</span>
+          <span class="bg-sky/40 rounded-full px-2.5 sm:px-3 py-1.5 text-xs font-thai text-plum"><i class="fa-solid fa-code-branch mr-1"></i>50/50</span>
+          <span class="bg-yellow/40 rounded-full px-2.5 sm:px-3 py-1.5 text-xs font-thai text-plum"><i class="fa-solid fa-forward mr-1"></i>ข้าม</span>
         </div>
       </div>
     </div>
 
-    <script>
-      /* =========================================================
-   AMBIENT BACKGROUND EFFECTS (Sparkles & Bamboo Leaves)
-========================================================= */
-      function initAmbientEffects() {
-        const container = document.getElementById("stars-container");
-        if (!container) return;
+    <!-- legend -->
+    <div class="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4" data-aos="fade-up">
+      <div class="flex gap-3 items-start bg-white rounded-2xl p-3.5 sm:p-4 shadow-card">
+        <span class="step-number shrink-0 bg-mintDeep text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-display">1</span>
+        <p class="font-thai text-plum text-xs sm:text-sm"><span class="font-semibold">แถบเลือดของผู้เล่น (HP)</span> — ตอบผิดหรือปล่อยเวลาหมด เลือดจะลดลง ถ้าเลือดหมด = แพ้ ต้องเริ่มใหม่</p>
+      </div>
+      <div class="flex gap-3 items-start bg-white rounded-2xl p-3.5 sm:p-4 shadow-card">
+        <span class="step-number shrink-0 bg-pinkDeep text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-display">2</span>
+        <p class="font-thai text-plum text-xs sm:text-sm"><span class="font-semibold">มอนสเตอร์/บอส</span> ที่กำลังสู้อยู่ — ตอบถูกเรื่อย ๆ จนแถบเลือดบอสหมด จะเอาชนะแล้วไปบอสตัวต่อไปทันที</p>
+      </div>
+      <div class="flex gap-3 items-start bg-white rounded-2xl p-3.5 sm:p-4 shadow-card">
+        <span class="step-number shrink-0 bg-skyDeep text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-display">3</span>
+        <p class="font-thai text-plum text-xs sm:text-sm">โจทย์เป็น <span class="font-semibold">ภาษาจีน</span> (ตัวอักษรจีน + พินอิน) กดปุ่ม 🔊 เพื่อฟังเสียงอ่านได้ ถ้าจำไม่ได้ให้ลองฟังก่อนตอบ</p>
+      </div>
+      <div class="flex gap-3 items-start bg-white rounded-2xl p-3.5 sm:p-4 shadow-card">
+        <span class="step-number shrink-0 bg-yellowDeep text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-display">4</span>
+        <p class="font-thai text-plum text-xs sm:text-sm">เลือกคำตอบที่เป็น <span class="font-semibold">ภาษาไทย</span> (ความหมายของคำศัพท์) ให้ตรงกับโจทย์ภาษาจีนด้านบน แตะแค่ครั้งเดียวเท่านั้น</p>
+      </div>
+      <div class="flex gap-3 items-start bg-white rounded-2xl p-3.5 sm:p-4 shadow-card md:col-span-2">
+        <span class="step-number shrink-0 bg-plum text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-display">5</span>
+        <p class="font-thai text-plum text-xs sm:text-sm"><span class="font-semibold">ไอเทมช่วยเหลือ</span> ใช้ได้จำกัดจำนวน — <b>ฮีล</b> เพิ่มเลือดผู้เล่น, <b>50/50</b> ตัดตัวเลือกผิด 2 อัน, <b>ข้าม</b> ข้ามคำถามข้อนี้ไปเลยโดยไม่เสียเลือด</p>
+      </div>
+    </div>
 
-        const sparkleGlyphs = ["✦", "✧", "⋆"];
-        for (let i = 0; i < 12; i++) {
-          const s = document.createElement("span");
-          s.className = "sparkle";
-          s.textContent =
-            sparkleGlyphs[Math.floor(Math.random() * sparkleGlyphs.length)];
-          s.style.left = Math.random() * 100 + "%";
-          s.style.top = Math.random() * 100 + "%";
-          s.style.fontSize = 10 + Math.random() * 14 + "px";
-          s.style.animationDuration = 2.5 + Math.random() * 3 + "s";
-          s.style.animationDelay = Math.random() * 4 + "s";
-          container.appendChild(s);
+    <div class="mt-5 sm:mt-6 text-center bg-yellow/30 rounded-2xl px-4 sm:px-5 py-3" data-aos="fade-up">
+      <p class="font-thai text-plum text-xs sm:text-sm">⏱️ <span class="font-semibold">อย่าลืม!</span> แต่ละคำถามมีเวลาจำกัด ถ้าตอบไม่ทันจะถือว่าตอบผิดและเสีย HP เหมือนกันนะ</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     KEYBOARD INSTALLATION GUIDE
+========================================= -->
+<section class="py-14 sm:py-20 px-4 bg-sky/30">
+  <div class="max-w-5xl mx-auto text-center mb-10 sm:mb-14" data-aos="fade-up">
+    <h2 class="font-display font-700 text-2xl sm:text-3xl md:text-4xl text-ink">
+      <i class="fa-solid fa-language text-skyDeep"></i> เตรียมคีย์บอร์ดภาษาจีน
+    </h2>
+    <p class="font-thai text-plum mt-2 text-sm sm:text-base px-2">ก่อนออกไปผจญภัย อย่าลืมติดตั้งคีย์บอร์ดพินอินกันก่อนนะ!</p>
+  </div>
+
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
+
+    <!-- Computer -->
+    <div class="paper-scroll rounded-3xl p-5 sm:p-8 shadow-card" data-aos="fade-right">
+      <div class="flex items-center gap-3 mb-4 sm:mb-5">
+        <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-skyDeep text-white flex items-center justify-center text-lg sm:text-2xl shadow-btn shrink-0">
+          <i class="fa-solid fa-computer"></i>
+        </div>
+        <h3 class="font-display font-600 text-lg sm:text-2xl text-ink">คอมพิวเตอร์ (PC/Mac)</h3>
+      </div>
+      <ol class="font-thai text-plum space-y-2.5 sm:space-y-3 list-decimal list-inside text-left text-sm sm:text-base">
+        <li>เปิด <span class="font-semibold">Settings</span> (การตั้งค่า) ของเครื่อง</li>
+        <li>ไปที่หมวด <span class="font-semibold">Language & Region</span> หรือ <span class="font-semibold">Keyboard</span></li>
+        <li>เลือก <span class="font-semibold">Add Input Method / Keyboard</span></li>
+        <li>ค้นหาและเพิ่ม <span class="font-semibold text-skyDeep">Chinese (Simplified) - Pinyin</span></li>
+        <li>สลับคีย์บอร์ดด้วย <span class="font-semibold">Win + Space</span> (Windows) หรือ <span class="font-semibold">Ctrl + Space</span> (Mac)</li>
+      </ol>
+    </div>
+
+    <!-- Mobile -->
+    <div class="paper-scroll rounded-3xl p-5 sm:p-8 shadow-card" data-aos="fade-left">
+      <div class="flex items-center gap-3 mb-4 sm:mb-5">
+        <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-pinkDeep text-white flex items-center justify-center text-lg sm:text-2xl shadow-btn shrink-0">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </div>
+        <h3 class="font-display font-600 text-lg sm:text-2xl text-ink">มือถือ (iOS/Android)</h3>
+      </div>
+      <ol class="font-thai text-plum space-y-2.5 sm:space-y-3 list-decimal list-inside text-left text-sm sm:text-base">
+        <li>เปิด <span class="font-semibold">Settings</span> (การตั้งค่า) บนมือถือ</li>
+        <li>ไปที่ <span class="font-semibold">General → Keyboard</span> (iOS) หรือ <span class="font-semibold">System → Languages & Input</span> (Android)</li>
+        <li>เลือก <span class="font-semibold">Add New Keyboard</span></li>
+        <li>ค้นหาและเพิ่ม <span class="font-semibold text-pinkDeep">Chinese - Pinyin</span></li>
+        <li>กดปุ่ม 🌐 บนคีย์บอร์ดเพื่อสลับไปใช้พินอินตอนเล่นเกม</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     FINAL CTA
+========================================= -->
+<section class="py-16 sm:py-24 px-4 bg-gradient-to-b from-white to-mint text-center">
+  <div class="max-w-2xl mx-auto" data-aos="zoom-in">
+    <div class="text-5xl sm:text-6xl mb-4 float-slow">⚔️🐼</div>
+    <h2 class="font-display font-700 text-2xl sm:text-3xl md:text-4xl text-ink mb-4 px-2">พร้อมออกผจญภัยหรือยัง?</h2>
+    <p class="font-thai text-plum mb-8 text-sm sm:text-base px-2">เลือกระดับความยากด้านบน แล้วเริ่มพิชิตศัพท์จีนไปด้วยกัน!</p>
+    <a href="#top" onclick="document.querySelector('header').scrollIntoView({behavior:'smooth'}); return false;"
+      class="quest-btn inline-block font-display font-600 text-base sm:text-xl text-white bg-plum hover:bg-ink px-6 sm:px-10 py-3 sm:py-4 rounded-full shadow-btn animate__animated animate__pulse animate__infinite animate__slower">
+      <i class="fa-solid fa-arrow-up mr-2"></i>กลับไปเลือกด่าน
+    </a>
+  </div>
+</section>
+
+<footer class="bg-ink text-white/80 text-center py-5 sm:py-6 font-thai text-xs sm:text-sm px-4">
+  <p>Made with 🐼🎋 for Chinese vocabulary adventurers · Panda's Chinese Quest</p>
+</footer>
+
+<!-- AOS JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+<script>
+  AOS.init({
+    duration: 700,
+    once: true,
+    easing: 'ease-out-cubic',
+  });
+
+  const levelLabels = {
+    'ง่าย (Easy)': { th: 'ง่าย', color: '#6FE3A8', icon: '🌱' },
+    'ปานกลาง (Medium)': { th: 'ปานกลาง', color: '#FFD34D', icon: '🐉' },
+    'ยาก (Hard)': { th: 'ยาก', color: '#FF9FC3', icon: '🔥' },
+  };
+
+document.querySelectorAll('[data-level]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // ดึง element ปุ่มที่มี attribute data-level จริงๆ
+      const targetBtn = e.target.closest('[data-level]');
+      if (!targetBtn) return;
+
+      const level = targetBtn.getAttribute('data-level');
+      const url = targetBtn.getAttribute('data-url');
+      const info = levelLabels[level] || { th: level, color: '#BEE7F5', icon: '✨' };
+
+      // Fallback: หาก SweetAlert2 ไม่โหลด ให้เปลี่ยนหน้าทันที
+      if (typeof Swal === 'undefined') {
+        if (url) window.location.href = url;
+        return;
+      }
+
+      Swal.fire({
+        title: `${info.icon} Starting ${level} Mode!`,
+        text: 'Get Ready! เตรียมตัวให้พร้อม แล้วออกไปผจญภัยกันเลย!',
+        confirmButtonText: 'ลุยเลย!',
+        confirmButtonColor: info.color,
+        background: '#FEFCF3',
+        color: '#3A3355',
+        customClass: {
+          popup: 'rounded-3xl',
         }
-
-        for (let i = 0; i < 6; i++) {
-          const b = document.createElement("i");
-          b.className = "fa-solid fa-leaf bamboo-drift";
-          b.style.left = Math.random() * 100 + "%";
-          b.style.fontSize = 14 + Math.random() * 16 + "px";
-          b.style.animationDuration = 10 + Math.random() * 8 + "s";
-          b.style.animationDelay = Math.random() * 10 + "s";
-          container.appendChild(b);
-        }
-      }
-
-      /* =========================================================
-   AUDIO & SPEECH SYSTEM
-========================================================= */
-      let soundEnabled = true;
-
-      let currentLocalAudio = null;
-
-      function speak(text, lang = "zh-CN") {
-        if (typeof soundEnabled !== "undefined" && !soundEnabled) return;
-        if (!text) return;
-        try {
-          if (currentLocalAudio) {
-            currentLocalAudio.pause();
-            currentLocalAudio.currentTime = 0;
-          }
-          const cleanText = text.trim();
-          const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
-          const audio = new Audio(audioPath);
-          audio.referrerPolicy = "no-referrer";
-          currentLocalAudio = audio;
-          audio.play().catch((err) => {
-            console.warn(
-              `Local audio playback failed for "${cleanText}":`,
-              err,
-            );
-          });
-        } catch (e) {
-          console.error("Audio playback error:", e);
-        }
-      }
-
-      function playUiClickSound() {
-        if (!soundEnabled) return;
-        try {
-          const ctx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(440, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(
-            880,
-            ctx.currentTime + 0.08,
-          );
-          gain.gain.setValueAtTime(0.15, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.09);
-        } catch (e) {
-          // AudioContext fallback ignored if blocked by autoplay policy
-        }
-      }
-
-      /* Dynamic Panda greetings on click */
-      const pandaQuotes = [
-        "你好！(Nǐ hǎo) ยินดีต้อนรับสู่ภารกิจฝึกภาษาจีนครับ!",
-        "加油！(Jiāyóu) สู้ๆ นะครับ เลือกระดับความยากได้เลย!",
-        "熊猫汉语大冒险！สนุกกับคำศัพท์จีนกันเถอะ!",
-        "อย่าลืมใช้ไอเทมช่วยในการเล่นด้วยนะ 🐼✨",
-        "พร้อมพิชิตครบทั้ง 10 บอสหรือยังครับ?",
-      ];
-
-      /* =========================================================
-   LOCAL STORAGE & HIGH SCORES
-========================================================= */
-      function loadHighScores() {
-        const easyBest = localStorage.getItem("panda_quest_easy_best") || "0";
-        const normalBest =
-          localStorage.getItem("panda_quest_normal_best") || "0";
-        const hardBest = localStorage.getItem("panda_quest_hard_best") || "0";
-
-        const easyEl = document.getElementById("best-easy");
-        const normalEl = document.getElementById("best-normal");
-        const hardEl = document.getElementById("best-hard");
-
-        if (easyEl && easyBest !== "0")
-          easyEl.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i>สถิติ: ${easyBest}`;
-        if (normalEl && normalBest !== "0")
-          normalEl.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i>สถิติ: ${normalBest}`;
-        if (hardEl && hardBest !== "0")
-          hardEl.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i>สถิติ: ${hardBest}`;
-      }
-
-      /* =========================================================
-   MODAL EVENT LISTENERS
-========================================================= */
-      const modal = document.getElementById("how-to-play-modal");
-      const btnHowToPlay = document.getElementById("btn-how-to-play");
-      const btnCloseModal = document.getElementById("btn-close-modal");
-      const btnUnderstand = document.getElementById("btn-understand");
-      const modalBackdrop = document.getElementById("modal-backdrop");
-
-      function openModal() {
-        playUiClickSound();
-        modal.classList.remove("hidden");
-      }
-
-      function closeModal() {
-        playUiClickSound();
-        modal.classList.add("hidden");
-      }
-
-      btnHowToPlay.addEventListener("click", openModal);
-      btnCloseModal.addEventListener("click", closeModal);
-      btnUnderstand.addEventListener("click", closeModal);
-      modalBackdrop.addEventListener("click", closeModal);
-
-      /* Sound Toggle */
-      const soundBtn = document.getElementById("btn-sound-toggle");
-      const soundIcon = document.getElementById("sound-icon");
-
-      soundBtn.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-        if (soundEnabled) {
-          soundIcon.className = "fa-solid fa-volume-high text-pinkDeep";
-          playUiClickSound();
-          speak("你好");
-        } else {
-          soundIcon.className = "fa-solid fa-volume-xmark text-plum/40";
-          if ("speechSynthesis" in window) speechSynthesis.cancel();
+      }).then((result) => {
+        if (result.isConfirmed && url) {
+          window.location.href = url;
         }
       });
+    });
+  });
+</script>
 
-      /* Panda Mascot Click Interactive Greeting */
-      const pandaClickArea = document.getElementById("panda-hero-click");
-      const pandaSpeech = document.getElementById("panda-speech");
-
-      pandaClickArea.addEventListener("click", () => {
-        playUiClickSound();
-        const randomQuote =
-          pandaQuotes[Math.floor(Math.random() * pandaQuotes.length)];
-        pandaSpeech.textContent = `"${randomQuote}"`;
-        speak(randomQuote.replace(/[^\u4e00-\u9fa5]/g, ""), "zh-CN");
-      });
-
-      /* Button Sound effects for mode cards */
-      document.querySelectorAll(".mode-card").forEach((card) => {
-        card.addEventListener("click", () => {
-          playUiClickSound();
-        });
-      });
-
-      /* Initialize */
-      document.addEventListener("DOMContentLoaded", () => {
-        initAmbientEffects();
-        loadHighScores();
-      });
-    </script>
-  </body>
+</body>
 </html>

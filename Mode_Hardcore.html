@@ -45,7 +45,8 @@
   body { 
     font-family: 'Mali', sans-serif; 
     background-color: #9871FA; 
-    color: #3A3355; 
+    color: #3A3355;
+    transition: background-color 0.5s ease;
   }
   .font-display { font-family: 'Fredoka','Mali',sans-serif; }
   .font-hanzi { font-family: "'Noto Sans SC'",sans-serif; }
@@ -336,6 +337,7 @@
     {
       id: 1,
       name: "จอมเวลา ปีศาจนาฬิกา",
+      themeColor: "#1E88E5",
       questions: [
         { hanzi: "八点", pinyin: "bā diǎn", meaning: "8:00 น.", questionImage: "public/Clock/08_00.png" },
         { hanzi: "十点十五分", pinyin: "shí diǎn shíwǔ fēn", meaning: "10:15 น.", questionImage: "public/Clock/10_15.png" },
@@ -347,6 +349,7 @@
     {
       id: 2,
       name: "อสูรปฏิทิน",
+      themeColor: "#E53935",
       questions: [
         { hanzi: "一月一号", pinyin: "yī yuè yī hào", meaning: "วันที่ 1 มกราคม", questionImage: "public/Calendar/1jan.png" },
         { hanzi: "星期一", pinyin: "xīngqīyī", meaning: "วันจันทร์", questionImage: "public/Calendar/Monday.png" },
@@ -358,6 +361,7 @@
     {
       id: 3,
       name: "ราชาสไลม์กิจวัตร",
+      themeColor: "#1E88E5",
       questions: [
         { hanzi: "起床", pinyin: "qǐchuáng", meaning: "ตื่นนอน", questionImage: "public/Daily/wakeup.png" },
         { hanzi: "睡觉", pinyin: "shuìjiào", meaning: "นอนหลับ", questionImage: "public/Daily/sleep.png" },
@@ -369,6 +373,7 @@
     {
       id: 4,
       name: "ก็อบลินเส้นทาง",
+      themeColor: "#43A047",
       questions: [
         { hanzi: "医院", pinyin: "yīyuàn", meaning: "โรงพยาบาล", questionImage: "public/Locations/hospital.png" },
         { hanzi: "学校", pinyin: "xuéxiào", meaning: "โรงเรียน", questionImage: "public/Locations/school.png" },
@@ -380,6 +385,7 @@
     {
       id: 5,
       name: "มังกรลมฟ้าอากาศ",
+      themeColor: "#00ACC1",
       questions: [
         { hanzi: "天气", pinyin: "tiānqì", meaning: "อากาศ", questionImage: "public/Weather/weather.png" },
         { hanzi: "冷", pinyin: "lěng", meaning: "หนาว", questionImage: "public/Weather/cold.png" },
@@ -392,9 +398,9 @@
 
   /* GAME STATE & CONFIG */
   const TOTAL_BOSSES = 5;
-  const QUESTION_TIME = 18000; // 18 seconds
-  const WRONG_DAMAGE = 20;
-  const HEAL_AMOUNT = 30;
+  const QUESTION_TIME = 5000; // 18 seconds
+  const WRONG_DAMAGE = 30;
+  const HEAL_AMOUNT = 5;
 
   let state = {
     bossIndex: 0,
@@ -543,6 +549,10 @@
     state.bossMaxHP = 100;
     state.playerHP = 100;
     state.questionIndex = 0;
+
+    if (boss.themeColor) {
+      document.body.style.backgroundColor = boss.themeColor;
+    }
 
     el.bossName.textContent = boss.name;
     el.bossProgress.textContent = index + 1;

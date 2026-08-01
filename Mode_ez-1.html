@@ -44,7 +44,8 @@
   body { 
     font-family: 'Mali', sans-serif; 
     background-color: #9871FA; 
-    color: #3A3355; 
+    color: #3A3355;
+    transition: background-color 0.5s ease;
   }
   .font-display { font-family: 'Fredoka','Mali',sans-serif; }
   .font-hanzi { font-family: "'Noto Sans SC'",sans-serif; }
@@ -329,6 +330,7 @@
       name: "จอมเวลา ปีศาจนาฬิกา",
       hp: 100,
       bossImage: "public/1.png",
+      themeColor: "#1E88E5",
       questions: [
         { hanzi: "一点", pinyin: "yī diǎn", meaning: "ตีหนึ่ง", isClock: true, time: "01:00", questionImage: "public/Clock/01_00.png" },
         { hanzi: "两点", pinyin: "liǎng diǎn", meaning: "สองนาฬิกา", isClock: true, time: "02:00", questionImage: "public/Clock/02_00.png" },
@@ -342,6 +344,7 @@
       name: "ปีศาจปฏิทิน (สัปดาห์)",
       hp: 100,
       bossImage: "public/2.png",
+      themeColor: "#E53935",
       questions: [
         { hanzi: "一月一号", pinyin: "yī yuè yī hào", meaning: "วันที่ 1 มกราคม", questionImage: "public/Calendar/1jan.png" },
         { hanzi: "星期一", pinyin: "xīngqīyī", meaning: "วันจันทร์", questionImage: "public/Calendar/Monday.png" },
@@ -355,6 +358,7 @@
       name: "ปีศาจปฏิทิน (เดือน)",
       hp: 100,
       bossImage: "public/3.png",
+      themeColor: "#E53935",
       questions: [
         { hanzi: "一月", pinyin: "yī yuè", meaning: "เดือนมกราคม", questionImage: "public/Calendar/January.png" },
         { hanzi: "二月", pinyin: "èr yuè", meaning: "เดือนกุมภาพันธ์", questionImage: "public/Calendar/February.png" },
@@ -368,6 +372,7 @@
       name: "ปีศาจสภาพอากาศ",
       hp: 100,
       bossImage: "public/4.png",
+      themeColor: "#00ACC1",
       questions: [
         { hanzi: "天气", pinyin: "tiānqì", meaning: "สภาพอากาศ", questionImage: "public/Weather/weather.png" },
         { hanzi: "热", pinyin: "rè", meaning: "ร้อน", questionImage: "public/Weather/hot.png" },
@@ -381,6 +386,7 @@
       name: "ปีศาจสถานที่",
       hp: 100,
       bossImage: "public/5.png",
+      themeColor: "#43A047",
       questions: [
         { hanzi: "学校", pinyin: "xuéxiào", meaning: "โรงเรียน", questionImage: "public/Locations/school.png" },
         { hanzi: "医院", pinyin: "yīyuàn", meaning: "โรงพยาบาล", questionImage: "public/Locations/hospital.png" },
@@ -393,7 +399,7 @@
 
   const FALLBACK_DISTRACTORS = ["เที่ยงคืน", "เมื่อวาน", "สัปดาห์หน้า", "ตอนเช้า", "ตีสี่", "เดือนหน้า"];
   const TOTAL_BOSSES = bossData.length;
-  const WRONG_DAMAGE = 20;
+  const WRONG_DAMAGE = 10;
   const HEAL_AMOUNT = 30;
   const GAME_TIME = 15000;
 
@@ -520,6 +526,11 @@
     state.bossMaxHP = boss.hp;
     state.playerHP = 100;
     state.questionIndex = 0;
+
+    if (boss.themeColor) {
+      document.body.style.backgroundColor = boss.themeColor;
+    }
+
 
     el.bossName.textContent = boss.name;
     el.bossProgress.textContent = index + 1;
