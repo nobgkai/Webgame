@@ -45,30 +45,28 @@
     font-family: 'Mali', sans-serif; 
     background-color: #9871FA; 
     color: #3A3355; 
+    transition: background-color 0.5s ease, background-image 0.5s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .font-display { font-family: 'Fredoka','Mali',sans-serif; }
   .font-hanzi { font-family: "'Noto Sans SC'",sans-serif; }
 
   /* Background Circles Pattern & Moving Animation */
   .bg-pattern {
-    background-image: 
-      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 8%, transparent 8%),
-      radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.15) 12%, transparent 12%),
-      radial-gradient(circle at 15% 65%, rgba(255, 255, 255, 0.12) 15%, transparent 15%),
-      radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.15) 10%, transparent 10%);
-    background-size: 100% 100%;
     animation: moveBg 12s ease-in-out infinite alternate;
   }
 
   @keyframes moveBg {
     0% {
-      background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+      background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, center;
     }
     50% {
-      background-position: 30px -20px, -20px 30px, 25px 25px, -30px -15px;
+      background-position: 30px -20px, -20px 30px, 25px 25px, -30px -15px, center;
     }
     100% {
-      background-position: -20px 25px, 25px -20px, -15px -30px, 20px 20px;
+      background-position: -20px 25px, 25px -20px, -15px -30px, 20px 20px, center;
     }
   }
 
@@ -122,10 +120,10 @@
 
 <div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-2">
 
-  <!-- ZONE: BOSS HEADER & IMAGE (จัดแบบ Layer ซ้อนกัน) -->
+  <!-- ZONE: BOSS HEADER & IMAGE -->
   <div class="relative w-full flex flex-col items-center mb-2 min-h-[260px]">
     
-    <!-- LAYER 1: รูปบอสขนาดใหญ่ ซ้อนอยู่ตรงกลางด้านหลัง -->
+    <!-- LAYER 1: รูปบอส -->
     <div class="absolute inset-0 flex justify-center items-center z-10 pointer-events-none -top-4">
       <img id="boss-image" src="public/1.png?v=1" alt="boss"
         class="w-72 h-72 md:w-80 md:h-80 object-contain drop-shadow-2xl float-slow">
@@ -157,7 +155,7 @@
       </div>
     </div>
 
-    <!-- LAYER 2: BOSS HP BAR (มังกรอยู่ในหลอดเลือด) -->
+    <!-- LAYER 2: BOSS HP BAR -->
     <div class="w-full z-20 relative px-1">
       <div class="w-full h-8 bg-black/40 border-2 border-white/80 rounded-full overflow-hidden shadow-md relative flex items-center">
         <div id="boss-hp-bar" class="h-full bg-bossHp rounded-full" style="width:100%"></div>
@@ -168,7 +166,7 @@
       </div>
     </div>
 
-    <!-- Spacer เพื่อเว้นพื้นที่รูปบอส -->
+    <!-- Spacer -->
     <div class="h-36 md:h-40 w-full"></div>
   </div>
 
@@ -181,7 +179,7 @@
       <i class="fa-solid fa-volume-high text-sm"></i>
     </button>
 
-    <!-- Question Image (ขยายขนาดรูปคำถาม) -->
+    <!-- Question Image -->
     <div class="flex justify-center my-2">
       <img id="question-image" src="" alt="" 
         class="max-h-36 md:max-h-44 w-auto object-contain drop-shadow-md rounded-xl transition-all duration-200 hidden">
@@ -264,42 +262,34 @@
 
 </div>
 
-<!-- ===================== CUSTOM POPUP MODAL (TAILWIND ONLY) ===================== -->
+<!-- ===================== CUSTOM POPUP MODAL ===================== -->
 <div id="game-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-  
-  <!-- กรอบ Pop-up หลัก -->
   <div id="modal-card" class="relative w-full max-w-xs md:max-w-sm bg-white rounded-[36px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 border-[#68cbf8] transition-all duration-200 scale-100">
     
-    <!-- ริบบิ้นด้านบน -->
     <div id="modal-ribbon" class="absolute -top-7 left-1/2 -translate-x-1/2 w-[82%] py-2 bg-[#68cbf8] border-2 border-white rounded-2xl shadow-md flex items-center justify-center
       before:content-[''] before:absolute before:top-2 before:-left-5 before:w-6 before:h-full before:bg-[#46b3e3] before:-z-10 before:rounded-l-md before:[clip-path:polygon(100%_0,0_0,40%_50%,0_100%,100%_100%)]
       after:content-[''] after:absolute after:top-2 after:-right-5 after:w-6 after:h-full after:bg-[#46b3e3] after:-z-10 after:rounded-r-md after:[clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]">
       <span id="modal-ribbon-text" class="font-display font-extrabold text-2xl md:text-3xl text-white tracking-wider uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]">BRAKE TIME</span>
     </div>
 
-    <!-- พื้นที่ใส่รูปแพนด้า -->
     <div class="flex justify-center items-center my-3 h-28">
       <img id="modal-panda-img" src="public/Alert/2.png" alt="Panda Status" 
            onerror="this.style.display='none';" 
            class="h-full object-contain drop-shadow-md">
     </div>
 
-    <!-- ข้อความหลัก -->
     <h3 id="modal-title" class="font-display font-extrabold text-2xl md:text-3xl text-[#4b4b4b] mb-2">หยุดชั่วคราว</h3>
     
-    <!-- ข้อความย่อย -->
     <div class="flex justify-center mb-5">
       <div id="modal-subtitle-box" class="bg-[#eef9ed] rounded-full px-5 py-1.5 inline-block">
         <p id="modal-subtitle" class="font-thai text-xs md:text-sm text-[#618a66] font-semibold">บางทีการพักก็ทำให้ดีขึ้น</p>
       </div>
     </div>
 
-    <!-- บล็อกสถิติคะแนน -->
     <div id="modal-stats" class="bg-emerald-50 rounded-2xl py-1.5 px-4 mb-4 text-xs font-thai text-emerald-800 font-semibold hidden">
       ปราบบอสได้ <span id="modal-boss-count">0/5</span> • คะแนน <span id="modal-score">0</span>
     </div>
 
-    <!-- ปุ่มกด Action Buttons -->
     <div id="modal-actions" class="flex gap-3 justify-center mt-2">
       <button id="modal-btn-home" class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#58cbf5] hover:bg-[#45bce7] active:translate-y-0.5 shadow-[0_4px_0_#3aa1c7] transition text-sm md:text-base">
         กลับหน้าแรก
@@ -319,6 +309,9 @@ const bossData = [
     name: "จอมเวลา ปีศาจนาฬิกา",
     theme: "Time — ชั่วโมงและนาที",
     image: "public/1.png",
+    bgColor: "#9871FA", // สีพื้นหลังประจำตัวบอส 1
+    circleColor: "rgba(255, 255, 255, 0.15)", // สีตัวกลมๆ ลอยไปมา
+    bgImage: "public/bg/bg-boss-1.jpg", // ภาพพื้นหลัง (ใส่ path รูปของคุณ)
     questions: [
       { hanzi: "八点",       pinyin: "bā diǎn",             meaning: "8:00 น.",  questionImage: "public/Clock/08_00.png" },
       { hanzi: "十点十五分", pinyin: "shí diǎn shíwǔ fēn",  meaning: "10:15 น.", questionImage: "public/Clock/10_15.png" },
@@ -332,6 +325,9 @@ const bossData = [
     name: "อสูรปฏิทิน",
     theme: "Calendar / Dates — วัน วันที่ สัปดาห์",
     image: "public/2.png",
+    bgColor: "#E53935", // สีแดง
+    circleColor: "rgba(255, 235, 59, 0.25)", // ตัวกลมๆ สีเหลืองทอง
+    bgImage: "public/bg/bg-boss-2.jpg",
     questions: [
       { hanzi: "一月一号", pinyin: "yī yuè yī hào",  meaning: "วันที่ 1 มกราคม",       questionImage: "public/Calendar/1jan.png" },
       { hanzi: "星期一",   pinyin: "xīngqīyī",       meaning: "วันจันทร์",             questionImage: "public/Calendar/Monday.png" },
@@ -345,6 +341,9 @@ const bossData = [
     name: "ราชาสไลม์กิจวัตร",
     theme: "Daily Activities — กิจวัตรประจำวันและคำกริยา",
     image: "public/3.png",
+    bgColor: "#1E88E5", // สีฟ้า/น้ำเงิน
+    circleColor: "rgba(129, 212, 250, 0.3)", // ตัวกลมๆ สีฟ้าอ่อน
+    bgImage: "public/bg/bg-boss-3.jpg",
     questions: [
       { hanzi: "起床", pinyin: "qǐchuáng", meaning: "ตื่นนอน",     questionImage: "" },
       { hanzi: "睡觉", pinyin: "shuìjiào", meaning: "นอนหลับ",     questionImage: "" },
@@ -356,6 +355,9 @@ const bossData = [
     name: "ก็อบลินเส้นทาง",
     theme: "Locations — สถานที่และทิศทาง",
     image: "public/4.png",
+    bgColor: "#43A047", // สีเขียว
+    circleColor: "rgba(200, 230, 201, 0.3)", // ตัวกลมๆ สีเขียวอ่อน
+    bgImage: "public/bg/bg-boss-4.jpg",
     questions: [
       { hanzi: "医院", pinyin: "yīyuàn",    meaning: "โรงพยาบาล", questionImage: "" },
       { hanzi: "学校", pinyin: "xuéxiào",   meaning: "โรงเรียน",  questionImage: "" },
@@ -366,6 +368,9 @@ const bossData = [
     name: "มังกรลมฟ้าอากาศ",
     theme: "Weather — อากาศและคำคุณศัพท์",
     image: "public/5.png",
+    bgColor: "#00ACC1", // สีฟ้าอมเขียว (Cyan)
+    circleColor: "rgba(255, 255, 255, 0.25)",
+    bgImage: "public/bg/bg-boss-5.jpg",
     questions: [
       { hanzi: "天气", pinyin: "tiānqì",    meaning: "อากาศ", questionImage: "" },
       { hanzi: "冷",   pinyin: "lěng",      meaning: "หนาว",   questionImage: "" },
@@ -375,9 +380,9 @@ const bossData = [
 
 const TOTAL_BOSSES = 5;
 const QUESTIONS_PER_BOSS = 5;
-const QUESTION_TIME = 18; 
-const WRONG_DAMAGE = 15;
-const HEAL_AMOUNT = 20;
+const QUESTION_TIME = 10; 
+const WRONG_DAMAGE = 20;
+const HEAL_AMOUNT = 10;
 const DAMAGE_PER_HIT = 100 / QUESTIONS_PER_BOSS;
 
 let state = {
@@ -485,14 +490,35 @@ function shuffleArray(array) {
   return arr;
 }
 
+// ฟังก์ชั่นอัปเดตสีและภาพ Background ตามธีมของบอส
+function updateBossTheme(boss) {
+  document.body.style.backgroundColor = boss.bgColor || '#9871FA';
+
+  const circle = boss.circleColor || 'rgba(255, 255, 255, 0.15)';
+  const patternGradient = `
+    radial-gradient(circle at 20% 20%, ${circle} 8%, transparent 8%),
+    radial-gradient(circle at 80% 30%, ${circle} 12%, transparent 12%),
+    radial-gradient(circle at 15% 65%, ${circle} 15%, transparent 15%),
+    radial-gradient(circle at 85% 75%, ${circle} 10%, transparent 10%)
+  `;
+
+  if (boss.bgImage) {
+    document.body.style.backgroundImage = `${patternGradient}, url('${boss.bgImage}')`;
+  } else {
+    document.body.style.backgroundImage = patternGradient;
+  }
+}
+
 function loadBoss(index) {
   state.bossIndex = index;
   const boss = bossData[index];
 
+  // อัปเดต Theme สีภาพและลวดลายของด่าน
+  updateBossTheme(boss);
+
   state.bossHP = 100;
   state.answered = false;
 
-  // สุ่มคำถามก้อนแรกของบอส
   state.currentQuestions = shuffleArray(boss.questions);
   state.questionIndex = 0;
 
@@ -512,14 +538,10 @@ function loadBoss(index) {
 function checkOutcomeThenNext() {
   setTimeout(() => {
     if (state.playerHP <= 0) return gameOver();
-    
-    // บอสตายแล้ว -> ผ่านด่าน
     if (state.bossHP <= 0) return bossDefeated();
 
-    // บอสยังไม่ตาย -> ไปข้อต่อไป
     state.questionIndex++;
 
-    // ถ้าใช้คำถามครบทุกข้อแล้วแต่บอสยังไม่ตาย ให้สุ่มคำถามใหม่วนลูปไปเรื่อยๆ
     if (state.questionIndex >= state.currentQuestions.length) {
       const boss = bossData[state.bossIndex];
       state.currentQuestions = shuffleArray(boss.questions);
@@ -623,7 +645,7 @@ el.answerForm.addEventListener('submit', (e) => {
 });
 
 /* ==========================================================================
-   POPUP MODAL SYSTEM (CUSTOM GAMING CARTOON STYLE)
+   POPUP MODAL SYSTEM
    ========================================================================== */
 function showGameModal(config) {
   const modal = document.getElementById('game-modal');
