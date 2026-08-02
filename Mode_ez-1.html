@@ -141,9 +141,35 @@
     color: white !important;
     box-shadow: 0 4px 0 #D12554 !important;
   }
+
+  /* EFFECT: DAMAGE BLUR */
+  #damage-overlay {
+    position: fixed;
+    inset: 0;
+    box-shadow: inset 0 0 100px 40px rgba(220, 38, 38, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 0.3s ease-in-out;
+  }
+  #damage-overlay.active {
+    opacity: 1;
+  }
+
+  /* EFFECT: COMBO POPUP */
+  @keyframes comboPop {
+    0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+    20% { opacity: 1; transform: scale(1.2) rotate(5deg); }
+    40% { transform: scale(1) rotate(0deg); }
+    80% { opacity: 1; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0.8) translateY(-40px); }
+  }
+  .combo-animate {
+    animation: comboPop 1.2s ease-out forwards;
+  }
 </style>
 </head>
-<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6">
+<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 relative overflow-hidden">
 
 <div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-2">
 
@@ -322,6 +348,17 @@
   </div>
 </div>
 
+<!-- ===================== OVERLAYS ===================== -->
+<!-- Damage Overlay (ขอบจอแดงเวลาโดนตี) -->
+<div id="damage-overlay"></div>
+
+<!-- Combo Overlay (ข้อความคอมโบกลางจอ) -->
+<div id="combo-container" class="fixed inset-0 flex items-center justify-center pointer-events-none z-[90] hidden">
+  <div id="combo-text" class="font-display font-black text-6xl md:text-7xl text-yellow-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.6)] text-center" style="-webkit-text-stroke: 2px #d97706;">
+    COMBO x3!
+  </div>
+</div>
+
 <script>
   /* DATA & CONFIG (EASY MODE) */
   const bossData = [
@@ -480,6 +517,34 @@
     }
   }
 
+  /* ========== เอฟเฟกต์ที่เพิ่มใหม่ ========== */
+  function showDamageEffect() {
+    const overlay = document.getElementById('damage-overlay');
+    overlay.classList.add('active');
+    setTimeout(() => {
+      overlay.classList.remove('active');
+    }, 300);
+  }
+
+  function showComboEffect(combo) {
+    const container = document.getElementById('combo-container');
+    const text = document.getElementById('combo-text');
+    
+    text.textContent = `COMBO x${combo}!`;
+    container.classList.remove('hidden');
+    
+    // รีเซ็ตแอนิเมชันให้เล่นใหม่ทุกครั้ง
+    text.classList.remove('combo-animate');
+    void text.offsetWidth; // กระตุ้นการเรนเดอร์ใหม่ (Trigger Reflow)
+    text.classList.add('combo-animate');
+    
+    // ซ่อนเมื่อแอนิเมชันจบ (1.2 วินาที)
+    setTimeout(() => {
+      container.classList.add('hidden');
+    }, 1200);
+  }
+  /* ======================================= */
+
   function updatePlayerHP(delta) {
     const hp = Math.max(0, state.playerHP);
     el.playerHPBar.style.width = hp + "%";
@@ -608,6 +673,8 @@
         state.scoreMultiplier = 1;
         updateScoreUI();
         updatePlayerHP(-WRONG_DAMAGE);
+        
+        showDamageEffect(); // <-- เรียกใช้ตอนหมดเวลา
 
         setTimeout(checkOutcome, 1000);
       } else {
@@ -631,7 +698,13 @@
     if (btn.textContent === correctMeaning) {
       btn.classList.add("choice-correct");
       state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
+      
+      // เพิ่มคอมโบ
       state.comboCount++;
+      if (state.comboCount >= 3) {
+        showComboEffect(state.comboCount); // <-- เรียกคอมโบถ้ามากกว่าหรือเท่ากับ 3
+      }
+      
       state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
       state.score += 100 * state.scoreMultiplier;
       hitBoss();
@@ -645,6 +718,8 @@
       state.comboCount = 0;
       state.scoreMultiplier = 1;
       updatePlayerHP(-WRONG_DAMAGE);
+      
+      showDamageEffect(); // <-- เรียกใช้ตอนตอบผิด
     }
     updateScoreUI();
     updateItemUI();

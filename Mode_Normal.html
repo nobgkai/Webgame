@@ -114,9 +114,35 @@
     border-right: 14px solid transparent;
     border-bottom: 15px solid white;
   }
+
+  /* EFFECT: DAMAGE BLUR */
+  #damage-overlay {
+    position: fixed;
+    inset: 0;
+    box-shadow: inset 0 0 100px 40px rgba(220, 38, 38, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 0.3s ease-in-out;
+  }
+  #damage-overlay.active {
+    opacity: 1;
+  }
+
+  /* EFFECT: COMBO POPUP */
+  @keyframes comboPop {
+    0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+    20% { opacity: 1; transform: scale(1.2) rotate(5deg); }
+    40% { transform: scale(1) rotate(0deg); }
+    80% { opacity: 1; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0.8) translateY(-40px); }
+  }
+  .combo-animate {
+    animation: comboPop 1.2s ease-out forwards;
+  }
 </style>
 </head>
-<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6">
+<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 overflow-hidden">
 
 <div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-2">
 
@@ -146,8 +172,8 @@
       <div class="flex items-center gap-2">
         <div class="bg-white/90 rounded-full px-2.5 py-1 shadow-md flex items-center gap-1 text-xs font-display font-bold text-amber-500">
           <i class="fa-solid fa-star text-yellow-400"></i>
-          <span>0</span>
-          <span class="text-[10px] text-gray-400">x1</span>
+          <span id="score-value">0</span>
+          <span id="combo-badge" class="text-[10px] text-gray-400">x1</span>
         </div>
         <button id="stop-btn" aria-label="หยุด" class="w-8 h-8 rounded-full bg-white text-purpleDark flex items-center justify-center shadow-md hover:bg-gray-100 transition">
           <i class="fa-solid fa-pause text-xs"></i>
@@ -260,6 +286,14 @@
     </div>
   </div>
 
+</div>
+
+<!-- ===================== OVERLAYS ===================== -->
+<div id="damage-overlay"></div>
+<div id="combo-container" class="fixed inset-0 flex items-center justify-center pointer-events-none z-[90] hidden">
+  <div id="combo-text" class="font-display font-black text-6xl md:text-7xl text-yellow-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.6)] text-center" style="-webkit-text-stroke: 2px #d97706;">
+    COMBO x3!
+  </div>
 </div>
 
 <!-- ===================== CUSTOM POPUP MODAL ===================== -->
@@ -389,6 +423,9 @@ let state = {
   bossIndex: 0,
   playerHP: 100,
   bossHP: 100,
+  score: 0,
+  comboCount: 0,
+  scoreMultiplier: 1,
   currentQuestions: [],
   questionIndex: 0,
   timer: null,
@@ -419,11 +456,34 @@ const el = {
   itemHealCount: document.getElementById('item-heal-count'),
   itemHintCount: document.getElementById('item-hint-count'),
   itemSkipCount: document.getElementById('item-skip-count'),
+  scoreValue: document.getElementById('score-value'),
+  comboBadge: document.getElementById('combo-badge'),
 };
 
 function normalize(str) {
   return str.trim().replace(/\s+/g, ' ');
 }
+
+/* ========== เอฟเฟกต์ที่เพิ่มใหม่ ========== */
+function showDamageEffect() {
+  const overlay = document.getElementById('damage-overlay');
+  overlay.classList.add('active');
+  setTimeout(() => overlay.classList.remove('active'), 300);
+}
+
+function showComboEffect(combo) {
+  const container = document.getElementById('combo-container');
+  const text = document.getElementById('combo-text');
+  
+  text.textContent = `COMBO x${combo}!`;
+  container.classList.remove('hidden');
+  text.classList.remove('combo-animate');
+  void text.offsetWidth;
+  text.classList.add('combo-animate');
+  
+  setTimeout(() => container.classList.add('hidden'), 1200);
+}
+/* ======================================= */
 
 function speak(text) {
   if (!('speechSynthesis' in window)) return;
@@ -444,6 +504,11 @@ function updateBossHP() {
   const hp = Math.max(state.bossHP, 0);
   el.bossHpBar.style.width = hp + '%';
   el.bossHpText.textContent = `${hp}/100`;
+}
+
+function updateScoreUI() {
+  el.scoreValue.textContent = state.score;
+  el.comboBadge.textContent = `x${state.scoreMultiplier}`;
 }
 
 function updateItemUI() {
@@ -577,6 +642,7 @@ function loadQuestion() {
   el.answerInput.focus();
 
   updateItemUI();
+  updateScoreUI();
   startTimer();
 }
 
@@ -604,8 +670,14 @@ function handleTimeout() {
   el.answerInput.disabled = true;
   el.answerInput.classList.add('ring-wrong');
   state.playerHP -= WRONG_DAMAGE;
+  
+  state.comboCount = 0;
+  state.scoreMultiplier = 1;
+  updateScoreUI();
+  
   updatePlayerHP();
   shakeScreen();
+  showDamageEffect();
   showFeedback(false, q.meaning);
   updateItemUI();
   checkOutcomeThenNext();
@@ -623,14 +695,29 @@ function submitAnswer(typed) {
   if (isCorrect) {
     el.answerInput.classList.add('ring-correct');
     state.bossHP -= DAMAGE_PER_HIT;
+    
+    state.comboCount++;
+    if (state.comboCount >= 3) {
+      showComboEffect(state.comboCount);
+    }
+    state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
+    state.score += 100 * state.scoreMultiplier;
+    
+    updateScoreUI();
     updateBossHP();
     hitBoss();
     showFeedback(true, q.meaning);
   } else {
     el.answerInput.classList.add('ring-wrong');
     state.playerHP -= WRONG_DAMAGE;
+    
+    state.comboCount = 0;
+    state.scoreMultiplier = 1;
+    updateScoreUI();
+    
     updatePlayerHP();
     shakeScreen();
+    showDamageEffect();
     showFeedback(false, q.meaning);
   }
 
@@ -722,7 +809,7 @@ function showGameModal(config) {
   if (theme.showStats) {
     statsBox.classList.remove('hidden');
     document.getElementById('modal-boss-count').textContent = `${state.bossIndex}/5`;
-    document.getElementById('modal-score').textContent = `0`;
+    document.getElementById('modal-score').textContent = `${state.score}`;
   } else {
     statsBox.classList.add('hidden');
   }
