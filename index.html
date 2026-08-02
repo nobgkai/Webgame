@@ -157,6 +157,32 @@
   }
   .bounce-hint { animation: bounce-hint 1.6s ease-in-out infinite; }
 
+  /* Mute Button Animations */
+  .audio-btn-hover:hover {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  .audio-btn-active:active {
+    transform: scale(0.95);
+  }
+  
+  /* Music Note Animation */
+  @keyframes float-note {
+    0% { transform: translateY(0) scale(0.8); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 0.8; }
+    100% { transform: translateY(-20px) scale(1.2); opacity: 0; }
+  }
+  .playing-music::before, .playing-music::after {
+    content: '♪';
+    position: absolute;
+    color: #FF9FC3;
+    font-size: 14px;
+    top: -5px;
+    animation: float-note 2s infinite;
+  }
+  .playing-music::before { left: 5px; animation-delay: 0s; }
+  .playing-music::after { right: 5px; animation-delay: 1s; content: '♫'; color: #6FCBE8; }
+
   /* Prevent horizontal overflow on all elements */
   header,
   section,
@@ -254,6 +280,22 @@
 </style>
 </head>
 <body class="antialiased">
+
+<!-- =========================================
+     AUDIO ELEMENT
+========================================= -->
+<!-- เปลี่ยน src เป็นลิงก์เพลงประกอบน่ารักๆ ที่คุณต้องการ -->
+<audio id="bgm" loop>
+  <source src="https://www.w3schools.com/html/horse.mp3" type="audio/ogg">
+</audio>
+
+<!-- =========================================
+     FLOATING AUDIO BUTTON
+========================================= -->
+<button id="audio-toggle-btn" 
+  class="fixed bottom-6 left-6 z-50 bg-white border-4 border-mintDeep text-ink w-14 h-14 rounded-full flex items-center justify-center shadow-btn transition-all duration-300 audio-btn-hover audio-btn-active">
+  <i id="audio-icon" class="fa-solid fa-volume-xmark text-2xl text-rose-400"></i>
+</button>
 
 <!-- =========================================
      HERO SECTION
@@ -671,9 +713,34 @@
     'ยาก (Hard)': { th: 'ยาก', color: '#FF9FC3', icon: '🔥' },
   };
 
-document.querySelectorAll('[data-level]').forEach(btn => {
+  /* ========== AUDIO CONTROL SYSTEM ========== */
+  const audioBtn = document.getElementById('audio-toggle-btn');
+  const audioIcon = document.getElementById('audio-icon');
+  const bgm = document.getElementById('bgm');
+  
+  let isPlaying = false;
+  
+  // ตั้งค่าระดับเสียงเริ่มต้น (0.0 ถึง 1.0)
+  bgm.volume = 0.3;
+
+  audioBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      bgm.pause();
+      audioIcon.className = 'fa-solid fa-volume-xmark text-2xl text-rose-400';
+      audioBtn.classList.remove('playing-music', 'border-skyDeep');
+      audioBtn.classList.add('border-mintDeep');
+    } else {
+      bgm.play();
+      audioIcon.className = 'fa-solid fa-volume-high text-2xl text-skyDeep';
+      audioBtn.classList.add('playing-music', 'border-skyDeep');
+      audioBtn.classList.remove('border-mintDeep');
+    }
+    isPlaying = !isPlaying;
+  });
+
+  /* ========== GAME START SYSTEM ========== */
+  document.querySelectorAll('[data-level]').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      // ดึง element ปุ่มที่มี attribute data-level จริงๆ
       const targetBtn = e.target.closest('[data-level]');
       if (!targetBtn) return;
 
@@ -681,7 +748,6 @@ document.querySelectorAll('[data-level]').forEach(btn => {
       const url = targetBtn.getAttribute('data-url');
       const info = levelLabels[level] || { th: level, color: '#BEE7F5', icon: '✨' };
 
-      // Fallback: หาก SweetAlert2 ไม่โหลด ให้เปลี่ยนหน้าทันที
       if (typeof Swal === 'undefined') {
         if (url) window.location.href = url;
         return;
