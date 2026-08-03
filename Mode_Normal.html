@@ -228,9 +228,7 @@
     </form>
 
     <!-- Feedback Banner / Answer Reveal -->
-    <div id="feedback-box" class="w-full bg-skyLight/80 text-gray-700 rounded-xl py-1.5 px-3 font-thai text-xs md:text-sm font-medium">
-      เฉลยคำตอบ ........................
-    </div>
+    <div id="feedback-box" class="hidden mt-3 rounded-xl px-3 py-2 font-thai text-xs md:text-sm items-center justify-center gap-1.5"></div>
   </div>
 
   <!-- Timer Bar -->
@@ -532,18 +530,22 @@ function hitBoss() {
 }
 
 function showFeedback(correct, correctAnswer) {
+  el.feedbackBox.classList.remove("hidden", "bg-emerald-100", "text-emerald-700", "bg-rose-100", "text-rose-700");
+  el.feedbackBox.classList.add("flex", "rounded-xl", "px-3", "py-2", "font-thai", "text-xs", "md:text-sm", "items-center", "justify-center", "gap-1.5");
+
   if (correct) {
-    el.feedbackBox.className = 'w-full bg-emerald-100 text-emerald-700 rounded-xl py-1.5 px-3 font-thai text-xs md:text-sm font-semibold flex items-center justify-center gap-1.5';
+    el.feedbackBox.classList.add("bg-emerald-100", "text-emerald-800");
     el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง!`;
   } else {
-    el.feedbackBox.className = 'w-full bg-rose-100 text-rose-700 rounded-xl py-1.5 px-3 font-thai text-xs md:text-sm font-semibold flex items-center justify-center gap-1.5';
-    el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลยคำตอบ: ${correctAnswer}`;
+    el.feedbackBox.classList.add("bg-rose-100", "text-rose-800");
+    el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctAnswer}"`;
   }
 }
 
 function hideFeedback() {
-  el.feedbackBox.className = 'w-full bg-skyLight/80 text-gray-700 rounded-xl py-1.5 px-3 font-thai text-xs md:text-sm font-medium';
-  el.feedbackBox.innerHTML = 'เฉลยคำตอบ ........................';
+  el.feedbackBox.classList.add("hidden");
+  el.feedbackBox.classList.remove("flex", "bg-emerald-100", "text-emerald-800", "bg-rose-100", "text-rose-800");
+  el.feedbackBox.innerHTML = "";
 }
 
 function shuffleArray(array) {

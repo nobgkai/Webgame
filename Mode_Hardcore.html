@@ -636,7 +636,7 @@
     const q = state.currentQuestions[state.questionIndex];
 
     el.questionHanzi.textContent = q.hanzi;
-    el.questionPinyin.textContent = q.pinyin;
+    el.questionPinyin.textContent = q.qPinyin;
 
     if (q.questionImage) {
       el.questionImage.src = `${q.questionImage}?v=${Date.now()}`;

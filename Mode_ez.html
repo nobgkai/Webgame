@@ -239,10 +239,10 @@
     </div>
 
     <!-- Question Text -->
-    <p id="question-hanzi" class="font-hanzi text-3xl md:text-4xl font-bold text-gray-800 mb-0.5">三点半</p>
-    <p id="question-pinyin" class="text-xs md:text-sm font-thai text-gray-500 mb-3">sān diǎn bàn</p>
+    <p id="question-hanzi" class="font-hanzi text-3xl md:text-4xl font-bold text-gray-800 mb-0.5"></p>
+    <p id="question-pinyin" class="text-xs md:text-sm font-thai text-gray-500 mb-3"></p>
 
-    <!-- CHOICES GRID (4 ข้อสำหรับ EASY MODE) -->
+    <!-- CHOICES GRID -->
     <div id="choices-grid" class="grid grid-cols-2 gap-2 mt-2"></div>
   </div>
 
@@ -360,81 +360,52 @@
 </div>
 
 <script>
-  /* DATA & CONFIG (EASY MODE) */
+  /* DATA & CONFIG (EASY MODE) - อัปเดตด้วยชุดคำถามใหม่ */
   const bossData = [
     {
       id: 1,
-      name: "จอมเวลา ปีศาจนาฬิกา",
+      name: "จอมเวลา (ช่วงที่ 1)",
       hp: 100,
       bossImage: "public/1.png",
       themeColor: "#1E88E5",
       questions: [
-        { hanzi: "一点", pinyin: "yī diǎn", meaning: "ตีหนึ่ง", isClock: true, time: "01:00", questionImage: "public/Clock/01_00.png" },
-        { hanzi: "两点", pinyin: "liǎng diǎn", meaning: "สองนาฬิกา", isClock: true, time: "02:00", questionImage: "public/Clock/02_00.png" },
-        { hanzi: "三点半", pinyin: "sān diǎn bàn", meaning: "สามโมงครึ่ง", isClock: true, time: "03:30", questionImage: "public/Clock/03_30.png" },
-        { hanzi: "十分", pinyin: "shí fēn", meaning: "สิบนาที", isClock: true, time: "00:10", questionImage: "public/Clock/10minutes.png" },
-        { hanzi: "五点十分", pinyin: "wǔ diǎn shí fēn", meaning: "ห้าโมงสิบนาที", isClock: true, time: "05:10", questionImage: "public/Clock/05_10.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "一点", aPinyin: "yī diǎn", meaning: "1:00", image: "public/Clock/01_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "两点", aPinyin: "liǎng diǎn", meaning: "2:00", image: "public/Clock/02_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "三点", aPinyin: "sān diǎn", meaning: "3:00", image: "public/Clock/03_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "四点", aPinyin: "sì diǎn", meaning: "4:00", image: "public/Clock/04_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "五点", aPinyin: "wǔ diǎn", meaning: "5:00", image: "public/Clock/05_00.png" }
       ],
     },
     {
       id: 2,
-      name: "ปีศาจปฏิทิน (สัปดาห์)",
+      name: "จอมเวลา (ช่วงที่ 2)",
       hp: 100,
       bossImage: "public/2.png",
       themeColor: "#E53935",
       questions: [
-        { hanzi: "一月一号", pinyin: "yī yuè yī hào", meaning: "วันที่ 1 มกราคม", questionImage: "public/Calendar/1jan.png" },
-        { hanzi: "星期一", pinyin: "xīngqīyī", meaning: "วันจันทร์", questionImage: "public/Calendar/Monday.png" },
-        { hanzi: "星期天", pinyin: "xīngqītiān", meaning: "วันอาทิตย์", questionImage: "public/Calendar/Sunday.png" },
-        { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
-        { hanzi: "明天", pinyin: "míngtiān", meaning: "พรุ่งนี้", questionImage: "public/Calendar/Tomorrow.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "六点", aPinyin: "liù diǎn", meaning: "6:00", image: "public/Clock/06_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "七点", aPinyin: "qī diǎn", meaning: "7:00", image: "public/Clock/07_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "八点", aPinyin: "bā diǎn", meaning: "8:00", image: "public/Clock/08_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "九点", aPinyin: "jiǔ diǎn", meaning: "9:00", image: "public/Clock/09_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "十点", aPinyin: "shí diǎn", meaning: "10:00", image: "public/Clock/10_00.png" }
       ],
     },
     {
       id: 3,
-      name: "ปีศาจปฏิทิน (เดือน)",
+      name: "จอมเวลา (ช่วงที่ 3)",
       hp: 100,
       bossImage: "public/3.png",
-      themeColor: "#E53935",
-      questions: [
-        { hanzi: "一月", pinyin: "yī yuè", meaning: "เดือนมกราคม", questionImage: "public/Calendar/January.png" },
-        { hanzi: "二月", pinyin: "èr yuè", meaning: "เดือนกุมภาพันธ์", questionImage: "public/Calendar/February.png" },
-        { hanzi: "星期几", pinyin: "xīngqī jǐ", meaning: "วันอะไร (ของสัปดาห์)", questionImage: "public/Calendar/WhichDay.png" },
-        { hanzi: "下午", pinyin: "xiàwǔ", meaning: "ตอนบ่าย", questionImage: "public/Time/Afternoon.png" },
-        { hanzi: "晚上", pinyin: "wǎnshang", meaning: "ตอนกลางคืน/ตอนเย็น", questionImage: "public/Time/Evening.png" },
-      ],
-    },
-    {
-      id: 4,
-      name: "ปีศาจสภาพอากาศ",
-      hp: 100,
-      bossImage: "public/4.png",
-      themeColor: "#00ACC1",
-      questions: [
-        { hanzi: "天气", pinyin: "tiānqì", meaning: "สภาพอากาศ", questionImage: "public/Weather/weather.png" },
-        { hanzi: "热", pinyin: "rè", meaning: "ร้อน", questionImage: "public/Weather/hot.png" },
-        { hanzi: "冷", pinyin: "lěng", meaning: "หนาว", questionImage: "public/Weather/cold.png" },
-        { hanzi: "下雨", pinyin: "xià yǔ", meaning: "ฝนตก", questionImage: "public/Weather/weather.png" },
-        { hanzi: "晴天", pinyin: "qíngtiān", meaning: "วันที่ท้องฟ้าแจ่มใส", questionImage: "public/Weather/weather.png" },
-      ],
-    },
-    {
-      id: 5,
-      name: "ปีศาจสถานที่",
-      hp: 100,
-      bossImage: "public/5.png",
       themeColor: "#43A047",
       questions: [
-        { hanzi: "学校", pinyin: "xuéxiào", meaning: "โรงเรียน", questionImage: "public/Locations/school.png" },
-        { hanzi: "医院", pinyin: "yīyuàn", meaning: "โรงพยาบาล", questionImage: "public/Locations/hospital.png" },
-        { hanzi: "商店", pinyin: "shāngdiàn", meaning: "ร้านค้า", questionImage: "public/Locations/store.png" },
-        { hanzi: "前面", pinyin: "qiánmiàn", meaning: "ด้านหน้า", questionImage: "public/Locations/front.png" },
-        { hanzi: "后面", pinyin: "hòumiàn", meaning: "ด้านหลัง", questionImage: "public/Locations/back.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "十一点", aPinyin: "shíyī diǎn", meaning: "11:00", image: "public/Clock/11_00.png" },
+        { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "十二点", aPinyin: "shí'èr diǎn", meaning: "12:00", image: "public/Clock/12_00.png" },
+        { qHanzi: "这是几分？", qPinyin: "zhè shì jǐ fēn?", aHanzi: "十分", aPinyin: "shí fēn", meaning: "10 นาที", image: "public/Clock/10m.png" },
+        { qHanzi: "这是几分？", qPinyin: "zhè shì jǐ fēn?", aHanzi: "二十分", aPinyin: "èrshí fēn", meaning: "20 นาที", image: "public/Clock/20m.png" },
+        { qHanzi: "这是几分？", qPinyin: "zhè shì jǐ fēn?", aHanzi: "三十分", aPinyin: "sānshí fēn", meaning: "30 นาที", image: "public/Clock/30m.png" }
       ],
-    },
+    }
   ];
 
-  const FALLBACK_DISTRACTORS = ["เที่ยงคืน", "เมื่อวาน", "สัปดาห์หน้า", "ตอนเช้า", "ตีสี่", "เดือนหน้า"];
   const TOTAL_BOSSES = bossData.length;
   const WRONG_DAMAGE = 10;
   const HEAL_AMOUNT = 30;
@@ -489,35 +460,35 @@
     return [...arr].sort(() => Math.random() - 0.5);
   }
 
-  function buildMeaningPool() {
-    const set = new Set(FALLBACK_DISTRACTORS);
-    bossData.forEach((b) => b.questions.forEach((q) => set.add(q.meaning)));
+  // ปรับการสร้างชุดคำตอบให้ใช้ ภาษาจีน + พินอิน (แทนคำแปลภาษาไทย)
+  function buildChoicePool() {
+    const set = new Set();
+    bossData.forEach((b) => b.questions.forEach((q) => set.add(q.aHanzi + " (" + q.aPinyin + ")")));
     return [...set];
   }
-  const MEANING_POOL = buildMeaningPool();
+  const CHOICE_POOL = buildChoicePool();
 
   let currentLocalAudio = null;
-  function speak(text) {
+ function speak(text) {
     if (!text) return;
-    try {
-      if (currentLocalAudio) {
-        currentLocalAudio.pause();
-        currentLocalAudio.currentTime = 0;
-      }
-      const cleanText = text.trim();
-      const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
-      const audio = new Audio(audioPath);
-      audio.referrerPolicy = "no-referrer";
-      currentLocalAudio = audio;
-      audio.play().catch((err) => {
-        console.warn(`Local audio playback failed for "${cleanText}":`, err);
-      });
-    } catch (e) {
-      console.error("Audio playback error:", e);
+    
+    // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
+    if ('speechSynthesis' in window) {
+      // ยกเลิกเสียงที่กำลังพูดอยู่ (ถ้ามีการกดรัวๆ)
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN'; // ตั้งค่าเป็นภาษาจีน (จีนแผ่นดินใหญ่)
+      utterance.rate = 0.85;     // ปรับความเร็ว (1 คือปกติ, < 1 คือช้าลงเพื่อให้ฟังง่ายขึ้น)
+      utterance.pitch = 1;      // ระดับเสียง
+      
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn("เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
+      alert("ขออภัย เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
     }
   }
 
-  /* ========== เอฟเฟกต์ที่เพิ่มใหม่ ========== */
   function showDamageEffect() {
     const overlay = document.getElementById('damage-overlay');
     overlay.classList.add('active');
@@ -533,17 +504,14 @@
     text.textContent = `COMBO x${combo}!`;
     container.classList.remove('hidden');
     
-    // รีเซ็ตแอนิเมชันให้เล่นใหม่ทุกครั้ง
     text.classList.remove('combo-animate');
-    void text.offsetWidth; // กระตุ้นการเรนเดอร์ใหม่ (Trigger Reflow)
+    void text.offsetWidth;
     text.classList.add('combo-animate');
     
-    // ซ่อนเมื่อแอนิเมชันจบ (1.2 วินาที)
     setTimeout(() => {
       container.classList.add('hidden');
     }, 1200);
   }
-  /* ======================================= */
 
   function updatePlayerHP(delta) {
     const hp = Math.max(0, state.playerHP);
@@ -596,7 +564,6 @@
       document.body.style.backgroundColor = boss.themeColor;
     }
 
-
     el.bossName.textContent = boss.name;
     el.bossProgress.textContent = index + 1;
     el.bossImage.src = `${boss.bossImage}?v=${Date.now()}`;
@@ -611,28 +578,40 @@
   }
 
   function loadQuestion() {
+    
     state.answered = false;
     el.choicesGrid.innerHTML = "";
     const q = state.currentQuestions[state.questionIndex];
 
-    el.questionHanzi.textContent = q.hanzi;
-    el.questionPinyin.textContent = q.pinyin;
+    // อัปเดตให้รองรับคีย์ qHanzi / qPinyin
+    el.questionHanzi.textContent = q.qHanzi;
+    el.questionPinyin.textContent = q.qPinyin;
 
-    if (q.questionImage) {
-      el.questionImage.src = `${q.questionImage}?v=${Date.now()}`;
+    if (q.image) {
+      el.questionImage.src = `${q.image}?v=${Date.now()}`;
       el.questionImage.classList.remove("hidden");
     } else {
       el.questionImage.classList.add("hidden");
     }
 
-    const fakeAnswers = shuffle(MEANING_POOL.filter((m) => m !== q.meaning)).slice(0, 3);
-    const choices = shuffle([q.meaning, ...fakeAnswers]);
+    // สร้างตัวเลือก (จีน + พินอิน)
+    const correctChoice = q.aHanzi + " (" + q.aPinyin + ")";
+    const fakeAnswers = shuffle(CHOICE_POOL.filter((c) => c !== correctChoice)).slice(0, 3);
+    const choices = shuffle([correctChoice, ...fakeAnswers]);
 
-    choices.forEach((meaning) => {
+   choices.forEach((choiceText) => {
       const btn = document.createElement("button");
-      btn.className = "choice-btn py-2.5 px-3 font-thai font-semibold text-xs md:text-sm w-full";
-      btn.textContent = meaning;
-      btn.onclick = () => handleChoice(btn, q.meaning);
+      btn.className = "choice-btn py-2 px-2 font-hanzi font-semibold w-full flex flex-col items-center justify-center leading-tight";
+      btn.dataset.choice = choiceText; // เก็บค่าที่แท้จริงไว้เปรียบเทียบ
+
+      // แยกข้อความตัวอักษรจีนกับพินอินเพื่อจัดรูปแบบสวยงาม
+      const [hanzi, pinyinStr] = choiceText.split(" (");
+      const pinyin = pinyinStr ? pinyinStr.replace(")", "") : "";
+      
+      btn.dataset.hanzi = hanzi; // <-- เพิ่มบรรทัดนี้ เพื่อเก็บอักษรจีนไว้ให้อ่านออกเสียง
+
+      btn.innerHTML = `<span class="mb-0.5 text-base md:text-lg">${hanzi}</span><span class="text-[11px] font-thai opacity-80">${pinyin}</span>`;
+      btn.onclick = () => handleChoice(btn, correctChoice);
       el.choicesGrid.appendChild(btn);
     });
 
@@ -674,7 +653,7 @@
         updateScoreUI();
         updatePlayerHP(-WRONG_DAMAGE);
         
-        showDamageEffect(); // <-- เรียกใช้ตอนหมดเวลา
+        showDamageEffect();
 
         setTimeout(checkOutcome, 1000);
       } else {
@@ -689,20 +668,22 @@
     cancelAnimationFrame(timerState.reqFrame);
   }
 
-  function handleChoice(btn, correctMeaning) {
+  function handleChoice(btn, correctChoice) {
     if (state.answered) return;
     state.answered = true;
     stopTimer();
     document.querySelectorAll(".choice-btn").forEach((b) => (b.disabled = true));
 
-    if (btn.textContent === correctMeaning) {
+    // เช็คจาก dataset.choice 
+    if (btn.dataset.choice === correctChoice) {
       btn.classList.add("choice-correct");
       state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
       
-      // เพิ่มคอมโบ
+      speak(btn.dataset.hanzi);
+
       state.comboCount++;
       if (state.comboCount >= 3) {
-        showComboEffect(state.comboCount); // <-- เรียกคอมโบถ้ามากกว่าหรือเท่ากับ 3
+        showComboEffect(state.comboCount);
       }
       
       state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
@@ -712,14 +693,14 @@
     } else {
       btn.classList.add("choice-wrong");
       document.querySelectorAll(".choice-btn").forEach((b) => {
-        if (b.textContent === correctMeaning) b.classList.add("choice-correct");
+        if (b.dataset.choice === correctChoice) b.classList.add("choice-correct");
       });
       state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
       state.comboCount = 0;
       state.scoreMultiplier = 1;
       updatePlayerHP(-WRONG_DAMAGE);
       
-      showDamageEffect(); // <-- เรียกใช้ตอนตอบผิด
+      showDamageEffect();
     }
     updateScoreUI();
     updateItemUI();
@@ -893,7 +874,8 @@
         updatePlayerHP(0);
       } else if (type === "fifty") {
         const q = state.currentQuestions[state.questionIndex];
-        const wrong = [...document.querySelectorAll(".choice-btn")].filter((b) => b.textContent !== q.meaning);
+        const correctChoice = q.aHanzi + " (" + q.aPinyin + ")";
+        const wrong = [...document.querySelectorAll(".choice-btn")].filter((b) => b.dataset.choice !== correctChoice);
         shuffle(wrong).slice(0, 2).forEach((b) => {
           b.disabled = true;
           b.style.opacity = "0.3";
