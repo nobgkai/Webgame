@@ -222,31 +222,30 @@
       <i class="fa-solid fa-volume-high text-sm"></i>
     </button>
 
-    <!-- Question Image -->
+    <!-- Question Image (ถ้าไม่มีรูปจะถูกซ่อนอัตโนมัติ) -->
     <div class="flex justify-center my-2">
       <img id="question-image" src="" alt="" 
         class="max-h-32 md:max-h-36 w-auto object-contain drop-shadow-md rounded-xl transition-all duration-200 hidden">
     </div>
 
-    <!-- Question Text -->
-    <p id="question-hanzi" class="font-hanzi text-3xl md:text-4xl font-bold text-gray-800 mb-0.5">生日</p>
-    <p id="question-pinyin" class="text-xs md:text-sm font-thai text-plum mb-3">shēngrì</p>
+    <!-- Question Text (แสดงเฉพาะตัวจีนใน Hard Mode) -->
+    <p id="question-hanzi" class="font-hanzi text-4xl md:text-5xl font-bold text-gray-800 my-3">八点</p>
 
     <!-- FORM INPUT (HARD MODE) -->
     <form id="answer-form" class="flex flex-col items-center gap-2 mt-2">
       <input
         type="text"
         id="answer-input"
-        placeholder="พิมพ์คำตอบที่นี่..."
+        placeholder="พิมพ์ Pinyin (เช่น ba dian)..."
         autocomplete="off"
         autocapitalize="off"
         spellcheck="false"
-        class="w-full text-center font-thai text-base md:text-lg border-2 border-purple-200 rounded-2xl px-3 py-2 outline-none focus:border-purpleDark bg-gray-50 text-gray-800 shadow-inner"
+        class="w-full text-center font-display text-base md:text-lg border-2 border-purple-200 rounded-2xl px-3 py-2.5 outline-none focus:border-purpleDark bg-gray-50 text-gray-800 shadow-inner"
       />
       <button
         type="submit"
         id="submit-btn"
-        class="w-full font-display font-bold bg-mintDeep hover:bg-emerald-500 active:scale-95 text-white rounded-2xl py-2.5 shadow-md transition text-sm"
+        class="w-full font-display font-bold bg-mintDeep hover:bg-emerald-500 active:scale-95 text-white rounded-2xl py-2.5 shadow-md transition text-sm md:text-base"
       >
         ส่งคำตอบ
       </button>
@@ -320,39 +319,31 @@
 
 <!-- ===================== CUSTOM POPUP MODAL ===================== -->
 <div id="game-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-  
   <div id="modal-card" class="relative w-full max-w-xs md:max-w-sm bg-white rounded-[36px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 border-[#68cbf8] transition-all duration-200 scale-100">
-    
-    <!-- ริบบิ้นด้านบน -->
     <div id="modal-ribbon" class="absolute -top-7 left-1/2 -translate-x-1/2 w-[82%] py-2 bg-[#68cbf8] border-2 border-white rounded-2xl shadow-md flex items-center justify-center
       before:content-[''] before:absolute before:top-2 before:-left-5 before:w-6 before:h-full before:bg-[#46b3e3] before:-z-10 before:rounded-l-md before:[clip-path:polygon(100%_0,0_0,40%_50%,0_100%,100%_100%)]
       after:content-[''] after:absolute after:top-2 after:-right-5 after:w-6 after:h-full after:bg-[#46b3e3] after:-z-10 after:rounded-r-md after:[clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]">
       <span id="modal-ribbon-text" class="font-display font-extrabold text-2xl md:text-3xl text-white tracking-wider uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]">BRAKE TIME</span>
     </div>
 
-    <!-- รูปแพนด้า -->
     <div class="flex justify-center items-center my-3 h-28">
       <img id="modal-panda-img" src="public/Alert/2.png" alt="Panda Status" 
            onerror="this.style.display='none';" 
            class="h-full object-contain drop-shadow-md">
     </div>
 
-    <!-- ข้อความหลัก -->
     <h3 id="modal-title" class="font-display font-extrabold text-2xl md:text-3xl text-[#4b4b4b] mb-2">หยุดชั่วคราว</h3>
     
-    <!-- ข้อความย่อย -->
     <div class="flex justify-center mb-5">
       <div id="modal-subtitle-box" class="bg-[#eef9ed] rounded-full px-5 py-1.5 inline-block">
         <p id="modal-subtitle" class="font-thai text-xs md:text-sm text-[#618a66] font-semibold">บางทีการพักก็ทำให้ดีขึ้น</p>
       </div>
     </div>
 
-    <!-- บล็อกสถิติคะแนน -->
     <div id="modal-stats" class="bg-emerald-50 rounded-2xl py-1.5 px-4 mb-4 text-xs font-thai text-emerald-800 font-semibold hidden">
       ปราบบอสได้ <span id="modal-boss-count">0/5</span> • คะแนน <span id="modal-score">0</span>
     </div>
 
-    <!-- Action Buttons -->
     <div id="modal-actions" class="flex gap-3 justify-center mt-2">
       <button id="modal-btn-home" class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#58cbf5] hover:bg-[#45bce7] active:translate-y-0.5 shadow-[0_4px_0_#3aa1c7] transition text-sm md:text-base">
         กลับหน้าแรก
@@ -361,24 +352,33 @@
         เล่นต่อ
       </button>
     </div>
-
   </div>
 </div>
 
 <script>
-  /* BOSS & QUESTION DATA (HARD MODE) */
+  /* BOSS & QUESTION DATA (15 QUESTIONS PER BOSS) */
   const bossData = [
     {
       id: 1,
       name: "จอมเวลา ปีศาจนาฬิกา",
-      themeColor: "#1E88E5",
+      themeColor: "#9871FA",
       questions: [
         { hanzi: "八点", pinyin: "bā diǎn", meaning: "8:00 น.", questionImage: "public/Clock/08_00.png" },
         { hanzi: "十点十五分", pinyin: "shí diǎn shíwǔ fēn", meaning: "10:15 น.", questionImage: "public/Clock/10_15.png" },
         { hanzi: "三点半", pinyin: "sān diǎn bàn", meaning: "3:30 น.", questionImage: "public/Clock/03_30.png" },
         { hanzi: "早上", pinyin: "zǎoshang", meaning: "ตอนเช้า", questionImage: "public/Clock/morning.png" },
         { hanzi: "晚上", pinyin: "wǎnshang", meaning: "ตอนเย็น", questionImage: "public/Clock/evening.png" },
-      ],
+        { hanzi: "ตอนนี้", pinyin: "xiànzài", meaning: "ตอนนี้", questionImage: "" },
+        { hanzi: "点", pinyin: "diǎn", meaning: "โมง / นาฬิกา", questionImage: "" },
+        { hanzi: "分", pinyin: "fēn", meaning: "นาที", questionImage: "" },
+        { hanzi: "半", pinyin: "bàn", meaning: "ครึ่ง", questionImage: "" },
+        { hanzi: "刻", pinyin: "kè", meaning: "15 นาที", questionImage: "" },
+        { hanzi: "小时", pinyin: "xiǎoshí", meaning: "ชั่วโมง", questionImage: "" },
+        { hanzi: "分钟", pinyin: "fēnzhōng", meaning: "นาที (ระยะเวลา)", questionImage: "" },
+        { hanzi: "中午", pinyin: "zhōngwǔ", meaning: "ตอนเที่ยง", questionImage: "" },
+        { hanzi: "下午", pinyin: "xiàwǔ", meaning: "ตอนบ่าย", questionImage: "" },
+        { hanzi: "几点", pinyin: "jǐ diǎn", meaning: "กี่โมง", questionImage: "" }
+      ]
     },
     {
       id: 2,
@@ -390,7 +390,17 @@
         { hanzi: "星期天", pinyin: "xīngqītiān", meaning: "วันอาทิตย์", questionImage: "public/Calendar/Sunday.png" },
         { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
         { hanzi: "昨天", pinyin: "zuótiān", meaning: "เมื่อวาน", questionImage: "public/Calendar/Yesterday.png" },
-      ],
+        { hanzi: "今天", pinyin: "jīntiān", meaning: "วันนี้", questionImage: "" },
+        { hanzi: "明天", pinyin: "míngtiān", meaning: "พรุ่งนี้", questionImage: "" },
+        { hanzi: "年", pinyin: "nián", meaning: "ปี", questionImage: "" },
+        { hanzi: "月", pinyin: "yuè", meaning: "เดือน", questionImage: "" },
+        { hanzi: "号", pinyin: "hào", meaning: "วันที่", questionImage: "" },
+        { hanzi: "星期", pinyin: "xīngqī", meaning: "สัปดาห์ / อาทิตย์", questionImage: "" },
+        { hanzi: "星期五", pinyin: "xīngqīwǔ", meaning: "วันศุกร์", questionImage: "" },
+        { hanzi: "周末", pinyin: "zhōumò", meaning: "สุดสัปดาห์", questionImage: "" },
+        { hanzi: "今年", pinyin: "jīnnián", meaning: "ปีนี้", questionImage: "" },
+        { hanzi: "明年", pinyin: "míngnián", meaning: "ปีหน้า", questionImage: "" }
+      ]
     },
     {
       id: 3,
@@ -401,8 +411,18 @@
         { hanzi: "睡觉", pinyin: "shuìjiào", meaning: "นอนหลับ", questionImage: "public/Daily/sleep.png" },
         { hanzi: "吃饭", pinyin: "chīfàn", meaning: "กินข้าว", questionImage: "public/Daily/beatrice.png" },
         { hanzi: "看书", pinyin: "kànshū", meaning: "อ่านหนังสือ", questionImage: "public/Daily/readabook.png" },
-        { hanzi: "工作", pinyin: "gōngzuò", meaning: "ทำงาน", questionImage: "public/Daily/work.png" },
-      ],
+        { hanzi: "喝水", pinyin: "hē shuǐ", meaning: "ดื่มน้ำ", questionImage: "" },
+        { hanzi: "去学校", pinyin: "qù xuéxiào", meaning: "ไปโรงเรียน", questionImage: "" },
+        { hanzi: "回家", pinyin: "huí jiā", meaning: "กลับบ้าน", questionImage: "" },
+        { hanzi: "刷牙", pinyin: "shuāyá", meaning: "แปรงฟัน", questionImage: "" },
+        { hanzi: "洗澡", pinyin: "xǐzǎo", meaning: "อาบน้ำ", questionImage: "" },
+        { hanzi: "做作业", pinyin: "zuò zuòyè", meaning: "ทำการบ้าน", questionImage: "" },
+        { hanzi: "看电视", pinyin: "kàn diànshì", meaning: "ดูทีวี", questionImage: "" },
+        { hanzi: "听音乐", pinyin: "tīng yīnyuè", meaning: "ฟังเพลง", questionImage: "" },
+        { hanzi: "玩游戏", pinyin: "wán yóuxì", meaning: "เล่นเกม", questionImage: "" },
+        { hanzi: "买东西", pinyin: "mǎi dōngxi", meaning: "ซื้อของ", questionImage: "" },
+        { hanzi: "上班", pinyin: "shàngbān", meaning: "ไปทำงาน", questionImage: "public/Daily/work.png" }
+      ]
     },
     {
       id: 4,
@@ -414,7 +434,17 @@
         { hanzi: "商店", pinyin: "shāngdiàn", meaning: "ร้านค้า", questionImage: "public/Locations/store.png" },
         { hanzi: "前面", pinyin: "qiánmiàn", meaning: "ข้างหน้า", questionImage: "public/Locations/front.png" },
         { hanzi: "后面", pinyin: "hòumiàn", meaning: "ข้างหลัง", questionImage: "public/Locations/back.png" },
-      ],
+        { hanzi: "超市", pinyin: "chāoshì", meaning: "ซูเปอร์มาร์เก็ต", questionImage: "" },
+        { hanzi: "饭馆", pinyin: "fànguǎn", meaning: "ร้านอาหาร", questionImage: "" },
+        { hanzi: "家", pinyin: "jiā", meaning: "บ้าน", questionImage: "" },
+        { hanzi: "中国", pinyin: "zhōngguó", meaning: "ประเทศจีน", questionImage: "" },
+        { hanzi: "北京", pinyin: "běijīng", meaning: "ปักกิ่ง", questionImage: "" },
+        { hanzi: "上", pinyin: "shàng", meaning: "ข้างบน", questionImage: "" },
+        { hanzi: "下", pinyin: "xià", meaning: "ข้างล่าง", questionImage: "" },
+        { hanzi: "里", pinyin: "lǐ", meaning: "ข้างใน", questionImage: "" },
+        { hanzi: "左边", pinyin: "zuǒbiān", meaning: "ด้านซ้าย", questionImage: "" },
+        { hanzi: "右边", pinyin: "yòubiān", meaning: "ด้านขวา", questionImage: "" }
+      ]
     },
     {
       id: 5,
@@ -426,15 +456,26 @@
         { hanzi: "热", pinyin: "rè", meaning: "ร้อน", questionImage: "public/Weather/hot.png" },
         { hanzi: "下雨", pinyin: "xià yǔ", meaning: "ฝนตก", questionImage: "public/Weather/weather.png" },
         { hanzi: "晴天", pinyin: "qíngtiān", meaning: "แจ่มใส", questionImage: "public/Weather/weather.png" },
-      ],
-    },
+        { hanzi: "下雪", pinyin: "xià xuě", meaning: "หิมะตก", questionImage: "" },
+        { hanzi: "阴天", pinyin: "yīntiān", meaning: "ฟ้าครึ้ม", questionImage: "" },
+        { hanzi: "刮风", pinyin: "guā fēng", meaning: "ลมพัด", questionImage: "" },
+        { hanzi: "好", pinyin: "hǎo", meaning: "ดี", questionImage: "" },
+        { hanzi: "大", pinyin: "dà", meaning: "ใหญ่", questionImage: "" },
+        { hanzi: "小", pinyin: "xiǎo", meaning: "เล็ก", questionImage: "" },
+        { hanzi: "多", pinyin: "duō", meaning: "มาก", questionImage: "" },
+        { hanzi: "少", pinyin: "shǎo", meaning: "น้อย", questionImage: "" },
+        { hanzi: "漂亮", pinyin: "piàoliang", meaning: "สวย", questionImage: "" },
+        { hanzi: "高兴", pinyin: "gāoxìng", meaning: "ดีใจ", questionImage: "" }
+      ]
+    }
   ];
 
   /* GAME STATE & CONFIG */
   const TOTAL_BOSSES = 5;
-  const QUESTION_TIME = 5000; // 5 seconds
+  const QUESTIONS_PER_BOSS = 15; // 👈 กำหนดเป็น 15 คำถาม
+  const QUESTION_TIME = 8000; // 8 วินาที สำหรับพิมพ์ Pinyin
   const WRONG_DAMAGE = 30;
-  const HEAL_AMOUNT = 5;
+  const HEAL_AMOUNT = 20;
 
   let state = {
     bossIndex: 0,
@@ -448,7 +489,7 @@
     items: { heal: 1, hint: 1, skip: 1 },
     currentQuestions: [],
     questionIndex: 0,
-    damagePerHit: 20,
+    damagePerHit: 100 / QUESTIONS_PER_BOSS, // ดาเมจตอบถูก 15 ข้อบอสร่วงพอดี
     answered: false,
     hintUsedThisQuestion: false,
     paused: false,
@@ -474,7 +515,6 @@
     timerBar: document.getElementById("timer-bar"),
     questionImage: document.getElementById("question-image"),
     questionHanzi: document.getElementById("question-hanzi"),
-    questionPinyin: document.getElementById("question-pinyin"),
     playSoundBtn: document.getElementById("play-sound-btn"),
     answerForm: document.getElementById("answer-form"),
     answerInput: document.getElementById("answer-input"),
@@ -485,7 +525,7 @@
 
   el.bossTotal.textContent = TOTAL_BOSSES;
 
-  /* HELPER FUNCTION: SHUFFLE ARRAY */
+  /* HELPER FUNCTIONS */
   function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -495,39 +535,38 @@
     return a;
   }
 
-  function normalize(str) {
-    return str.trim().toLowerCase().replace(/\s+/g, " ");
+  // แปลง Pinyin มีวรรณยุกต์ให้กลายเป็นตัวอักษรธรรมดาและลบช่องว่างเพื่อเปรียบเทียบคำตอบได้ง่ายขึ้น
+  function removeToneMarks(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ü/g, "v")
+      .replace(/Ü/g, "V")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
   }
 
-  /* ========== เอฟเฟกต์ที่เพิ่มใหม่ ========== */
   function showDamageEffect() {
     const overlay = document.getElementById('damage-overlay');
     overlay.classList.add('active');
-    setTimeout(() => {
-      overlay.classList.remove('active');
-    }, 300);
+    setTimeout(() => overlay.classList.remove('active'), 300);
   }
 
   function showComboEffect(combo) {
     const container = document.getElementById('combo-container');
     const text = document.getElementById('combo-text');
-    
     text.textContent = `COMBO x${combo}!`;
     container.classList.remove('hidden');
     text.classList.remove('combo-animate');
-    void text.offsetWidth; // Trigger Reflow
+    void text.offsetWidth;
     text.classList.add('combo-animate');
-    
-    setTimeout(() => {
-      container.classList.add('hidden');
-    }, 1200);
+    setTimeout(() => container.classList.add('hidden'), 1200);
   }
-  /* ======================================= */
 
   function updatePlayerHP(delta) {
     const hp = Math.max(0, state.playerHP);
     el.playerHPBar.style.width = hp + "%";
-    el.playerHPText.textContent = `${hp}/100`;
+    el.playerHPText.textContent = `${Math.round(hp)}/100`;
 
     if (delta && delta < 0) {
       el.container.classList.add("shake");
@@ -539,7 +578,7 @@
     const hp = Math.max(0, state.bossHP);
     const percent = (hp / state.bossMaxHP) * 100;
     el.bossHPBar.style.width = percent + "%";
-    el.bossHPText.textContent = `${hp}/${state.bossMaxHP}`;
+    el.bossHPText.textContent = `${Math.round(hp)}/${state.bossMaxHP}`;
   }
 
   function updateScoreUI() {
@@ -584,14 +623,14 @@
     setTimeout(() => el.bossImage.classList.remove("hit"), 350);
   }
 
-  function showFeedback(correct, correctAnswer) {
+  function showFeedback(correct, correctPinyin) {
     el.feedbackBox.classList.remove("hidden", "bg-emerald-100", "text-emerald-800", "bg-rose-100", "text-rose-800");
     if (correct) {
       el.feedbackBox.classList.add("flex", "bg-emerald-100", "text-emerald-800");
-      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง!`;
+      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง! (${correctPinyin})`;
     } else {
       el.feedbackBox.classList.add("flex", "bg-rose-100", "text-rose-800");
-      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctAnswer}"`;
+      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctPinyin}"`;
     }
   }
 
@@ -617,9 +656,9 @@
     el.bossProgress.textContent = index + 1;
     el.bossImage.src = `public/${boss.id}.png?v=${Date.now()}`;
     
-    // สุ่มคำถามตั้งแต่โหลดบอส
+    // สุ่มคำถามทั้ง 15 ข้อ
     state.currentQuestions = shuffle(boss.questions);
-    state.damagePerHit = Math.ceil(100 / boss.questions.length) || 20;
+    state.damagePerHit = 100 / state.currentQuestions.length;
 
     updatePlayerHP();
     updateBossHP();
@@ -635,10 +674,12 @@
 
     const q = state.currentQuestions[state.questionIndex];
 
+    // HARD MODE: แสดงเฉพาะ Hanzi (ตัวจีน) เท่านั้น!
     el.questionHanzi.textContent = q.hanzi;
-    el.questionPinyin.textContent = q.qPinyin;
+    el.questionPinyin.textContent = q.pinyin;
 
-    if (q.questionImage) {
+    // แสดง/ซ่อนรูปภาพ
+    if (q.questionImage && q.questionImage.trim() !== "") {
       el.questionImage.src = `${q.questionImage}?v=${Date.now()}`;
       el.questionImage.classList.remove("hidden");
     } else {
@@ -704,10 +745,9 @@
     
     updateScoreUI();
     updatePlayerHP(-WRONG_DAMAGE);
-    showFeedback(false, q.meaning);
+    showFeedback(false, q.pinyin);
     updateItemUI();
-    
-    showDamageEffect(); // <-- เรียกใช้ตอนหมดเวลา
+    showDamageEffect();
 
     setTimeout(checkOutcome, 1200);
   }
@@ -719,32 +759,31 @@
     stopTimer();
     el.answerInput.disabled = true;
 
-    const isCorrect = normalize(typed) === normalize(q.meaning);
+    // เปรียบเทียบ Pinyin โดยตัด tone marks ออก
+    const isCorrect = removeToneMarks(typed) === removeToneMarks(q.pinyin);
 
     if (isCorrect) {
       el.answerInput.classList.add("ring-correct");
       state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
       
-      // เพิ่มคอมโบ
       state.comboCount++;
       if (state.comboCount >= 3) {
-        showComboEffect(state.comboCount); // <-- เรียกใช้ตอนคอมโบถึง
+        showComboEffect(state.comboCount);
       }
 
       state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
       state.score += 100 * state.scoreMultiplier;
       hitBoss();
       updateBossHP();
-      showFeedback(true, q.meaning);
+      showFeedback(true, q.pinyin);
     } else {
       el.answerInput.classList.add("ring-wrong");
       state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
       state.comboCount = 0;
       state.scoreMultiplier = 1;
       updatePlayerHP(-WRONG_DAMAGE);
-      showFeedback(false, q.meaning);
-      
-      showDamageEffect(); // <-- เรียกใช้ตอนตอบผิด
+      showFeedback(false, q.pinyin);
+      showDamageEffect();
     }
 
     updateScoreUI();
@@ -763,6 +802,7 @@
 
     state.questionIndex++;
     
+    // เมื่อเล่นครบทั้ง 15 ข้อ ให้สุ่มสลับตำแหน่งทั้ง 15 คำถามใหม่อีกรอบ
     if (state.questionIndex >= state.currentQuestions.length) {
       const originalQuestions = bossData[state.bossIndex].questions;
       state.currentQuestions = shuffle(originalQuestions);
@@ -929,7 +969,8 @@
       } else if (type === "hint" && !state.hintUsedThisQuestion) {
         state.hintUsedThisQuestion = true;
         const q = state.currentQuestions[state.questionIndex];
-        el.answerInput.value = q.meaning.charAt(0);
+        const cleanPinyin = removeToneMarks(q.pinyin);
+        el.answerInput.value = cleanPinyin.substring(0, 2); // ใบ้ตัวอักษร 2 ตัวแรก
         el.answerInput.focus();
         const len = el.answerInput.value.length;
         el.answerInput.setSelectionRange(len, len);
