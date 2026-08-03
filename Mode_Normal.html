@@ -343,15 +343,25 @@ const bossData = [
     name: "จอมเวลา ปีศาจนาฬิกา",
     theme: "Time — ชั่วโมงและนาที",
     image: "public/1.png",
-    bgColor: "#9871FA", // สีพื้นหลังประจำตัวบอส 1
-    circleColor: "rgba(255, 255, 255, 0.15)", // สีตัวกลมๆ ลอยไปมา
-    bgImage: "public/bg/bg-boss-1.jpg", // ภาพพื้นหลัง (ใส่ path รูปของคุณ)
+    bgColor: "#9871FA",
+    circleColor: "rgba(255, 255, 255, 0.15)",
+    bgImage: "public/bg/bg-boss-1.jpg",
     questions: [
-      { hanzi: "八点",       pinyin: "bā diǎn",             meaning: "8:00 น.",  questionImage: "public/Clock/08_00.png" },
-      { hanzi: "十点十五分", pinyin: "shí diǎn shíwǔ fēn",  meaning: "10:15 น.", questionImage: "public/Clock/10_15.png" },
-      { hanzi: "三点半",     pinyin: "sān diǎn bàn",        meaning: "3:30 น.",  questionImage: "public/Clock/03_30.png" },
-      { hanzi: "早上",       pinyin: "zǎoshang",            meaning: "ตอนเช้า", questionImage: "public/Clock/morning.png" },
-      { hanzi: "晚上",       pinyin: "wǎnshang",            meaning: "ตอนเย็น", questionImage: "public/Clock/evening.png" },
+      { hanzi: "八点", pinyin: "bā diǎn", meaning: "8:00 น.", questionImage: "public/Clock/08_00.png" },
+      { hanzi: "十点十五分", pinyin: "shí diǎn shíwǔ fēn", meaning: "10:15 น.", questionImage: "public/Clock/10_15.png" },
+      { hanzi: "三点半", pinyin: "sān diǎn bàn", meaning: "3:30 น.", questionImage: "public/Clock/03_30.png" },
+      { hanzi: "早上", pinyin: "zǎoshang", meaning: "ตอนเช้า", questionImage: "public/Clock/morning.png" },
+      { hanzi: "晚上", pinyin: "wǎnshang", meaning: "ตอนเย็น", questionImage: "public/Clock/evening.png" },
+      { hanzi: "现在", pinyin: "xiànzài", meaning: "ตอนนี้", questionImage: "" },
+      { hanzi: "点", pinyin: "diǎn", meaning: "โมง / นาฬิกา", questionImage: "" },
+      { hanzi: "分", pinyin: "fēn", meaning: "นาที", questionImage: "" },
+      { hanzi: "半", pinyin: "bàn", meaning: "ครึ่ง", questionImage: "" },
+      { hanzi: "刻", pinyin: "kè", meaning: "15 นาที (1 เค่อ)", questionImage: "" },
+      { hanzi: "小时", pinyin: "xiǎoshí", meaning: "ชั่วโมง", questionImage: "" },
+      { hanzi: "分钟", pinyin: "fēnzhōng", meaning: "นาที (ระยะเวลา)", questionImage: "" },
+      { hanzi: "中午", pinyin: "zhōngwǔ", meaning: "ตอนเที่ยง", questionImage: "" },
+      { hanzi: "下午", pinyin: "xiàwǔ", meaning: "ตอนบ่าย", questionImage: "" },
+      { hanzi: "几点", pinyin: "jǐ diǎn", meaning: "กี่โมง", questionImage: "" }
     ]
   },
   {
@@ -359,15 +369,25 @@ const bossData = [
     name: "อสูรปฏิทิน",
     theme: "Calendar / Dates — วัน วันที่ สัปดาห์",
     image: "public/2.png",
-    bgColor: "#E53935", // สีแดง
-    circleColor: "rgba(255, 235, 59, 0.25)", // ตัวกลมๆ สีเหลืองทอง
+    bgColor: "#E53935",
+    circleColor: "rgba(255, 235, 59, 0.25)",
     bgImage: "public/bg/bg-boss-2.jpg",
     questions: [
-      { hanzi: "一月一号", pinyin: "yī yuè yī hào",  meaning: "วันที่ 1 มกราคม",       questionImage: "public/Calendar/1jan.png" },
-      { hanzi: "星期一",   pinyin: "xīngqīyī",       meaning: "วันจันทร์",             questionImage: "public/Calendar/Monday.png" },
-      { hanzi: "星期天",   pinyin: "xīngqītiān",     meaning: "วันอาทิตย์",           questionImage: "public/Calendar/Sunday.png" },
+      { hanzi: "一月一号", pinyin: "yī yuè yī hào", meaning: "วันที่ 1 มกราคม", questionImage: "public/Calendar/1jan.png" },
+      { hanzi: "星期一", pinyin: "xīngqīyī", meaning: "วันจันทร์", questionImage: "public/Calendar/Monday.png" },
+      { hanzi: "星期天", pinyin: "xīngqītiān", meaning: "วันอาทิตย์", questionImage: "public/Calendar/Sunday.png" },
       { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
-      { hanzi: "昨天",     pinyin: "zuótiān",        meaning: "เมื่อวาน",             questionImage: "public/Calendar/Yesterday.png" },
+      { hanzi: "昨天", pinyin: "zuótiān", meaning: "เมื่อวาน", questionImage: "public/Calendar/Yesterday.png" },
+      { hanzi: "今天", pinyin: "jīntiān", meaning: "วันนี้", questionImage: "" },
+      { hanzi: "明天", pinyin: "míngtiān", meaning: "พรุ่งนี้", questionImage: "" },
+      { hanzi: "年", pinyin: "nián", meaning: "ปี", questionImage: "" },
+      { hanzi: "月", pinyin: "yuè", meaning: "เดือน", questionImage: "" },
+      { hanzi: "号", pinyin: "hào", meaning: "วันที่", questionImage: "" },
+      { hanzi: "星期", pinyin: "xīngqī", meaning: "สัปดาห์ / อาทิตย์", questionImage: "" },
+      { hanzi: "星期五", pinyin: "xīngqīwǔ", meaning: "วันศุกร์", questionImage: "" },
+      { hanzi: "周末", pinyin: "zhōumò", meaning: "เสาร์-อาทิตย์ (สุดสัปดาห์)", questionImage: "" },
+      { hanzi: "今年", pinyin: "jīnnián", meaning: "ปีนี้", questionImage: "" },
+      { hanzi: "明年", pinyin: "míngnián", meaning: "ปีหน้า", questionImage: "" }
     ]
   },
   {
@@ -375,13 +395,25 @@ const bossData = [
     name: "ราชาสไลม์กิจวัตร",
     theme: "Daily Activities — กิจวัตรประจำวันและคำกริยา",
     image: "public/3.png",
-    bgColor: "#1E88E5", // สีฟ้า/น้ำเงิน
-    circleColor: "rgba(129, 212, 250, 0.3)", // ตัวกลมๆ สีฟ้าอ่อน
+    bgColor: "#1E88E5",
+    circleColor: "rgba(129, 212, 250, 0.3)",
     bgImage: "public/bg/bg-boss-3.jpg",
     questions: [
-      { hanzi: "起床", pinyin: "qǐchuáng", meaning: "ตื่นนอน",     questionImage: "" },
-      { hanzi: "睡觉", pinyin: "shuìjiào", meaning: "นอนหลับ",     questionImage: "" },
-      { hanzi: "吃饭", pinyin: "chīfàn",   meaning: "กินข้าว",     questionImage: "" },
+      { hanzi: "起床", pinyin: "qǐchuáng", meaning: "ตื่นนอน", questionImage: "" },
+      { hanzi: "睡觉", pinyin: "shuìjiào", meaning: "นอนหลับ", questionImage: "" },
+      { hanzi: "吃饭", pinyin: "chīfàn", meaning: "กินข้าว", questionImage: "" },
+      { hanzi: "喝水", pinyin: "hē shuǐ", meaning: "ดื่มน้ำ", questionImage: "" },
+      { hanzi: "去学校", pinyin: "qù xuéxiào", meaning: "ไปโรงเรียน", questionImage: "" },
+      { hanzi: "回家", pinyin: "huí jiā", meaning: "กลับบ้าน", questionImage: "" },
+      { hanzi: "刷牙", pinyin: "shuāyá", meaning: "แปรงฟัน", questionImage: "" },
+      { hanzi: "洗澡", pinyin: "xǐzǎo", meaning: "อาบน้ำ", questionImage: "" },
+      { hanzi: "做作业", pinyin: "zuò zuòyè", meaning: "ทำการบ้าน", questionImage: "" },
+      { hanzi: "看书", pinyin: "kàn shū", meaning: "อ่านหนังสือ", questionImage: "" },
+      { hanzi: "看电视", pinyin: "kàn diànshì", meaning: "ดูทีวี", questionImage: "" },
+      { hanzi: "听音乐", pinyin: "tīng yīnyuè", meaning: "ฟังเพลง", questionImage: "" },
+      { hanzi: "玩游戏", pinyin: "wán yóuxì", meaning: "เล่นเกม", questionImage: "" },
+      { hanzi: "买东西", pinyin: "mǎi dōngxi", meaning: "ซื้อของ", questionImage: "" },
+      { hanzi: "上班", pinyin: "shàngbān", meaning: "ไปทำงาน", questionImage: "" }
     ]
   },
   {
@@ -389,12 +421,25 @@ const bossData = [
     name: "ก็อบลินเส้นทาง",
     theme: "Locations — สถานที่และทิศทาง",
     image: "public/4.png",
-    bgColor: "#43A047", // สีเขียว
-    circleColor: "rgba(200, 230, 201, 0.3)", // ตัวกลมๆ สีเขียวอ่อน
+    bgColor: "#43A047",
+    circleColor: "rgba(200, 230, 201, 0.3)",
     bgImage: "public/bg/bg-boss-4.jpg",
     questions: [
-      { hanzi: "医院", pinyin: "yīyuàn",    meaning: "โรงพยาบาล", questionImage: "" },
-      { hanzi: "学校", pinyin: "xuéxiào",   meaning: "โรงเรียน",  questionImage: "" },
+      { hanzi: "医院", pinyin: "yīyuàn", meaning: "โรงพยาบาล", questionImage: "" },
+      { hanzi: "学校", pinyin: "xuéxiào", meaning: "โรงเรียน", questionImage: "" },
+      { hanzi: "商店", pinyin: "shāngdiàn", meaning: "ร้านค้า", questionImage: "" },
+      { hanzi: "超市", pinyin: "chāoshì", meaning: "ซูเปอร์มาร์เก็ต", questionImage: "" },
+      { hanzi: "饭馆", pinyin: "fànguǎn", meaning: "ร้านอาหาร", questionImage: "" },
+      { hanzi: "家", pinyin: "jiā", meaning: "บ้าน", questionImage: "" },
+      { hanzi: "中国", pinyin: "zhōngguó", meaning: "ประเทศจีน", questionImage: "" },
+      { hanzi: "北京", pinyin: "běijīng", meaning: "ปักกิ่ง", questionImage: "" },
+      { hanzi: "上", pinyin: "shàng", meaning: "ข้างบน", questionImage: "" },
+      { hanzi: "下", pinyin: "xià", meaning: "ข้างล่าง", questionImage: "" },
+      { hanzi: "前", pinyin: "qián", meaning: "ข้างหน้า", questionImage: "" },
+      { hanzi: "后", pinyin: "hòu", meaning: "ข้างหลัง", questionImage: "" },
+      { hanzi: "里", pinyin: "lǐ", meaning: "ข้างใน", questionImage: "" },
+      { hanzi: "左边", pinyin: "zuǒbiān", meaning: "ด้านซ้าย", questionImage: "" },
+      { hanzi: "右边", pinyin: "yòubiān", meaning: "ด้านขวา", questionImage: "" }
     ]
   },
   {
@@ -402,22 +447,36 @@ const bossData = [
     name: "มังกรลมฟ้าอากาศ",
     theme: "Weather — อากาศและคำคุณศัพท์",
     image: "public/5.png",
-    bgColor: "#00ACC1", // สีฟ้าอมเขียว (Cyan)
+    bgColor: "#00ACC1",
     circleColor: "rgba(255, 255, 255, 0.25)",
     bgImage: "public/bg/bg-boss-5.jpg",
     questions: [
-      { hanzi: "天气", pinyin: "tiānqì",    meaning: "อากาศ", questionImage: "" },
-      { hanzi: "冷",   pinyin: "lěng",      meaning: "หนาว",   questionImage: "" },
+      { hanzi: "天气", pinyin: "tiānqì", meaning: "อากาศ", questionImage: "" },
+      { hanzi: "冷", pinyin: "lěng", meaning: "หนาว", questionImage: "" },
+      { hanzi: "热", pinyin: "rè", meaning: "ร้อน", questionImage: "" },
+      { hanzi: "下雨", pinyin: "xià yǔ", meaning: "ฝนตก", questionImage: "" },
+      { hanzi: "下雪", pinyin: "xià xuě", meaning: "หิมะตก", questionImage: "" },
+      { hanzi: "晴天", pinyin: "qíngtiān", meaning: "วันฟ้าหลัว / แดดจัด", questionImage: "" },
+      { hanzi: "阴天", pinyin: "yīntiān", meaning: "วันฟ้าครึ้ม", questionImage: "" },
+      { hanzi: "刮风", pinyin: "guā fēng", meaning: "ลมพัด", questionImage: "" },
+      { hanzi: "好", pinyin: "hǎo", meaning: "ดี", questionImage: "" },
+      { hanzi: "大", pinyin: "dà", meaning: "ใหญ่", questionImage: "" },
+      { hanzi: "小", pinyin: "xiǎo", meaning: "เล็ก", questionImage: "" },
+      { hanzi: "多", pinyin: "duō", meaning: "เยอะ / มาก", questionImage: "" },
+      { hanzi: "少", pinyin: "shǎo", meaning: "น้อย", questionImage: "" },
+      { hanzi: "漂亮", pinyin: "piàoliang", meaning: "สวย", questionImage: "" },
+      { hanzi: "高兴", pinyin: "gāoxìng", meaning: "ดีใจ / มีความสุข", questionImage: "" }
     ]
-  },
+  }
 ];
 
 const TOTAL_BOSSES = 5;
-const QUESTIONS_PER_BOSS = 5;
+const QUESTIONS_PER_BOSS = 15;
 const QUESTION_TIME = 10; 
 const WRONG_DAMAGE = 20;
 const HEAL_AMOUNT = 10;
-const DAMAGE_PER_HIT = 100 / QUESTIONS_PER_BOSS;
+// const DAMAGE_PER_HIT = 100 / QUESTIONS_PER_BOSS;
+const DAMAGE_PER_HIT = 10;
 
 let state = {
   bossIndex: 0,
@@ -609,7 +668,7 @@ function checkOutcomeThenNext() {
 
     if (state.questionIndex >= state.currentQuestions.length) {
       const boss = bossData[state.bossIndex];
-      state.currentQuestions = shuffleArray(boss.questions);
+      state.currentQuestions = shuffleArray(boss.questions); // สุ่ม 15 ข้อใหม่อีกรอบ
       state.questionIndex = 0;
     }
 

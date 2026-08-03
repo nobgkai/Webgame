@@ -361,7 +361,7 @@
 
 <script>
   /* DATA & CONFIG (EASY MODE) */
-  const bossData = [
+const bossData = [
     {
       id: 1,
       name: "จอมเวลา ปีศาจนาฬิกา",
@@ -369,11 +369,21 @@
       bossImage: "public/1.png",
       themeColor: "#1E88E5",
       questions: [
-        { hanzi: "一点", pinyin: "yī diǎn", meaning: "ตีหนึ่ง", isClock: true, time: "01:00", questionImage: "public/Clock/01_00.png" },
+        { hanzi: "一点", pinyin: "yī diǎn", meaning: "ตีหนึ่ง / หนึ่งนาฬิกา", isClock: true, time: "01:00", questionImage: "public/Clock/01_00.png" },
         { hanzi: "两点", pinyin: "liǎng diǎn", meaning: "สองนาฬิกา", isClock: true, time: "02:00", questionImage: "public/Clock/02_00.png" },
         { hanzi: "三点半", pinyin: "sān diǎn bàn", meaning: "สามโมงครึ่ง", isClock: true, time: "03:30", questionImage: "public/Clock/03_30.png" },
         { hanzi: "十分", pinyin: "shí fēn", meaning: "สิบนาที", isClock: true, time: "00:10", questionImage: "public/Clock/10minutes.png" },
         { hanzi: "五点十分", pinyin: "wǔ diǎn shí fēn", meaning: "ห้าโมงสิบนาที", isClock: true, time: "05:10", questionImage: "public/Clock/05_10.png" },
+        { hanzi: "四点", pinyin: "sì diǎn", meaning: "สี่นาฬิกา" },
+        { hanzi: "六点半", pinyin: "liù diǎn bàn", meaning: "หกโมงครึ่ง" },
+        { hanzi: "八点", pinyin: "bā diǎn", meaning: "แปดนาฬิกา" },
+        { hanzi: "九点十五分", pinyin: "jiǔ diǎn shí wǔ fēn", meaning: "เก้าโมงสิบห้านาที" },
+        { hanzi: "十点", pinyin: "shí diǎn", meaning: "สิบนาฬิกา" },
+        { hanzi: "十二点", pinyin: "shí èr diǎn", meaning: "เที่ยง / สิบสองนาฬิกา" },
+        { hanzi: "五分", pinyin: "wǔ fēn", meaning: "ห้านาที" },
+        { hanzi: "半", pinyin: "bàn", meaning: "ครึ่ง" },
+        { hanzi: "点", pinyin: "diǎn", meaning: "โมง / นาฬิกา" },
+        { hanzi: "分", pinyin: "fēn", meaning: "นาที" }
       ],
     },
     {
@@ -388,6 +398,16 @@
         { hanzi: "星期天", pinyin: "xīngqītiān", meaning: "วันอาทิตย์", questionImage: "public/Calendar/Sunday.png" },
         { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
         { hanzi: "明天", pinyin: "míngtiān", meaning: "พรุ่งนี้", questionImage: "public/Calendar/Tomorrow.png" },
+        { hanzi: "星期二", pinyin: "xīngqī'èr", meaning: "วันอังคาร" },
+        { hanzi: "星期三", pinyin: "xīngqīsān", meaning: "วันพุธ" },
+        { hanzi: "星期四", pinyin: "xīngqīsì", meaning: "วันพฤหัสบดี" },
+        { hanzi: "星期五", pinyin: "xīngqīwǔ", meaning: "วันศุกร์" },
+        { hanzi: "星期六", pinyin: "xīngqīliù", meaning: "วันเสาร์" },
+        { hanzi: "今天", pinyin: "jīntiān", meaning: "วันนี้" },
+        { hanzi: "昨天", pinyin: "zuótiān", meaning: "เมื่อวาน" },
+        { hanzi: "号", pinyin: "hào", meaning: "วันที่" },
+        { hanzi: "星期", pinyin: "xīngqī", meaning: "สัปดาห์ / วัน" },
+        { hanzi: "几", pinyin: "jǐ", meaning: "กี่ / เท่าไหร่" }
       ],
     },
     {
@@ -402,6 +422,16 @@
         { hanzi: "星期几", pinyin: "xīngqī jǐ", meaning: "วันอะไร (ของสัปดาห์)", questionImage: "public/Calendar/WhichDay.png" },
         { hanzi: "下午", pinyin: "xiàwǔ", meaning: "ตอนบ่าย", questionImage: "public/Time/Afternoon.png" },
         { hanzi: "晚上", pinyin: "wǎnshang", meaning: "ตอนกลางคืน/ตอนเย็น", questionImage: "public/Time/Evening.png" },
+        { hanzi: "三月", pinyin: "sān yuè", meaning: "เดือนมีนาคม" },
+        { hanzi: "四月", pinyin: "sì yuè", meaning: "เดือนเมษายน" },
+        { hanzi: "五月", pinyin: "wǔ yuè", meaning: "เดือนพฤษภาคม" },
+        { hanzi: "六月", pinyin: "liù yuè", meaning: "เดือนมิถุนายน" },
+        { hanzi: "十二月", pinyin: "shí'èr yuè", meaning: "เดือนธันวาคม" },
+        { hanzi: "早上", pinyin: "zǎoshang", meaning: "ตอนเช้า" },
+        { hanzi: "中午", pinyin: "zhōngwǔ", meaning: "ตอนเที่ยง" },
+        { hanzi: "月", pinyin: "yuè", meaning: "เดือน" },
+        { hanzi: "上午", pinyin: "shàngwǔ", meaning: "ตอนสาย" },
+        { hanzi: "年", pinyin: "nián", meaning: "ปี" }
       ],
     },
     {
@@ -416,6 +446,16 @@
         { hanzi: "冷", pinyin: "lěng", meaning: "หนาว", questionImage: "public/Weather/cold.png" },
         { hanzi: "下雨", pinyin: "xià yǔ", meaning: "ฝนตก", questionImage: "public/Weather/weather.png" },
         { hanzi: "晴天", pinyin: "qíngtiān", meaning: "วันที่ท้องฟ้าแจ่มใส", questionImage: "public/Weather/weather.png" },
+        { hanzi: "刮风", pinyin: "guā fēng", meaning: "ลมพัด" },
+        { hanzi: "下雪", pinyin: "xià xuě", meaning: "หิมะตก" },
+        { hanzi: "阴天", pinyin: "yīntiān", meaning: "วันฟ้าครึ้ม" },
+        { hanzi: "太热了", pinyin: "tài rè le", meaning: "ร้อนเกินไปแล้ว" },
+        { hanzi: "太冷了", pinyin: "tài lěng le", meaning: "หนาวเกินไปแล้ว" },
+        { hanzi: "怎么样", pinyin: "zěnme yàng", meaning: "เป็นอย่างไรบ้าง" },
+        { hanzi: "水", pinyin: "shuǐ", meaning: "น้ำ" },
+        { hanzi: "大", pinyin: "dà", meaning: "ใหญ่ / หนัก (เช่น ฝนตกหนัก)" },
+        { hanzi: "小", pinyin: "xiǎo", meaning: "เล็ก / เบา (เช่น ฝนตกเบา)" },
+        { hanzi: "好", pinyin: "hǎo", meaning: "ดี" }
       ],
     },
     {
@@ -430,6 +470,16 @@
         { hanzi: "商店", pinyin: "shāngdiàn", meaning: "ร้านค้า", questionImage: "public/Locations/store.png" },
         { hanzi: "前面", pinyin: "qiánmiàn", meaning: "ด้านหน้า", questionImage: "public/Locations/front.png" },
         { hanzi: "后面", pinyin: "hòumiàn", meaning: "ด้านหลัง", questionImage: "public/Locations/back.png" },
+        { hanzi: "家", pinyin: "jiā", meaning: "บ้าน" },
+        { hanzi: "中国", pinyin: "zhōngguó", meaning: "ประเทศจีน" },
+        { hanzi: "饭店", pinyin: "fàndiàn", meaning: "ร้านอาหาร / โรงแรม" },
+        { hanzi: "上面", pinyin: "shàngmiàn", meaning: "ด้านบน" },
+        { hanzi: "下面", pinyin: "xiàmiàn", meaning: "ด้านล่าง" },
+        { hanzi: "里面", pinyin: "lǐmiàn", meaning: "ด้านใน" },
+        { hanzi: "在", pinyin: "zài", meaning: "อยู่ / อยู่ที่" },
+        { hanzi: "哪儿", pinyin: "nǎr", meaning: "ที่ไหน" },
+        { hanzi: "去", pinyin: "qù", meaning: "ไป" },
+        { hanzi: "来", pinyin: "lái", meaning: "มา" }
       ],
     },
   ];
@@ -601,7 +651,10 @@
     el.bossProgress.textContent = index + 1;
     el.bossImage.src = `${boss.bossImage}?v=${Date.now()}`;
     state.currentQuestions = shuffle(boss.questions);
-    state.damagePerHit = Math.ceil(boss.hp / state.currentQuestions.length) || 1;
+    state.damagePerHit = 20; 
+
+    //Math.ceil(boss.hp / state.currentQuestions.length) || 1
+    //ตีแบบคำนวณ ดาเมจ
 
     updatePlayerHP();
     updateBossHP();
@@ -730,11 +783,11 @@
     if (state.playerHP <= 0) return gameOver();
     if (state.bossHP <= 0) return bossDefeated();
 
-    state.questionIndex++;
-    if (state.questionIndex >= state.currentQuestions.length) {
-      state.currentQuestions = shuffle(bossData[state.bossIndex].questions);
-      state.questionIndex = 0;
-    }
+  state.questionIndex++;
+  if (state.questionIndex >= state.currentQuestions.length) {
+    state.currentQuestions = shuffle(bossData[state.bossIndex].questions);
+    state.questionIndex = 0;
+  }
     loadQuestion();
   }
 
