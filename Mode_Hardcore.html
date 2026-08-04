@@ -236,7 +236,7 @@
       <input
         type="text"
         id="answer-input"
-        placeholder="พิมพ์ Pinyin (เช่น ba dian)..."
+        placeholder="พิมพ์ตัวอักษรจีนที่นี่..."
         autocomplete="off"
         autocapitalize="off"
         spellcheck="false"
@@ -276,21 +276,21 @@
           <button data-item="heal" aria-label="ฮีล" class="icon-btn w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
             <i class="fa-solid fa-flask"></i>
           </button>
-          <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
+          <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">2</span>
         </div>
 
         <div class="relative">
           <button data-item="hint" aria-label="คำใบ้" class="icon-btn w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
             <i class="fa-solid fa-lightbulb"></i>
           </button>
-          <span id="item-hint-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
+          <span id="item-hint-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">3</span>
         </div>
 
         <div class="relative">
           <button data-item="skip" aria-label="ข้าม" class="icon-btn w-7 h-7 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-xs">
             <i class="fa-solid fa-forward font-bold"></i>
           </button>
-          <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
+          <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">3</span>
         </div>
       </div>
     </div>
@@ -473,7 +473,7 @@
   /* GAME STATE & CONFIG */
   const TOTAL_BOSSES = 5;
   const QUESTIONS_PER_BOSS = 15; // 👈 กำหนดเป็น 15 คำถาม
-  const QUESTION_TIME = 8000; // 8 วินาที สำหรับพิมพ์ Pinyin
+  const QUESTION_TIME = 8000; // 8 วินาที สำหรับพิมพ์
   const WRONG_DAMAGE = 30;
   const HEAL_AMOUNT = 20;
 
@@ -486,7 +486,7 @@
     comboCount: 0,
     scoreMultiplier: 1,
     bossesDefeated: 0,
-    items: { heal: 1, hint: 1, skip: 1 },
+    items: { heal: 2, hint: 3, skip: 3 }, // <--- แก้จำนวนการใช้ตัวช่วยตามที่ขอ
     currentQuestions: [],
     questionIndex: 0,
     damagePerHit: 100 / QUESTIONS_PER_BOSS, // ดาเมจตอบถูก 15 ข้อบอสร่วงพอดี
@@ -533,17 +533,6 @@
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
-  }
-
-  // แปลง Pinyin มีวรรณยุกต์ให้กลายเป็นตัวอักษรธรรมดาและลบช่องว่างเพื่อเปรียบเทียบคำตอบได้ง่ายขึ้น
-  function removeToneMarks(str) {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/ü/g, "v")
-      .replace(/Ü/g, "V")
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "");
   }
 
   function showDamageEffect() {
@@ -600,21 +589,21 @@
   let currentLocalAudio = null;
   function speak(text) {
     if (!text) return;
-    try {
-      if (currentLocalAudio) {
-        currentLocalAudio.pause();
-        currentLocalAudio.currentTime = 0;
-      }
-      const cleanText = text.trim();
-      const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
-      const audio = new Audio(audioPath);
-      audio.referrerPolicy = "no-referrer";
-      currentLocalAudio = audio;
-      audio.play().catch((err) => {
-        console.warn(`Local audio playback failed for "${cleanText}":`, err);
-      });
-    } catch (e) {
-      console.error("Audio playback error:", e);
+    
+    // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
+    if ('speechSynthesis' in window) {
+      // ยกเลิกเสียงที่กำลังพูดอยู่ (ถ้ามีการกดรัวๆ)
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN'; // ตั้งค่าเป็นภาษาจีน (จีนแผ่นดินใหญ่)
+      utterance.rate = 0.85;     // ปรับความเร็ว (1 คือปกติ, < 1 คือช้าลงเพื่อให้ฟังง่ายขึ้น)
+      utterance.pitch = 1;      // ระดับเสียง
+      
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn("เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
+      alert("ขออภัย เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
     }
   }
 
@@ -623,14 +612,14 @@
     setTimeout(() => el.bossImage.classList.remove("hit"), 350);
   }
 
-  function showFeedback(correct, correctPinyin) {
+  function showFeedback(correct, correctAnswerHanzi) {
     el.feedbackBox.classList.remove("hidden", "bg-emerald-100", "text-emerald-800", "bg-rose-100", "text-rose-800");
     if (correct) {
       el.feedbackBox.classList.add("flex", "bg-emerald-100", "text-emerald-800");
-      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง! (${correctPinyin})`;
+      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง! (${correctAnswerHanzi})`;
     } else {
       el.feedbackBox.classList.add("flex", "bg-rose-100", "text-rose-800");
-      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctPinyin}"`;
+      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctAnswerHanzi}"`;
     }
   }
 
@@ -676,11 +665,10 @@
 
     // HARD MODE: แสดงเฉพาะ Hanzi (ตัวจีน) เท่านั้น!
     el.questionHanzi.textContent = q.qHanzi;
-    el.questionPinyin.textContent = q.qPinyin;
 
     // แสดง/ซ่อนรูปภาพ
-    if (q.questionImage && q.questionImage.trim() !== "") {
-      el.questionImage.src = `${q.questionImage}?v=${Date.now()}`;
+    if (q.image && q.image.trim() !== "") { 
+      el.questionImage.src = `${q.image}?v=${Date.now()}`;
       el.questionImage.classList.remove("hidden");
     } else {
       el.questionImage.classList.add("hidden");
@@ -745,7 +733,7 @@
     
     updateScoreUI();
     updatePlayerHP(-WRONG_DAMAGE);
-    showFeedback(false, q.pinyin);
+    showFeedback(false, q.aHanzi); // เปลี่ยนเฉลยเป็นอักษรจีน
     updateItemUI();
     showDamageEffect();
 
@@ -759,8 +747,8 @@
     stopTimer();
     el.answerInput.disabled = true;
 
-    // เปรียบเทียบ Pinyin โดยตัด tone marks ออก
-    const isCorrect = removeToneMarks(typed) === removeToneMarks(q.pinyin);
+    // ตรวจสอบว่าคำตอบที่พิมพ์มาตรงกับตัวอักษรจีนหรือไม่
+    const isCorrect = (typed.trim() === q.aHanzi);
 
     if (isCorrect) {
       el.answerInput.classList.add("ring-correct");
@@ -775,14 +763,14 @@
       state.score += 100 * state.scoreMultiplier;
       hitBoss();
       updateBossHP();
-      showFeedback(true, q.pinyin);
+      showFeedback(true, q.aHanzi); // แสดงเฉลยอักษรจีน
     } else {
       el.answerInput.classList.add("ring-wrong");
       state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
       state.comboCount = 0;
       state.scoreMultiplier = 1;
       updatePlayerHP(-WRONG_DAMAGE);
-      showFeedback(false, q.pinyin);
+      showFeedback(false, q.aHanzi); // แสดงเฉลยอักษรจีน
       showDamageEffect();
     }
 
@@ -969,9 +957,16 @@
       } else if (type === "hint" && !state.hintUsedThisQuestion) {
         state.hintUsedThisQuestion = true;
         const q = state.currentQuestions[state.questionIndex];
-        const cleanPinyin = removeToneMarks(q.pinyin);
-        el.answerInput.value = cleanPinyin.substring(0, 2); // ใบ้ตัวอักษร 2 ตัวแรก
+        const hanziAnswer = q.aHanzi;
+        
+       // คำนวณความยาวครึ่งหนึ่งของตัวอักษรจีน (ปัดเศษขึ้น)
+        const halfLength = Math.ceil(hanziAnswer.length / 2); 
+        
+        // นำตัวอักษรจีนครึ่งแรกไปใส่ในช่องพิมพ์
+        el.answerInput.value = hanziAnswer.substring(0, halfLength); 
         el.answerInput.focus();
+        
+        // เลื่อนเคอร์เซอร์ไปรอพิมพ์ต่อท้าย
         const len = el.answerInput.value.length;
         el.answerInput.setSelectionRange(len, len);
       } else if (type === "skip") {

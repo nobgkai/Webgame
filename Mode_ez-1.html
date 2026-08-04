@@ -239,10 +239,10 @@
     </div>
 
     <!-- Question Text -->
-    <p id="question-hanzi" class="font-hanzi text-3xl md:text-4xl font-bold text-gray-800 mb-0.5"></p>
-    <p id="question-pinyin" class="text-xs md:text-sm font-thai text-gray-500 mb-3"></p>
+    <p id="question-hanzi" class="font-hanzi text-3xl md:text-4xl font-bold text-gray-800 mb-0.5">三点半</p>
+    <p id="question-pinyin" class="text-xs md:text-sm font-thai text-gray-500 mb-3">sān diǎn bàn</p>
 
-    <!-- CHOICES GRID -->
+    <!-- CHOICES GRID (4 ข้อสำหรับ EASY MODE) -->
     <div id="choices-grid" class="grid grid-cols-2 gap-2 mt-2"></div>
   </div>
 
@@ -268,21 +268,21 @@
           <button data-item="heal" aria-label="ฮีล" class="icon-btn w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
             <i class="fa-solid fa-flask"></i>
           </button>
-          <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">2</span>
+          <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
         </div>
 
         <div class="relative">
           <button data-item="fifty" aria-label="ตัดตัวเลือก" class="icon-btn w-7 h-7 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-xs">
             <i class="fa-solid fa-code-branch"></i>
           </button>
-          <span id="item-fifty-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">3</span>
+          <span id="item-fifty-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
         </div>
 
         <div class="relative">
           <button data-item="skip" aria-label="ข้าม" class="icon-btn w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
             <i class="fa-solid fa-forward font-bold"></i>
           </button>
-          <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">3</span>
+          <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">1</span>
         </div>
       </div>
     </div>
@@ -360,7 +360,7 @@
 </div>
 
 <script>
-  /* DATA & CONFIG (EASY MODE) - อัปเดตด้วยชุดคำถามใหม่ */
+  /* DATA & CONFIG (EASY MODE) */
 const bossData = [
     {
       id: 1,
@@ -369,22 +369,22 @@ const bossData = [
       bossImage: "public/1.png",
       themeColor: "#1E88E5",
       questions: [
-      { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "一点", aPinyin: "yī diǎn", meaning: "1:00", image: "public/Clock/01_00.png" },
-      { qHanzi: "钟表上是几点？", qPinyin: "zhōngbiǎo shàng shì jǐ diǎn?", aHanzi: "两点", aPinyin: "liǎng diǎn", meaning: "2:00", image: "public/Clock/02_00.png" },
-      { qHanzi: "请问，几点了？", qPinyin: "qǐngwèn, jǐ diǎn le?", aHanzi: "三点", aPinyin: "sān diǎn", meaning: "3:00", image: "public/Clock/03_00.png" },
-      { qHanzi: "图片里是几点？", qPinyin: "túpiàn lǐ shì jǐ diǎn?", aHanzi: "四点", aPinyin: "sì diǎn", meaning: "4:00", image: "public/Clock/04_00.png" },
-      { qHanzi: "现在的时间是？", qPinyin: "xiànzài de shíjiān shì?", aHanzi: "五点", aPinyin: "wǔ diǎn", meaning: "5:00", image: "public/Clock/05_00.png" },
-      { qHanzi: "这是几点钟？", qPinyin: "zhè shì jǐ diǎn zhōng?", aHanzi: "六点", aPinyin: "liù diǎn", meaning: "6:00", image: "public/Clock/06_00.png" },
-      { qHanzi: "告诉我，现在几点。", qPinyin: "gàosu wǒ, xiànzài jǐ diǎn.", aHanzi: "七点", aPinyin: "qī diǎn", meaning: "7:00", image: "public/Clock/07_00.png" },
-      { qHanzi: "看时钟，几点了？", qPinyin: "kàn shízhōng, jǐ diǎn le?", aHanzi: "八点", aPinyin: "bā diǎn", meaning: "8:00", image: "public/Clock/08_00.png" },
-      { qHanzi: "几点？", qPinyin: "jǐ diǎn?", aHanzi: "九点", aPinyin: "jiǔ diǎn", meaning: "9:00", image: "public/Clock/09_00.png" },
-      { qHanzi: "现在的准确时间是？", qPinyin: "xiànzài de zhǔnquè shíjiān shì?", aHanzi: "十点", aPinyin: "shí diǎn", meaning: "10:00", image: "public/Clock/10_00.png" },
-      { qHanzi: "请看图，几点了？", qPinyin: "qǐng kàn tú, jǐ diǎn le?", aHanzi: "十一点", aPinyin: "shíyī diǎn", meaning: "11:00", image: "public/Clock/11_00.png" },
-      { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "十二点", aPinyin: "shí'èr diǎn", meaning: "12:00", image: "public/Clock/12_00.png" },
-      { qHanzi: "这是几分？", qPinyin: "zhè shì jǐ fēn?", aHanzi: "十分", aPinyin: "shí fēn", meaning: "10 นาที", image: "public/Clock/10m.png" },
-      { qHanzi: "图片显示几分？", qPinyin: "túpiàn xiǎnshì jǐ fēn?", aHanzi: "二十分", aPinyin: "èrshí fēn", meaning: "20 นาที", image: "public/Clock/20m.png" },
-      { qHanzi: "钟表上是几分？", qPinyin: "zhōngbiǎo shàng shì jǐ fēn?", aHanzi: "三十分", aPinyin: "sānshí fēn", meaning: "30 นาที", image: "public/Clock/30m.png" },
-      ]
+        { hanzi: "一点", pinyin: "yī diǎn", meaning: "ตีหนึ่ง / หนึ่งนาฬิกา", isClock: true, time: "01:00", questionImage: "public/Clock/01_00.png" },
+        { hanzi: "两点", pinyin: "liǎng diǎn", meaning: "สองนาฬิกา", isClock: true, time: "02:00", questionImage: "public/Clock/02_00.png" },
+        { hanzi: "三点半", pinyin: "sān diǎn bàn", meaning: "สามโมงครึ่ง", isClock: true, time: "03:30", questionImage: "public/Clock/03_30.png" },
+        { hanzi: "十分", pinyin: "shí fēn", meaning: "สิบนาที", isClock: true, time: "00:10", questionImage: "public/Clock/10minutes.png" },
+        { hanzi: "五点十分", pinyin: "wǔ diǎn shí fēn", meaning: "ห้าโมงสิบนาที", isClock: true, time: "05:10", questionImage: "public/Clock/05_10.png" },
+        { hanzi: "四点", pinyin: "sì diǎn", meaning: "สี่นาฬิกา" },
+        { hanzi: "六点半", pinyin: "liù diǎn bàn", meaning: "หกโมงครึ่ง" },
+        { hanzi: "八点", pinyin: "bā diǎn", meaning: "แปดนาฬิกา" },
+        { hanzi: "九点十五分", pinyin: "jiǔ diǎn shí wǔ fēn", meaning: "เก้าโมงสิบห้านาที" },
+        { hanzi: "十点", pinyin: "shí diǎn", meaning: "สิบนาฬิกา" },
+        { hanzi: "十二点", pinyin: "shí èr diǎn", meaning: "เที่ยง / สิบสองนาฬิกา" },
+        { hanzi: "五分", pinyin: "wǔ fēn", meaning: "ห้านาที" },
+        { hanzi: "半", pinyin: "bàn", meaning: "ครึ่ง" },
+        { hanzi: "点", pinyin: "diǎn", meaning: "โมง / นาฬิกา" },
+        { hanzi: "分", pinyin: "fēn", meaning: "นาที" }
+      ],
     },
     {
       id: 2,
@@ -393,21 +393,21 @@ const bossData = [
       bossImage: "public/2.png",
       themeColor: "#E53935",
       questions: [
-      { qHanzi: "这是星期几？", qPinyin: "zhè shì xīngqī jǐ?", aHanzi: "星期一", aPinyin: "xīngqīyī", meaning: "วันจันทร์", image: "public/Calendar/Monday.png" },
-      { qHanzi: "日历上写着什么？", qPinyin: "rìlì shàng xiě zhe shénme?", aHanzi: "星期二", aPinyin: "xīngqī'èr", meaning: "วันอังคาร", image: "public/Calendar/Tuesday.png" },
-      { qHanzi: "图片里是哪一天？", qPinyin: "túpiàn lǐ shì nǎ yī tiān?", aHanzi: "星期三", aPinyin: "xīngqīsān", meaning: "วันพุธ", image: "public/Calendar/Wednesday.png" },
-      { qHanzi: "今天星期几？", qPinyin: "jīntiān xīngqī jǐ?", aHanzi: "星期四", aPinyin: "xīngqīsì", meaning: "วันพฤหัสบดี", image: "public/Calendar/Thursday.png" },
-      { qHanzi: "这是星期几？", qPinyin: "zhè shì xīngqī jǐ?", aHanzi: "星期五", aPinyin: "xīngqīwǔ", meaning: "วันศุกร์", image: "public/Calendar/Friday.png" },
-      { qHanzi: "看图，这是星期几？", qPinyin: "kàn tú, zhè shì xīngqī jǐ?", aHanzi: "星期六", aPinyin: "xīngqīliù", meaning: "วันเสาร์", image: "public/Calendar/Saturday.png" },
-      { qHanzi: "这是哪一天？", qPinyin: "zhè shì nǎ yī tiān?", aHanzi: "星期天", aPinyin: "xīngqītiān", meaning: "วันอาทิตย์", image: "public/Calendar/Sunday.png" },
-      { qHanzi: "这是哪一天？", qPinyin: "zhè shì nǎ yī tiān?", aHanzi: "今天", aPinyin: "jīntiān", meaning: "วันนี้", image: "public/Calendar/today.png" },
-      { qHanzi: "这个词怎么读？", qPinyin: "zhè ge cí zěnme dú?", aHanzi: "明天", aPinyin: "míngtiān", meaning: "พรุ่งนี้", image: "public/Calendar/tomorrow.png" },
-      { qHanzi: "请问这是什么？", qPinyin: "qǐngwèn zhè shì shénme?", aHanzi: "昨天", aPinyin: "zuótiān", meaning: "เมื่อวาน", image: "public/Calendar/yesterday.png" },
-      { qHanzi: "这是什么字？", qPinyin: "zhè shì shénme zì?", aHanzi: "天", aPinyin: "tiān", meaning: "วัน", image: "public/Calendar/day.png" },
-      { qHanzi: "这是什么字？(口语)", qPinyin: "zhè shì shénme zì?", aHanzi: "号", aPinyin: "hào", meaning: "วันที่(พูด)", image: "public/Calendar/date_hao.png" },
-      { qHanzi: "这是什么字？(书面)", qPinyin: "zhè shì shénme zì?", aHanzi: "日", aPinyin: "rì", meaning: "วันที่(เขียน)", image: "public/Calendar/date_ri.png" },
-      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "星期", aPinyin: "xīngqī", meaning: "สัปดาห์", image: "public/Calendar/week.png" },
-      { qHanzi: "这是什么时间单位？", qPinyin: "zhè shì shénme shíjiān dānwèi?", aHanzi: "年", aPinyin: "nián", meaning: "ปี", image: "public/Calendar/year.png" },
+        { hanzi: "一月一号", pinyin: "yī yuè yī hào", meaning: "วันที่ 1 มกราคม", questionImage: "public/Calendar/1jan.png" },
+        { hanzi: "星期一", pinyin: "xīngqīyī", meaning: "วันจันทร์", questionImage: "public/Calendar/Monday.png" },
+        { hanzi: "星期天", pinyin: "xīngqītiān", meaning: "วันอาทิตย์", questionImage: "public/Calendar/Sunday.png" },
+        { hanzi: "今天几号", pinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", questionImage: "public/Calendar/Whatdate.png" },
+        { hanzi: "明天", pinyin: "míngtiān", meaning: "พรุ่งนี้", questionImage: "public/Calendar/Tomorrow.png" },
+        { hanzi: "星期二", pinyin: "xīngqī'èr", meaning: "วันอังคาร" },
+        { hanzi: "星期三", pinyin: "xīngqīsān", meaning: "วันพุธ" },
+        { hanzi: "星期四", pinyin: "xīngqīsì", meaning: "วันพฤหัสบดี" },
+        { hanzi: "星期五", pinyin: "xīngqīwǔ", meaning: "วันศุกร์" },
+        { hanzi: "星期六", pinyin: "xīngqīliù", meaning: "วันเสาร์" },
+        { hanzi: "今天", pinyin: "jīntiān", meaning: "วันนี้" },
+        { hanzi: "昨天", pinyin: "zuótiān", meaning: "เมื่อวาน" },
+        { hanzi: "号", pinyin: "hào", meaning: "วันที่" },
+        { hanzi: "星期", pinyin: "xīngqī", meaning: "สัปดาห์ / วัน" },
+        { hanzi: "几", pinyin: "jǐ", meaning: "กี่ / เท่าไหร่" }
       ],
     },
     {
@@ -417,21 +417,21 @@ const bossData = [
       bossImage: "public/3.png",
       themeColor: "#E53935",
       questions: [
-      { qHanzi: "这是几月份？", qPinyin: "zhè shì jǐ yuèfèn?", aHanzi: "一月", aPinyin: "yī yuè", meaning: "เดือนมกราคม", image: "public/Calendar/January.png" },
-      { qHanzi: "日历上是几月？", qPinyin: "rìlì shàng shì jǐ yuè?", aHanzi: "二月", aPinyin: "èr yuè", meaning: "เดือนกุมภาพันธ์", image: "public/Calendar/February.png" },
-      { qHanzi: "图片里是几月？", qPinyin: "túpiàn lǐ shì jǐ yuè?", aHanzi: "三月", aPinyin: "sān yuè", meaning: "เดือนมีนาคม", image: "public/Calendar/March.png" },
-      { qHanzi: "这是几月？", qPinyin: "zhè shì jǐ yuè?", aHanzi: "四月", aPinyin: "sì yuè", meaning: "เดือนเมษายน", image: "public/Calendar/April.png" },
-      { qHanzi: "请问这是几月？", qPinyin: "qǐngwèn zhè shì jǐ yuè?", aHanzi: "五月", aPinyin: "wǔ yuè", meaning: "เดือนพฤษภาคม", image: "public/Calendar/May.png" },
-      { qHanzi: "你看这是几月？", qPinyin: "nǐ kàn zhè shì jǐ yuè?", aHanzi: "六月", aPinyin: "liù yuè", meaning: "เดือนมิถุนายน", image: "public/Calendar/June.png" },
-      { qHanzi: "这是几月？", qPinyin: "zhè shì jǐ yuè?", aHanzi: "七月", aPinyin: "qī yuè", meaning: "เดือนกรกฎาคม", image: "public/Calendar/July.png" },
-      { qHanzi: "这是几月份？", qPinyin: "zhè shì jǐ yuèfèn?", aHanzi: "八月", aPinyin: "bā yuè", meaning: "เดือนสิงหาคม", image: "public/Calendar/August.png" },
-      { qHanzi: "日历显示几月？", qPinyin: "rìlì xiǎnshì jǐ yuè?", aHanzi: "九月", aPinyin: "jiǔ yuè", meaning: "เดือนกันยายน", image: "public/Calendar/September.png" },
-      { qHanzi: "这是几月？", qPinyin: "zhè shì jǐ yuè?", aHanzi: "十月", aPinyin: "shí yuè", meaning: "เดือนตุลาคม", image: "public/Calendar/October.png" },
-      { qHanzi: "这是几月份？", qPinyin: "zhè shì jǐ yuèfèn?", aHanzi: "十一月", aPinyin: "shíyī yuè", meaning: "เดือนพฤศจิกายน", image: "public/Calendar/November.png" },
-      { qHanzi: "这是几月？", qPinyin: "zhè shì jǐ yuè?", aHanzi: "十二月", aPinyin: "shí'èr yuè", meaning: "เดือนธันวาคม", image: "public/Calendar/December.png" },
-      { qHanzi: "这个字怎么读？", qPinyin: "zhè ge zì zěnme dú?", aHanzi: "月", aPinyin: "yuè", meaning: "เดือน", image: "public/Calendar/month.png" },
-      { qHanzi: "量词是什么？", qPinyin: "liàngcí shì shénme?", aHanzi: "个月", aPinyin: "ge yuè", meaning: "เดือน (ลักษณนาม)", image: "public/Calendar/month_measure.png" },
-      { qHanzi: "这里问多长时间？", qPinyin: "zhèlǐ wèn duō cháng shíjiān?", aHanzi: "几个月", aPinyin: "jǐ ge yuè", meaning: "กี่เดือน", image: "public/Calendar/howmanymonths.png" },
+        { hanzi: "一月", pinyin: "yī yuè", meaning: "เดือนมกราคม", questionImage: "public/Calendar/January.png" },
+        { hanzi: "二月", pinyin: "èr yuè", meaning: "เดือนกุมภาพันธ์", questionImage: "public/Calendar/February.png" },
+        { hanzi: "星期几", pinyin: "xīngqī jǐ", meaning: "วันอะไร (ของสัปดาห์)", questionImage: "public/Calendar/WhichDay.png" },
+        { hanzi: "下午", pinyin: "xiàwǔ", meaning: "ตอนบ่าย", questionImage: "public/Time/Afternoon.png" },
+        { hanzi: "晚上", pinyin: "wǎnshang", meaning: "ตอนกลางคืน/ตอนเย็น", questionImage: "public/Time/Evening.png" },
+        { hanzi: "三月", pinyin: "sān yuè", meaning: "เดือนมีนาคม" },
+        { hanzi: "四月", pinyin: "sì yuè", meaning: "เดือนเมษายน" },
+        { hanzi: "五月", pinyin: "wǔ yuè", meaning: "เดือนพฤษภาคม" },
+        { hanzi: "六月", pinyin: "liù yuè", meaning: "เดือนมิถุนายน" },
+        { hanzi: "十二月", pinyin: "shí'èr yuè", meaning: "เดือนธันวาคม" },
+        { hanzi: "早上", pinyin: "zǎoshang", meaning: "ตอนเช้า" },
+        { hanzi: "中午", pinyin: "zhōngwǔ", meaning: "ตอนเที่ยง" },
+        { hanzi: "月", pinyin: "yuè", meaning: "เดือน" },
+        { hanzi: "上午", pinyin: "shàngwǔ", meaning: "ตอนสาย" },
+        { hanzi: "年", pinyin: "nián", meaning: "ปี" }
       ],
     },
     {
@@ -441,21 +441,21 @@ const bossData = [
       bossImage: "public/4.png",
       themeColor: "#00ACC1",
       questions: [
-      { qHanzi: "他觉得怎么样？", qPinyin: "tā juéde zěnmeyàng?", aHanzi: "热", aPinyin: "rè", meaning: "ร้อน", image: "public/Weather/hot.png" },
-      { qHanzi: "这是什么感觉？", qPinyin: "zhè shì shénme gǎnjué?", aHanzi: "冷", aPinyin: "lěng", meaning: "หนาว", image: "public/Weather/cold.png" },
-      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "水", aPinyin: "shuǐ", meaning: "น้ำ", image: "public/Weather/water.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "风", aPinyin: "fēng", meaning: "ลม", image: "public/Weather/wind.png" },
-      { qHanzi: "天空中有什么？", qPinyin: "tiānkōng zhōng yǒu shénme?", aHanzi: "云", aPinyin: "yún", meaning: "เมฆ", image: "public/Weather/cloud.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "雪", aPinyin: "xuě", meaning: "หิมะ", image: "public/Weather/snow.png" },
-      { qHanzi: "这是什么东西？", qPinyin: "zhè shì shénme dōngxi?", aHanzi: "冰", aPinyin: "bīng", meaning: "น้ำแข็ง", image: "public/Weather/ice.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "太阳", aPinyin: "tàiyáng", meaning: "พระอาทิตย์", image: "public/Weather/sun.png" },
-      { qHanzi: "晚上的天空有什么？", qPinyin: "wǎnshang de tiānkōng yǒu shénme?", aHanzi: "月亮", aPinyin: "yuèliang", meaning: "พระจันทร์", image: "public/Weather/moon.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "星星", aPinyin: "xīngxing", meaning: "ดวงดาว", image: "public/Weather/star.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "天", aPinyin: "tiān", meaning: "ท้องฟ้า", image: "public/Weather/sky.png" },
-      { qHanzi: "正在下什么？", qPinyin: "zhèngzài xià shénme?", aHanzi: "雨", aPinyin: "yǔ", meaning: "ฝน", image: "public/Weather/rain.png" },
-      { qHanzi: "这怎么样？", qPinyin: "zhè zěnmeyàng?", aHanzi: "好", aPinyin: "hǎo", meaning: "ดี", image: "public/Weather/good.png" },
-      { qHanzi: "情况好吗？", qPinyin: "qíngkuàng hǎo ma?", aHanzi: "坏", aPinyin: "huài", meaning: "แย่", image: "public/Weather/bad.png" },
-      { qHanzi: "这是什么词？", qPinyin: "zhè shì shénme cí?", aHanzi: "气", aPinyin: "qì", meaning: "อากาศ", image: "public/Weather/air.png" },
+        { hanzi: "天气", pinyin: "tiānqì", meaning: "สภาพอากาศ", questionImage: "public/Weather/weather.png" },
+        { hanzi: "热", pinyin: "rè", meaning: "ร้อน", questionImage: "public/Weather/hot.png" },
+        { hanzi: "冷", pinyin: "lěng", meaning: "หนาว", questionImage: "public/Weather/cold.png" },
+        { hanzi: "下雨", pinyin: "xià yǔ", meaning: "ฝนตก", questionImage: "public/Weather/weather.png" },
+        { hanzi: "晴天", pinyin: "qíngtiān", meaning: "วันที่ท้องฟ้าแจ่มใส", questionImage: "public/Weather/weather.png" },
+        { hanzi: "刮风", pinyin: "guā fēng", meaning: "ลมพัด" },
+        { hanzi: "下雪", pinyin: "xià xuě", meaning: "หิมะตก" },
+        { hanzi: "阴天", pinyin: "yīntiān", meaning: "วันฟ้าครึ้ม" },
+        { hanzi: "太热了", pinyin: "tài rè le", meaning: "ร้อนเกินไปแล้ว" },
+        { hanzi: "太冷了", pinyin: "tài lěng le", meaning: "หนาวเกินไปแล้ว" },
+        { hanzi: "怎么样", pinyin: "zěnme yàng", meaning: "เป็นอย่างไรบ้าง" },
+        { hanzi: "水", pinyin: "shuǐ", meaning: "น้ำ" },
+        { hanzi: "大", pinyin: "dà", meaning: "ใหญ่ / หนัก (เช่น ฝนตกหนัก)" },
+        { hanzi: "小", pinyin: "xiǎo", meaning: "เล็ก / เบา (เช่น ฝนตกเบา)" },
+        { hanzi: "好", pinyin: "hǎo", meaning: "ดี" }
       ],
     },
     {
@@ -465,25 +465,26 @@ const bossData = [
       bossImage: "public/5.png",
       themeColor: "#43A047",
       questions: [
-      { qHanzi: "箭头指着哪儿？", qPinyin: "jiàntóu zhǐ zhe nǎ'er?", aHanzi: "上", aPinyin: "shàng", meaning: "บน", image: "public/Locations/up.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "下", aPinyin: "xià", meaning: "ล่าง", image: "public/Locations/down.png" },
-      { qHanzi: "箭头指着哪儿？", qPinyin: "jiàntóu zhǐ zhe nǎ'er?", aHanzi: "左", aPinyin: "zuǒ", meaning: "ซ้าย", image: "public/Locations/left.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "右", aPinyin: "yòu", meaning: "ขวา", image: "public/Locations/right.png" },
-      { qHanzi: "看图，这是什么？", qPinyin: "kàn tú, zhè shì shénme?", aHanzi: "前", aPinyin: "qián", meaning: "หน้า", image: "public/Locations/front_char.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "后", aPinyin: "hòu", meaning: "หลัง", image: "public/Locations/back_char.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "里", aPinyin: "lǐ", meaning: "ใน", image: "public/Locations/in.png" },
-      { qHanzi: "小狗在哪里？", qPinyin: "xiǎogǒu zài nǎlǐ?", aHanzi: "外", aPinyin: "wài", meaning: "นอก", image: "public/Locations/out.png" },
-      { qHanzi: "他做什么？", qPinyin: "tā zuò shénme?", aHanzi: "去", aPinyin: "qù", meaning: "ไป", image: "public/Locations/go.png" },
-      { qHanzi: "这个动作是？", qPinyin: "zhè ge dòngzuò shì...?", aHanzi: "来", aPinyin: "lái", meaning: "มา", image: "public/Locations/come.png" },
-      { qHanzi: "他做什么？", qPinyin: "tā zuò shénme?", aHanzi: "回", aPinyin: "huí", meaning: "กลับ", image: "public/Locations/return.png" },
-      { qHanzi: "这是什么地方？", qPinyin: "zhè shì shénme dìfang?", aHanzi: "家", aPinyin: "jiā", meaning: "บ้าน", image: "public/Locations/home.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "国", aPinyin: "guó", meaning: "ประเทศ", image: "public/Locations/country.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "人", aPinyin: "rén", meaning: "คน", image: "public/Locations/person.png" },
-      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "车", aPinyin: "chē", meaning: "รถ", image: "public/Locations/car.png" },
+        { hanzi: "学校", pinyin: "xuéxiào", meaning: "โรงเรียน", questionImage: "public/Locations/school.png" },
+        { hanzi: "医院", pinyin: "yīyuàn", meaning: "โรงพยาบาล", questionImage: "public/Locations/hospital.png" },
+        { hanzi: "商店", pinyin: "shāngdiàn", meaning: "ร้านค้า", questionImage: "public/Locations/store.png" },
+        { hanzi: "前面", pinyin: "qiánmiàn", meaning: "ด้านหน้า", questionImage: "public/Locations/front.png" },
+        { hanzi: "后面", pinyin: "hòumiàn", meaning: "ด้านหลัง", questionImage: "public/Locations/back.png" },
+        { hanzi: "家", pinyin: "jiā", meaning: "บ้าน" },
+        { hanzi: "中国", pinyin: "zhōngguó", meaning: "ประเทศจีน" },
+        { hanzi: "饭店", pinyin: "fàndiàn", meaning: "ร้านอาหาร / โรงแรม" },
+        { hanzi: "上面", pinyin: "shàngmiàn", meaning: "ด้านบน" },
+        { hanzi: "下面", pinyin: "xiàmiàn", meaning: "ด้านล่าง" },
+        { hanzi: "里面", pinyin: "lǐmiàn", meaning: "ด้านใน" },
+        { hanzi: "在", pinyin: "zài", meaning: "อยู่ / อยู่ที่" },
+        { hanzi: "哪儿", pinyin: "nǎr", meaning: "ที่ไหน" },
+        { hanzi: "去", pinyin: "qù", meaning: "ไป" },
+        { hanzi: "来", pinyin: "lái", meaning: "มา" }
       ],
     },
   ];
 
+  const FALLBACK_DISTRACTORS = ["เที่ยงคืน", "เมื่อวาน", "สัปดาห์หน้า", "ตอนเช้า", "ตีสี่", "เดือนหน้า"];
   const TOTAL_BOSSES = bossData.length;
   const WRONG_DAMAGE = 10;
   const HEAL_AMOUNT = 30;
@@ -499,7 +500,7 @@ const bossData = [
     comboCount: 0,
     scoreMultiplier: 1,
     bossesDefeated: 0,
-    items: { heal: 2, fifty: 3, skip: 3 },
+    items: { heal: 1, fifty: 1, skip: 1 },
     currentQuestions: [],
     answered: false,
     damagePerHit: 25,
@@ -538,35 +539,35 @@ const bossData = [
     return [...arr].sort(() => Math.random() - 0.5);
   }
 
-  // ปรับการสร้างชุดคำตอบให้ใช้ ภาษาจีน + พินอิน (แทนคำแปลภาษาไทย)
-  function buildChoicePool() {
-    const set = new Set();
-    bossData.forEach((b) => b.questions.forEach((q) => set.add(q.aHanzi + " (" + q.aPinyin + ")")));
+  function buildMeaningPool() {
+    const set = new Set(FALLBACK_DISTRACTORS);
+    bossData.forEach((b) => b.questions.forEach((q) => set.add(q.meaning)));
     return [...set];
   }
-  const CHOICE_POOL = buildChoicePool();
+  const MEANING_POOL = buildMeaningPool();
 
   let currentLocalAudio = null;
- function speak(text) {
+  function speak(text) {
     if (!text) return;
-    
-    // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
-    if ('speechSynthesis' in window) {
-      // ยกเลิกเสียงที่กำลังพูดอยู่ (ถ้ามีการกดรัวๆ)
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN'; // ตั้งค่าเป็นภาษาจีน (จีนแผ่นดินใหญ่)
-      utterance.rate = 0.85;     // ปรับความเร็ว (1 คือปกติ, < 1 คือช้าลงเพื่อให้ฟังง่ายขึ้น)
-      utterance.pitch = 1;      // ระดับเสียง
-      
-      window.speechSynthesis.speak(utterance);
-    } else {
-      console.warn("เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
-      alert("ขออภัย เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
+    try {
+      if (currentLocalAudio) {
+        currentLocalAudio.pause();
+        currentLocalAudio.currentTime = 0;
+      }
+      const cleanText = text.trim();
+      const audioPath = `public/audio/${encodeURIComponent(cleanText)}.mp3`;
+      const audio = new Audio(audioPath);
+      audio.referrerPolicy = "no-referrer";
+      currentLocalAudio = audio;
+      audio.play().catch((err) => {
+        console.warn(`Local audio playback failed for "${cleanText}":`, err);
+      });
+    } catch (e) {
+      console.error("Audio playback error:", e);
     }
   }
 
+  /* ========== เอฟเฟกต์ที่เพิ่มใหม่ ========== */
   function showDamageEffect() {
     const overlay = document.getElementById('damage-overlay');
     overlay.classList.add('active');
@@ -582,14 +583,17 @@ const bossData = [
     text.textContent = `COMBO x${combo}!`;
     container.classList.remove('hidden');
     
+    // รีเซ็ตแอนิเมชันให้เล่นใหม่ทุกครั้ง
     text.classList.remove('combo-animate');
-    void text.offsetWidth;
+    void text.offsetWidth; // กระตุ้นการเรนเดอร์ใหม่ (Trigger Reflow)
     text.classList.add('combo-animate');
     
+    // ซ่อนเมื่อแอนิเมชันจบ (1.2 วินาที)
     setTimeout(() => {
       container.classList.add('hidden');
     }, 1200);
   }
+  /* ======================================= */
 
   function updatePlayerHP(delta) {
     const hp = Math.max(0, state.playerHP);
@@ -642,11 +646,15 @@ const bossData = [
       document.body.style.backgroundColor = boss.themeColor;
     }
 
+
     el.bossName.textContent = boss.name;
     el.bossProgress.textContent = index + 1;
     el.bossImage.src = `${boss.bossImage}?v=${Date.now()}`;
     state.currentQuestions = shuffle(boss.questions);
-    state.damagePerHit = Math.ceil(boss.hp / state.currentQuestions.length) || 1;
+    state.damagePerHit = 20; 
+
+    //Math.ceil(boss.hp / state.currentQuestions.length) || 1
+    //ตีแบบคำนวณ ดาเมจ
 
     updatePlayerHP();
     updateBossHP();
@@ -656,40 +664,28 @@ const bossData = [
   }
 
   function loadQuestion() {
-    
     state.answered = false;
     el.choicesGrid.innerHTML = "";
     const q = state.currentQuestions[state.questionIndex];
 
-    // อัปเดตให้รองรับคีย์ qHanzi / qPinyin
-    el.questionHanzi.textContent = q.qHanzi;
-    el.questionPinyin.textContent = q.qPinyin;
+    el.questionHanzi.textContent = q.hanzi;
+    el.questionPinyin.textContent = q.pinyin;
 
-    if (q.image) {
-      el.questionImage.src = `${q.image}?v=${Date.now()}`;
+    if (q.questionImage) {
+      el.questionImage.src = `${q.questionImage}?v=${Date.now()}`;
       el.questionImage.classList.remove("hidden");
     } else {
       el.questionImage.classList.add("hidden");
     }
 
-    // สร้างตัวเลือก (จีน + พินอิน)
-    const correctChoice = q.aHanzi + " (" + q.aPinyin + ")";
-    const fakeAnswers = shuffle(CHOICE_POOL.filter((c) => c !== correctChoice)).slice(0, 3);
-    const choices = shuffle([correctChoice, ...fakeAnswers]);
+    const fakeAnswers = shuffle(MEANING_POOL.filter((m) => m !== q.meaning)).slice(0, 3);
+    const choices = shuffle([q.meaning, ...fakeAnswers]);
 
-   choices.forEach((choiceText) => {
+    choices.forEach((meaning) => {
       const btn = document.createElement("button");
-      btn.className = "choice-btn py-2 px-2 font-hanzi font-semibold w-full flex flex-col items-center justify-center leading-tight";
-      btn.dataset.choice = choiceText; // เก็บค่าที่แท้จริงไว้เปรียบเทียบ
-
-      // แยกข้อความตัวอักษรจีนกับพินอินเพื่อจัดรูปแบบสวยงาม
-      const [hanzi, pinyinStr] = choiceText.split(" (");
-      const pinyin = pinyinStr ? pinyinStr.replace(")", "") : "";
-      
-      btn.dataset.hanzi = hanzi; // <-- เพิ่มบรรทัดนี้ เพื่อเก็บอักษรจีนไว้ให้อ่านออกเสียง
-
-      btn.innerHTML = `<span class="mb-0.5 text-base md:text-lg">${hanzi}</span><span class="text-[11px] font-thai opacity-80">${pinyin}</span>`;
-      btn.onclick = () => handleChoice(btn, correctChoice);
+      btn.className = "choice-btn py-2.5 px-3 font-thai font-semibold text-xs md:text-sm w-full";
+      btn.textContent = meaning;
+      btn.onclick = () => handleChoice(btn, q.meaning);
       el.choicesGrid.appendChild(btn);
     });
 
@@ -731,7 +727,7 @@ const bossData = [
         updateScoreUI();
         updatePlayerHP(-WRONG_DAMAGE);
         
-        showDamageEffect();
+        showDamageEffect(); // <-- เรียกใช้ตอนหมดเวลา
 
         setTimeout(checkOutcome, 1000);
       } else {
@@ -746,22 +742,20 @@ const bossData = [
     cancelAnimationFrame(timerState.reqFrame);
   }
 
-  function handleChoice(btn, correctChoice) {
+  function handleChoice(btn, correctMeaning) {
     if (state.answered) return;
     state.answered = true;
     stopTimer();
     document.querySelectorAll(".choice-btn").forEach((b) => (b.disabled = true));
 
-    // เช็คจาก dataset.choice 
-    if (btn.dataset.choice === correctChoice) {
+    if (btn.textContent === correctMeaning) {
       btn.classList.add("choice-correct");
       state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
       
-      speak(btn.dataset.hanzi);
-
+      // เพิ่มคอมโบ
       state.comboCount++;
       if (state.comboCount >= 3) {
-        showComboEffect(state.comboCount);
+        showComboEffect(state.comboCount); // <-- เรียกคอมโบถ้ามากกว่าหรือเท่ากับ 3
       }
       
       state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
@@ -771,14 +765,14 @@ const bossData = [
     } else {
       btn.classList.add("choice-wrong");
       document.querySelectorAll(".choice-btn").forEach((b) => {
-        if (b.dataset.choice === correctChoice) b.classList.add("choice-correct");
+        if (b.textContent === correctMeaning) b.classList.add("choice-correct");
       });
       state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
       state.comboCount = 0;
       state.scoreMultiplier = 1;
       updatePlayerHP(-WRONG_DAMAGE);
       
-      showDamageEffect();
+      showDamageEffect(); // <-- เรียกใช้ตอนตอบผิด
     }
     updateScoreUI();
     updateItemUI();
@@ -789,11 +783,11 @@ const bossData = [
     if (state.playerHP <= 0) return gameOver();
     if (state.bossHP <= 0) return bossDefeated();
 
-    state.questionIndex++;
-    if (state.questionIndex >= state.currentQuestions.length) {
-      state.currentQuestions = shuffle(bossData[state.bossIndex].questions);
-      state.questionIndex = 0;
-    }
+  state.questionIndex++;
+  if (state.questionIndex >= state.currentQuestions.length) {
+    state.currentQuestions = shuffle(bossData[state.bossIndex].questions);
+    state.questionIndex = 0;
+  }
     loadQuestion();
   }
 
@@ -952,8 +946,7 @@ const bossData = [
         updatePlayerHP(0);
       } else if (type === "fifty") {
         const q = state.currentQuestions[state.questionIndex];
-        const correctChoice = q.aHanzi + " (" + q.aPinyin + ")";
-        const wrong = [...document.querySelectorAll(".choice-btn")].filter((b) => b.dataset.choice !== correctChoice);
+        const wrong = [...document.querySelectorAll(".choice-btn")].filter((b) => b.textContent !== q.meaning);
         shuffle(wrong).slice(0, 2).forEach((b) => {
           b.disabled = true;
           b.style.opacity = "0.3";
