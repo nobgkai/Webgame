@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard คะแนน | Panda's Chinese Quest</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mali:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>body{font-family:Mali,sans-serif}.font-display{font-family:Fredoka,sans-serif}</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-100 via-amber-50 to-violet-100 text-slate-700">
+  <main class="mx-auto max-w-5xl px-4 py-8 sm:py-12">
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div><p class="font-display text-sm text-emerald-600">PANDA'S CHINESE QUEST</p><h1 class="font-display text-3xl font-bold text-slate-800">Dashboard คะแนน</h1></div>
+      <a href="index.html" class="rounded-2xl bg-white px-4 py-2 text-sm font-bold shadow hover:bg-slate-50">← กลับหน้าแรก</a>
+    </div>
+    <section class="rounded-3xl bg-white/90 p-5 shadow-lg sm:p-7">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div><p class="text-xs font-bold text-slate-400">ผู้เล่นล่าสุด</p><h2 id="player-name" class="font-display text-2xl font-bold text-violet-700">—</h2></div>
+        <div class="flex flex-wrap gap-2" id="filters">
+          <button data-level="All" class="filter rounded-full bg-violet-600 px-4 py-2 text-sm font-bold text-white">ทั้งหมด</button>
+          <button data-level="Easy" class="filter rounded-full bg-emerald-100 px-4 py-2 text-sm font-bold text-emerald-700">Easy</button>
+          <button data-level="Normal" class="filter rounded-full bg-amber-100 px-4 py-2 text-sm font-bold text-amber-700">Normal</button>
+          <button data-level="Hardcore" class="filter rounded-full bg-rose-100 px-4 py-2 text-sm font-bold text-rose-700">Hardcore</button>
+        </div>
+      </div>
+      <div class="mt-6 grid gap-3 sm:grid-cols-3">
+        <article class="rounded-2xl bg-sky-50 p-4"><p class="text-xs font-bold text-sky-600">คะแนนล่าสุด</p><p id="latest-score" class="font-display mt-1 text-3xl font-bold">—</p><p id="latest-detail" class="mt-1 text-xs text-slate-500">ยังไม่มีข้อมูล</p></article>
+        <article class="rounded-2xl bg-emerald-50 p-4"><p class="text-xs font-bold text-emerald-600">คะแนนสูงสุด</p><p id="highest-score" class="font-display mt-1 text-3xl font-bold">—</p><p id="highest-detail" class="mt-1 text-xs text-slate-500">ยังไม่มีข้อมูล</p></article>
+        <article class="rounded-2xl bg-violet-50 p-4"><p class="text-xs font-bold text-violet-600">คะแนนเฉลี่ย</p><p id="average-score" class="font-display mt-1 text-3xl font-bold">—</p><p id="average-detail" class="mt-1 text-xs text-slate-500">ยังไม่มีข้อมูล</p></article>
+      </div>
+    </section>
+    <section class="mt-6 rounded-3xl bg-white/90 p-5 shadow-lg sm:p-7">
+      <div class="flex items-center justify-between gap-3"><h2 class="font-display text-xl font-bold text-slate-800">เปรียบเทียบแต่ละครั้ง</h2><span id="count" class="text-xs text-slate-500"></span></div>
+      <div id="chart" class="mt-6 flex h-48 items-end gap-2 overflow-x-auto border-b border-slate-200 pb-6"></div>
+      <h2 class="font-display mt-8 text-xl font-bold text-slate-800">ประวัติการเล่น</h2>
+      <div class="mt-3 overflow-x-auto"><table class="w-full min-w-[620px] text-left text-sm"><thead class="border-b text-xs text-slate-400"><tr><th class="pb-3">วันที่</th><th class="pb-3">ชื่อ</th><th class="pb-3">ระดับ</th><th class="pb-3">คะแนน</th><th class="pb-3">เต็ม</th><th class="pb-3">%</th></tr></thead><tbody id="history"></tbody></table></div>
+    </section>
+  </main>
+  <script>
+    const KEY = 'pandaChineseGameHistory', PLAYER_KEY = 'pandaChinesePlayerName'; let active = 'All';
+    const el = (id) => document.getElementById(id);
+    const safe = (value) => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    function history() { try { const value = JSON.parse(localStorage.getItem(KEY) || '[]'); const name = (localStorage.getItem(PLAYER_KEY) || '').trim(); return Array.isArray(value) && name ? value.filter(item => item.name === name).sort((a,b) => new Date(b.date)-new Date(a.date)) : []; } catch (_) { return []; } }
+    function formatDate(value) { return new Intl.DateTimeFormat('th-TH',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value)); }
+    function render() {
+      const all = history(); const rows = active === 'All' ? all : all.filter(item => item.level === active);
+      el('player-name').textContent = localStorage.getItem(PLAYER_KEY) || 'ยังไม่มีผู้เล่น';
+      el('count').textContent = `${rows.length} รอบ`;
+      const latest = rows[0]; const highest = rows.reduce((best,item) => !best || item.score > best.score ? item : best, null); const average = rows.length ? rows.reduce((sum,item) => sum + Number(item.score || 0),0) / rows.length : 0;
+      el('latest-score').textContent = latest ? latest.score.toLocaleString() : '—'; el('latest-detail').textContent = latest ? `${latest.level} · เต็ม ${latest.maxScore.toLocaleString()}` : 'ยังไม่มีข้อมูล';
+      el('highest-score').textContent = highest ? highest.score.toLocaleString() : '—'; el('highest-detail').textContent = highest ? `${highest.name} · ${highest.level}` : 'ยังไม่มีข้อมูล';
+      el('average-score').textContent = rows.length ? Math.round(average).toLocaleString() : '—'; el('average-detail').textContent = rows.length ? `จาก ${rows.length} รอบที่เลือก` : 'ยังไม่มีข้อมูล';
+      const chart = el('chart'); chart.innerHTML = rows.length ? rows.slice().reverse().map((item,index) => { const pct = Math.min(100, Math.round((item.score / item.maxScore) * 100)); return `<div class="flex h-full min-w-12 flex-col justify-end text-center"><span class="mb-1 text-[10px] font-bold text-slate-500">${pct}%</span><div title="${safe(item.name)}: ${item.score}/${item.maxScore}" class="rounded-t-lg bg-violet-500" style="height:${Math.max(4,pct)}%"></div><span class="mt-2 text-[10px] text-slate-400">#${index+1}</span></div>`; }).join('') : '<p class="m-auto text-sm text-slate-400">ยังไม่มีประวัติสำหรับระดับนี้</p>';
+      el('history').innerHTML = rows.length ? rows.map(item => { const pct = item.maxScore ? ((item.score / item.maxScore)*100).toFixed(1) : '0.0'; return `<tr class="border-b border-slate-100"><td class="py-3">${formatDate(item.date)}</td><td class="py-3 font-bold">${safe(item.name)}</td><td class="py-3">${safe(item.level)}</td><td class="py-3 font-bold">${Number(item.score).toLocaleString()}</td><td class="py-3">${Number(item.maxScore).toLocaleString()}</td><td class="py-3">${pct}%</td></tr>`; }).join('') : '<tr><td colspan="6" class="py-8 text-center text-slate-400">ยังไม่มีประวัติการเล่น</td></tr>';
+    }
+    document.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => { active = button.dataset.level; document.querySelectorAll('.filter').forEach(item => item.classList.remove('bg-violet-600','text-white')); button.classList.add('bg-violet-600','text-white'); render(); })); render();
+  </script>
+</body>
+</html>

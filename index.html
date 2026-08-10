@@ -334,6 +334,9 @@
     <p class="font-thai text-base sm:text-lg md:text-xl text-plum mt-5 max-w-xl px-2">
       พิมพ์คำศัพท์ให้ถูก ปราบมอนสเตอร์ให้ราบ 🗡️ พร้อมเลเวลอัพภาษาจีนไปกับคุณแพนด้า!
     </p>
+    <a href="Dashboard.html" class="mt-4 rounded-full bg-white px-5 py-2 text-sm font-display font-600 text-violet-700 shadow-btn transition hover:bg-violet-50">
+      <i class="fa-solid fa-chart-line mr-1"></i> ดู Dashboard คะแนน
+    </a>
 
 <!-- 3 Adventure Quest Cards (แทนที่ปุ่มเดิม) -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-10 w-full max-w-5xl mx-auto px-2">
@@ -364,7 +367,7 @@
       </ul>
     </div>
 
-    <button data-level="ง่าย (Easy)" data-url="./Mode_ez.html"
+    <button data-level="ง่าย (Easy)" data-url="./Mode_ez-1.html"
       class="w-full font-display font-600 text-base text-white bg-mintDeep hover:bg-emerald-400 py-3 rounded-2xl shadow-btn transition-colors text-center">
       <i class="fa-solid fa-play mr-1"></i> เข้าระดับเริ่มต้น
     </button>
@@ -442,6 +445,21 @@
     </div>
   </div>
 </header>
+
+<!-- Player name popup: opens before entering every game mode -->
+<div id="player-name-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
+  <form id="player-name-form" class="w-full max-w-sm rounded-[30px] border-4 border-mintDeep bg-white p-6 text-center shadow-2xl">
+    <div class="mb-2 text-4xl">🐼</div>
+    <h2 class="font-display text-2xl font-700 text-ink">ก่อนเริ่มผจญภัย</h2>
+    <p class="mt-2 font-thai text-sm text-plum/80">กรอกชื่อเพื่อบันทึกคะแนนของคุณ</p>
+    <label for="player-name-input" class="sr-only">ชื่อผู้เล่น</label>
+    <input id="player-name-input" type="text" maxlength="40" required autocomplete="name" placeholder="ชื่อผู้เล่น" class="mt-4 w-full rounded-2xl border-2 border-mintDeep/40 bg-mint/20 px-4 py-3 text-center font-thai text-base text-ink outline-none focus:border-mintDeep">
+    <div class="mt-4 grid grid-cols-2 gap-3">
+      <button id="player-name-cancel" type="button" class="rounded-2xl bg-slate-100 py-3 font-thai font-semibold text-slate-600 hover:bg-slate-200">ยกเลิก</button>
+      <button type="submit" class="rounded-2xl bg-mintDeep py-3 font-display font-600 text-white shadow-btn hover:bg-emerald-500">เริ่มเกม</button>
+    </div>
+  </form>
+</div>
 
 <!-- =========================================
      ABOUT & GAME DESCRIPTION
@@ -712,6 +730,42 @@
     'ปานกลาง (Medium)': { th: 'ปานกลาง', color: '#FFD34D', icon: '🐉' },
     'ยาก (Hard)': { th: 'ยาก', color: '#FF9FC3', icon: '🔥' },
   };
+  const playerNameInput = document.getElementById('player-name-input');
+  const playerNameModal = document.getElementById('player-name-modal');
+  const playerNameForm = document.getElementById('player-name-form');
+  let selectedGameUrl = '';
+
+  function openPlayerNameModal(url) {
+    selectedGameUrl = url;
+    playerNameInput.value = localStorage.getItem('pandaChinesePlayerName') || '';
+    playerNameModal.classList.remove('hidden');
+    playerNameModal.classList.add('flex');
+    setTimeout(() => playerNameInput.focus(), 0);
+  }
+
+  function closePlayerNameModal() {
+    playerNameModal.classList.add('hidden');
+    playerNameModal.classList.remove('flex');
+    selectedGameUrl = '';
+  }
+
+  document.getElementById('player-name-cancel').addEventListener('click', closePlayerNameModal);
+  playerNameForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const playerName = playerNameInput.value.trim();
+    if (!playerName) return;
+    localStorage.setItem('pandaChinesePlayerName', playerName);
+    if (selectedGameUrl) {
+      window.location.href = selectedGameUrl;
+    } else {
+      closePlayerNameModal();
+    }
+  });
+
+  // Ask only once, on the home page, when this browser has no saved player name.
+  if (!(localStorage.getItem('pandaChinesePlayerName') || '').trim()) {
+    openPlayerNameModal('');
+  }
 
   /* ========== AUDIO CONTROL SYSTEM ========== */
   const audioBtn = document.getElementById('audio-toggle-btn');
@@ -746,28 +800,13 @@
 
       const level = targetBtn.getAttribute('data-level');
       const url = targetBtn.getAttribute('data-url');
-      const info = levelLabels[level] || { th: level, color: '#BEE7F5', icon: '✨' };
-
-      if (typeof Swal === 'undefined') {
-        if (url) window.location.href = url;
-        return;
+      const savedPlayerName = (localStorage.getItem('pandaChinesePlayerName') || '').trim();
+      if (!url) return;
+      if (savedPlayerName) {
+        window.location.href = url;
+      } else {
+        openPlayerNameModal(url);
       }
-
-      Swal.fire({
-        title: `${info.icon} Starting ${level} Mode!`,
-        text: 'Get Ready! เตรียมตัวให้พร้อม แล้วออกไปผจญภัยกันเลย!',
-        confirmButtonText: 'ลุยเลย!',
-        confirmButtonColor: info.color,
-        background: '#FEFCF3',
-        color: '#3A3355',
-        customClass: {
-          popup: 'rounded-3xl',
-        }
-      }).then((result) => {
-        if (result.isConfirmed && url) {
-          window.location.href = url;
-        }
-      });
     });
   });
 </script>
