@@ -1,991 +1,1852 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hard Mode | Panda's Chinese Quest</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hard Mode | Panda's Chinese Quest</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800;900&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800;900&family=Mali:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          purpleBg: '#9871FA',
-          purpleDark: '#7A4FE2',
-          bossHp: '#8A32D2',
-          playerHp: '#F33B6D',
-          mintDeep: '#53D797',
-          skyLight: '#90E2FF',
-          yellowBar: '#F3CE38',
-          ink: '#3A3355',
-          plum: '#5C4B8A',
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              purpleBg: "#9871FA",
+              purpleDark: "#7A4FE2",
+              bossHp: "#8A32D2",
+              playerHp: "#F33B6D",
+              mintDeep: "#53D797",
+              skyLight: "#90E2FF",
+              yellowBar: "#F3CE38",
+              ink: "#3A3355",
+              plum: "#5C4B8A",
+            },
+            fontFamily: {
+              display: ["Fredoka", "Mali", "sans-serif"],
+              thai: ["Mali", "sans-serif"],
+              hanzi: ["'Noto Sans SC'", "sans-serif"],
+            },
+            boxShadow: {
+              card: "0 8px 20px rgba(0,0,0,0.12)",
+              btn: "0 4px 0 rgba(0,0,0,0.15)",
+            },
+          },
         },
-        fontFamily: { 
-          display: ['Fredoka','Mali','sans-serif'], 
-          thai: ['Mali','sans-serif'], 
-          hanzi: ["'Noto Sans SC'",'sans-serif'] 
-        },
-        boxShadow: {
-          card: '0 8px 20px rgba(0,0,0,0.12)',
-          btn: '0 4px 0 rgba(0,0,0,0.15)',
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: "Mali", sans-serif;
+        background-color: #9871fa;
+        color: #3a3355;
+        transition: background-color 0.5s ease;
+      }
+      .font-display {
+        font-family: "Fredoka", "Mali", sans-serif;
+      }
+      .font-hanzi {
+        font-family: "'Noto Sans SC'", sans-serif;
+      }
+
+      /* Background Circles Pattern & Moving Animation */
+      .bg-pattern {
+        background-image:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 255, 255, 0.15) 8%,
+            transparent 8%
+          ),
+          radial-gradient(
+            circle at 80% 30%,
+            rgba(255, 255, 255, 0.15) 12%,
+            transparent 12%
+          ),
+          radial-gradient(
+            circle at 15% 65%,
+            rgba(255, 255, 255, 0.12) 15%,
+            transparent 15%
+          ),
+          radial-gradient(
+            circle at 85% 75%,
+            rgba(255, 255, 255, 0.15) 10%,
+            transparent 10%
+          );
+        background-size: 100% 100%;
+        animation: moveBg 12s ease-in-out infinite alternate;
+      }
+
+      @keyframes moveBg {
+        0% {
+          background-position:
+            0px 0px,
+            0px 0px,
+            0px 0px,
+            0px 0px;
+        }
+        50% {
+          background-position:
+            30px -20px,
+            -20px 30px,
+            25px 25px,
+            -30px -15px;
+        }
+        100% {
+          background-position:
+            -20px 25px,
+            25px -20px,
+            -15px -30px,
+            20px 20px;
         }
       }
-    }
-  }
-</script>
 
-<style>
-  body { 
-    font-family: 'Mali', sans-serif; 
-    background-color: #9871FA; 
-    color: #3A3355;
-    transition: background-color 0.5s ease;
-  }
-  .font-display { font-family: 'Fredoka','Mali',sans-serif; }
-  .font-hanzi { font-family: "'Noto Sans SC'",sans-serif; }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-12px) rotate(-1deg);
+        }
+        40% {
+          transform: translateX(10px) rotate(1deg);
+        }
+        60% {
+          transform: translateX(-6px);
+        }
+        80% {
+          transform: translateX(6px);
+        }
+      }
+      .shake {
+        animation: shake 0.4s ease;
+      }
 
-  /* Background Circles Pattern & Moving Animation */
-  .bg-pattern {
-    background-image: 
-      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 8%, transparent 8%),
-      radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.15) 12%, transparent 12%),
-      radial-gradient(circle at 15% 65%, rgba(255, 255, 255, 0.12) 15%, transparent 15%),
-      radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.15) 10%, transparent 10%);
-    background-size: 100% 100%;
-    animation: moveBg 12s ease-in-out infinite alternate;
-  }
+      @keyframes hit {
+        0% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+        30% {
+          transform: scale(0.92);
+          filter: brightness(1.6) saturate(2);
+        }
+        100% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+      }
+      .hit {
+        animation: hit 0.35s ease;
+      }
 
-  @keyframes moveBg {
-    0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
-    50% { background-position: 30px -20px, -20px 30px, 25px 25px, -30px -15px; }
-    100% { background-position: -20px 25px, 25px -20px, -15px -30px, 20px 20px; }
-  }
+      @keyframes floaty {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      .float-slow {
+        animation: floaty 3.5s ease-in-out infinite;
+      }
 
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    20% { transform: translateX(-12px) rotate(-1deg); }
-    40% { transform: translateX(10px) rotate(1deg); }
-    60% { transform: translateX(-6px); }
-    80% { transform: translateX(6px); }
-  }
-  .shake { animation: shake 0.4s ease; }
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: translateY(6px) scale(0.96);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .pop-in {
+        animation: popIn 0.25s ease;
+      }
 
-  @keyframes hit {
-    0% { transform: scale(1); filter: brightness(1); }
-    30% { transform: scale(0.92); filter: brightness(1.6) saturate(2); }
-    100% { transform: scale(1); filter: brightness(1); }
-  }
-  .hit { animation: hit 0.35s ease; }
+      .icon-btn {
+        transition: transform 0.12s ease;
+      }
+      .icon-btn:hover:not(:disabled) {
+        transform: scale(1.08);
+      }
+      .icon-btn:active:not(:disabled) {
+        transform: scale(0.95);
+      }
+      .icon-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+      }
 
-  @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
-  .float-slow { animation: floaty 3.5s ease-in-out infinite; }
+      #timer-bar {
+        transition: width 0.1s linear;
+      }
+      #boss-hp-bar,
+      #player-hp-bar {
+        transition: width 0.35s ease;
+      }
 
-  @keyframes popIn {
-    0% { opacity: 0; transform: translateY(6px) scale(0.96); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .pop-in { animation: popIn 0.25s ease; }
+      /* SPEECH BUBBLE */
+      .speech-bubble {
+        position: relative;
+      }
+      .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-bottom: 15px solid white;
+      }
 
-  .icon-btn { transition: transform .12s ease; }
-  .icon-btn:hover:not(:disabled) { transform: scale(1.08); }
-  .icon-btn:active:not(:disabled) { transform: scale(.95); }
-  .icon-btn:disabled { opacity:.4; cursor:not-allowed; transform:none !important; }
+      /* INPUT RING STYLING */
+      #answer-input {
+        transition:
+          box-shadow 0.15s ease,
+          border-color 0.15s ease;
+      }
+      #answer-input.ring-correct {
+        border-color: #53d797 !important;
+        box-shadow: 0 0 0 4px rgba(83, 215, 151, 0.35);
+      }
+      #answer-input.ring-wrong {
+        border-color: #f33b6d !important;
+        box-shadow: 0 0 0 4px rgba(243, 59, 109, 0.35);
+      }
+      #answer-input:disabled {
+        opacity: 0.8;
+      }
 
-  #timer-bar { transition: width 0.1s linear; }
-  #boss-hp-bar, #player-hp-bar { transition: width .35s ease; }
+      /* EFFECT: DAMAGE BLUR */
+      #damage-overlay {
+        position: fixed;
+        inset: 0;
+        box-shadow: inset 0 0 100px 40px rgba(220, 38, 38, 0.7);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 100;
+        transition: opacity 0.3s ease-in-out;
+      }
+      #damage-overlay.active {
+        opacity: 1;
+      }
 
-  /* SPEECH BUBBLE */
-  .speech-bubble { position: relative; }
-  .speech-bubble::before {
-    content: '';
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    border-bottom: 15px solid white;
-  }
+      /* EFFECT: COMBO POPUP */
+      @keyframes comboPop {
+        0% {
+          opacity: 0;
+          transform: scale(0.5) rotate(-10deg);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1.2) rotate(5deg);
+        }
+        40% {
+          transform: scale(1) rotate(0deg);
+        }
+        80% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.8) translateY(-40px);
+        }
+      }
+      .combo-animate {
+        animation: comboPop 1.2s ease-out forwards;
+      }
 
-  /* INPUT RING STYLING */
-  #answer-input {
-    transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  }
-  #answer-input.ring-correct {
-    border-color: #53D797 !important;
-    box-shadow: 0 0 0 4px rgba(83, 215, 151, 0.35);
-  }
-  #answer-input.ring-wrong {
-    border-color: #F33B6D !important;
-    box-shadow: 0 0 0 4px rgba(243, 59, 109, 0.35);
-  }
-  #answer-input:disabled { opacity: 0.8; }
-
-  /* EFFECT: DAMAGE BLUR */
-  #damage-overlay {
-    position: fixed;
-    inset: 0;
-    box-shadow: inset 0 0 100px 40px rgba(220, 38, 38, 0.7);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 100;
-    transition: opacity 0.3s ease-in-out;
-  }
-  #damage-overlay.active {
-    opacity: 1;
-  }
-
-  /* EFFECT: COMBO POPUP */
-  @keyframes comboPop {
-    0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
-    20% { opacity: 1; transform: scale(1.2) rotate(5deg); }
-    40% { transform: scale(1) rotate(0deg); }
-    80% { opacity: 1; transform: scale(1) translateY(0); }
-    100% { opacity: 0; transform: scale(0.8) translateY(-40px); }
-  }
-  .combo-animate {
-    animation: comboPop 1.2s ease-out forwards;
-  }
-</style>
-</head>
-<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 overflow-hidden">
-
-<div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-2">
-
-  <!-- ZONE: BOSS HEADER & IMAGE -->
-  <div class="relative w-full flex flex-col items-center mb-2 min-h-[260px]">
-    
-    <!-- LAYER 1: รูปบอสขนาดใหญ่ ซ้อนอยู่ตรงกลางด้านหลัง -->
-    <div class="absolute inset-0 flex justify-center items-center z-10 pointer-events-none -top-4">
-      <img id="boss-image" src="public/1.png" alt="boss"
-        class="w-72 h-72 md:w-80 md:h-80 object-contain drop-shadow-2xl float-slow">
-    </div>
-
-    <!-- LAYER 2: TOP BAR -->
-    <div class="w-full flex items-center justify-between gap-2 mb-2 z-20 relative px-1">
-      <!-- Boss Badge -->
-      <div class="bg-white/90 rounded-full px-3 py-1 shadow-md flex items-center gap-1.5 text-xs md:text-sm font-display text-pink-500 font-bold">
-        <i class="fa-solid fa-dragon text-pink-400"></i>
-        <span>Boss <span id="boss-progress">1</span>/<span id="boss-total">5</span></span>
-      </div>
-
-      <!-- Boss Title -->
-      <h2 id="boss-name" class="font-display font-bold text-lg md:text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-center truncate">
-        จอมเวลา ปีศาจนาฬิกา
-      </h2>
-
-      <!-- Right Controls -->
-      <div class="flex items-center gap-2">
-        <div class="bg-white/90 rounded-full px-2.5 py-1 shadow-md flex items-center gap-1 text-xs font-display font-bold text-amber-500">
-          <i class="fa-solid fa-star text-yellow-400"></i>
-          <span id="score-value">0</span>
-          <span id="combo-badge" class="text-[10px] text-gray-400">x1</span>
-        </div>
-        <div class="bg-pink-500 text-white rounded-full px-2.5 py-1 shadow-md font-display font-bold text-[10px] md:text-xs">
-          HARD
-        </div>
-        <button id="stop-btn" aria-label="หยุด" class="w-8 h-8 rounded-full bg-white text-purpleDark flex items-center justify-center shadow-md hover:bg-gray-100 transition active:scale-95">
-          <i class="fa-solid fa-pause text-xs"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- LAYER 2: BOSS HP BAR -->
-    <div class="w-full z-20 relative px-1">
-      <div class="w-full h-8 bg-black/40 border-2 border-white/80 rounded-full overflow-hidden shadow-md relative flex items-center">
-        <div id="boss-hp-bar" class="h-full bg-bossHp rounded-full" style="width:100%"></div>
-        <i class="fa-solid fa-dragon text-sm text-white/80 absolute left-2.5 z-10 pointer-events-none"></i>
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <span id="boss-hp-text" class="font-display font-bold text-white text-xs drop-shadow">100/100</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Spacer เพื่อเว้นพื้นที่รูปบอส -->
-    <div class="h-36 md:h-40 w-full"></div>
-  </div>
-
-  <!-- ===================== MIDDLE SECTION: QUESTION CARD ===================== -->
-  <div class="speech-bubble bg-white rounded-3xl p-4 md:p-5 shadow-card text-center relative z-30 mb-3">
-    
-    <!-- Audio Button Top-Right -->
-    <button id="play-sound-btn" aria-label="ฟังเสียง"
-      class="absolute top-3 right-3 w-9 h-9 rounded-full bg-red-50 hover:bg-red-100 text-pink-500 flex items-center justify-center transition active:scale-90 z-20">
-      <i class="fa-solid fa-volume-high text-sm"></i>
-    </button>
-
-    <!-- Question Image (ถ้าไม่มีรูปจะถูกซ่อนอัตโนมัติ) -->
-    <div class="flex justify-center my-2">
-      <img id="question-image" src="" alt="" 
-        class="max-h-32 md:max-h-36 w-auto object-contain drop-shadow-md rounded-xl transition-all duration-200 hidden">
-    </div>
-
-    <!-- Question Text (แสดงเฉพาะตัวจีนใน Hard Mode) -->
-    <p id="question-hanzi" class="font-hanzi text-4xl md:text-5xl font-bold text-gray-800 my-3">八点</p>
-
-    <!-- FORM INPUT (HARD MODE) -->
-    <form id="answer-form" class="flex flex-col items-center gap-2 mt-2">
-      <input
-        type="text"
-        id="answer-input"
-        placeholder="พิมพ์ตัวอักษรจีนที่นี่..."
-        autocomplete="off"
-        autocapitalize="off"
-        spellcheck="false"
-        class="w-full text-center font-display text-base md:text-lg border-2 border-purple-200 rounded-2xl px-3 py-2.5 outline-none focus:border-purpleDark bg-gray-50 text-gray-800 shadow-inner"
-      />
-      <button
-        type="submit"
-        id="submit-btn"
-        class="w-full font-display font-bold bg-mintDeep hover:bg-emerald-500 active:scale-95 text-white rounded-2xl py-2.5 shadow-md transition text-sm md:text-base"
+      /* Keep the complete game board visible at every viewport size. */
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        overflow: hidden !important;
+      }
+      body {
+        min-height: 100dvh;
+        padding: clamp(8px, 1.5vh, 24px);
+        align-items: center !important;
+      }
+      #game-container {
+        --board-zoom: clamp(0.72, calc(100dvh / 800px), 0.98);
+        zoom: var(--board-zoom);
+        width: min(100%, 32rem);
+        max-height: calc(100dvh / var(--board-zoom));
+      }
+      @media (max-width: 420px) {
+        #game-container {
+          width: min(100%, 30rem);
+        }
+        #boss-name {
+          max-width: 38%;
+          font-size: 0.95rem;
+        }
+      }
+      @media (max-height: 540px) {
+        #game-container {
+          --board-zoom: clamp(0.52, calc(100dvh / 760px), 0.75);
+        }
+      }
+      #game-modal {
+        overflow-y: auto;
+        padding: clamp(16px, 3vh, 24px);
+      }
+      #modal-card {
+        max-height: calc(100dvh - 32px);
+        overflow: visible;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 overflow-hidden"
+  >
+    <div
+      id="game-container"
+      class="w-full max-w-lg mx-auto relative select-none pt-2"
+    >
+      <!-- ZONE: BOSS HEADER & IMAGE -->
+      <div
+        class="relative w-full flex flex-col items-center mb-2 min-h-[260px]"
       >
-        ส่งคำตอบ
-      </button>
-    </form>
-
-    <div id="feedback-box" class="hidden mt-3 rounded-xl px-3 py-2 font-thai text-xs md:text-sm items-center justify-center gap-1.5 pop-in"></div>
-  </div>
-
-  <!-- Timer Bar -->
-  <div class="w-full h-2 bg-black/20 rounded-full overflow-hidden mb-3 relative z-30">
-    <div id="timer-bar" class="h-full bg-yellowBar rounded-full" style="width:100%"></div>
-  </div>
-
-  <!-- ===================== BOTTOM SECTION: PLAYER CARD ===================== -->
-  <div class="bg-white rounded-2xl p-3 shadow-card relative z-30">
-    <div class="flex items-center justify-between mb-2">
-      <!-- Player Profile -->
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-base overflow-hidden">
-          🐼
+        <!-- LAYER 1: รูปบอสขนาดใหญ่ ซ้อนอยู่ตรงกลางด้านหลัง -->
+        <div
+          class="absolute inset-0 flex justify-center items-center z-10 pointer-events-none -top-4"
+        >
+          <img
+            id="boss-image"
+            src="public/1.png"
+            alt="boss"
+            class="w-72 h-72 md:w-80 md:h-80 object-contain drop-shadow-2xl float-slow"
+          />
         </div>
-        <span id="player-display-name" class="font-display font-bold text-gray-700 text-xs md:text-sm">Panda</span>
+
+        <!-- LAYER 2: TOP BAR -->
+        <div
+          class="w-full flex items-center justify-between gap-2 mb-2 z-20 relative px-1"
+        >
+          <!-- Boss Badge -->
+          <div
+            class="bg-white/90 rounded-full px-3 py-1 shadow-md flex items-center gap-1.5 text-xs md:text-sm font-display text-pink-500 font-bold"
+          >
+            <i class="fa-solid fa-dragon text-pink-400"></i>
+            <span
+              >Boss <span id="boss-progress">1</span>/<span id="boss-total"
+                >5</span
+              ></span
+            >
+          </div>
+
+          <!-- Boss Title -->
+          <h2
+            id="boss-name"
+            class="font-display font-bold text-lg md:text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-center truncate"
+          >
+            จอมเวลา ปีศาจนาฬิกา
+          </h2>
+
+          <!-- Right Controls -->
+          <div class="flex items-center gap-2">
+            <div
+              class="bg-white/90 rounded-full px-2.5 py-1 shadow-md flex items-center gap-1 text-xs font-display font-bold text-amber-500"
+            >
+              <i class="fa-solid fa-star text-yellow-400"></i>
+              <span id="score-value">0</span>
+              <span id="combo-badge" class="text-[10px] text-gray-400">x1</span>
+            </div>
+            <div
+              class="bg-pink-500 text-white rounded-full px-2.5 py-1 shadow-md font-display font-bold text-[10px] md:text-xs"
+            >
+              HARD
+            </div>
+            <button
+              id="stop-btn"
+              aria-label="หยุด"
+              class="w-8 h-8 rounded-full bg-white text-purpleDark flex items-center justify-center shadow-md hover:bg-gray-100 transition active:scale-95"
+            >
+              <i class="fa-solid fa-pause text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- LAYER 2: BOSS HP BAR -->
+        <div class="w-full z-20 relative px-1">
+          <div
+            class="w-full h-8 bg-black/40 border-2 border-white/80 rounded-full overflow-hidden shadow-md relative flex items-center"
+          >
+            <div
+              id="boss-hp-bar"
+              class="h-full bg-bossHp rounded-full"
+              style="width: 100%"
+            ></div>
+            <i
+              class="fa-solid fa-dragon text-sm text-white/80 absolute left-2.5 z-10 pointer-events-none"
+            ></i>
+            <div
+              class="absolute inset-0 flex items-center justify-center pointer-events-none"
+            >
+              <span
+                id="boss-hp-text"
+                class="font-display font-bold text-white text-xs drop-shadow"
+                >100/100</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer เพื่อเว้นพื้นที่รูปบอส -->
+        <div class="h-36 md:h-40 w-full"></div>
       </div>
 
-      <!-- Helper Items -->
-      <div class="flex items-center gap-2">
-        <div class="relative">
-          <button data-item="heal" aria-label="ฮีล" class="icon-btn w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
-            <i class="fa-solid fa-flask"></i>
+      <!-- ===================== MIDDLE SECTION: QUESTION CARD ===================== -->
+      <div
+        class="speech-bubble bg-white rounded-3xl p-4 md:p-5 shadow-card text-center relative z-30 mb-3"
+      >
+        <!-- Audio Button Top-Right -->
+        <button
+          id="play-sound-btn"
+          aria-label="ฟังเสียง"
+          class="absolute top-3 right-3 w-9 h-9 rounded-full bg-red-50 hover:bg-red-100 text-pink-500 flex items-center justify-center transition active:scale-90 z-20"
+        >
+          <i class="fa-solid fa-volume-high text-sm"></i>
+        </button>
+
+        <!-- Question Image (ถ้าไม่มีรูปจะถูกซ่อนอัตโนมัติ) -->
+        <div class="flex justify-center my-2">
+          <img
+            id="question-image"
+            src=""
+            alt=""
+            class="max-h-32 md:max-h-36 w-auto object-contain drop-shadow-md rounded-xl transition-all duration-200 hidden"
+          />
+        </div>
+
+        <!-- Question Text (แสดงเฉพาะตัวจีนใน Hard Mode) -->
+        <p
+          id="question-hanzi"
+          class="font-hanzi text-4xl md:text-5xl font-bold text-gray-800 my-3"
+        >
+          八点
+        </p>
+
+        <!-- FORM INPUT (HARD MODE) -->
+        <form id="answer-form" class="flex flex-col items-center gap-2 mt-2">
+          <input
+            type="text"
+            id="answer-input"
+            placeholder="พิมพ์ตัวอักษรจีนที่นี่..."
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            class="w-full text-center font-display text-base md:text-lg border-2 border-purple-200 rounded-2xl px-3 py-2.5 outline-none focus:border-purpleDark bg-gray-50 text-gray-800 shadow-inner"
+          />
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full font-display font-bold bg-mintDeep hover:bg-emerald-500 active:scale-95 text-white rounded-2xl py-2.5 shadow-md transition text-sm md:text-base"
+          >
+            ส่งคำตอบ
           </button>
-          <span id="item-heal-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">2</span>
+        </form>
+
+        <div
+          id="feedback-box"
+          class="hidden mt-3 rounded-xl px-3 py-2 font-thai text-xs md:text-sm items-center justify-center gap-1.5 pop-in"
+        ></div>
+      </div>
+
+      <!-- Timer Bar -->
+      <div
+        class="w-full h-2 bg-black/20 rounded-full overflow-hidden mb-3 relative z-30"
+      >
+        <div
+          id="timer-bar"
+          class="h-full bg-yellowBar rounded-full"
+          style="width: 100%"
+        ></div>
+      </div>
+
+      <!-- ===================== BOTTOM SECTION: PLAYER CARD ===================== -->
+      <div class="bg-white rounded-2xl p-3 shadow-card relative z-30">
+        <div class="flex items-center justify-between mb-2">
+          <!-- Player Profile -->
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-base overflow-hidden"
+            >
+              🐼
+            </div>
+            <span
+              id="player-display-name"
+              class="font-display font-bold text-gray-700 text-xs md:text-sm"
+              >Panda</span
+            >
+          </div>
+
+          <!-- Helper Items -->
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <button
+                data-item="heal"
+                aria-label="ฮีล"
+                class="icon-btn w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs"
+              >
+                <i class="fa-solid fa-flask"></i>
+              </button>
+              <span
+                id="item-heal-count"
+                class="absolute -top-1 -right-1 font-display text-[9px] bg-mintDeep text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold"
+                >2</span
+              >
+            </div>
+
+            <div class="relative">
+              <button
+                data-item="hint"
+                aria-label="คำใบ้"
+                class="icon-btn w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs"
+              >
+                <i class="fa-solid fa-lightbulb"></i>
+              </button>
+              <span
+                id="item-hint-count"
+                class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold"
+                >3</span
+              >
+            </div>
+
+            <div class="relative">
+              <button
+                data-item="skip"
+                aria-label="ข้าม"
+                class="icon-btn w-7 h-7 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-xs"
+              >
+                <i class="fa-solid fa-forward font-bold"></i>
+              </button>
+              <span
+                id="item-skip-count"
+                class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold"
+                >3</span
+              >
+            </div>
+          </div>
         </div>
 
-        <div class="relative">
-          <button data-item="hint" aria-label="คำใบ้" class="icon-btn w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
-            <i class="fa-solid fa-lightbulb"></i>
+        <!-- Player HP Bar -->
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-heart text-playerHp text-sm"></i>
+          <div
+            class="relative w-full h-6 bg-gray-200 border-2 border-gray-700 rounded-full overflow-hidden"
+          >
+            <div
+              id="player-hp-bar"
+              class="h-full bg-playerHp rounded-full"
+              style="width: 100%"
+            ></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span
+                id="player-hp-text"
+                class="font-display font-bold text-white text-[11px] drop-shadow"
+                >100/100</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== OVERLAYS ===================== -->
+    <div id="damage-overlay"></div>
+    <div
+      id="combo-container"
+      class="fixed inset-0 flex items-center justify-center pointer-events-none z-[90] hidden"
+    >
+      <div
+        id="combo-text"
+        class="font-display font-black text-6xl md:text-7xl text-yellow-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.6)] text-center"
+        style="-webkit-text-stroke: 2px #d97706"
+      >
+        COMBO x3!
+      </div>
+    </div>
+
+    <!-- ===================== CUSTOM POPUP MODAL ===================== -->
+    <div
+      id="game-modal"
+      class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+    >
+      <div
+        id="modal-card"
+        class="relative w-full max-w-xs md:max-w-sm bg-white rounded-[36px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 border-[#68cbf8] transition-all duration-200 scale-100"
+      >
+        <div
+          id="modal-ribbon"
+          class="absolute -top-7 left-1/2 -translate-x-1/2 w-[82%] py-2 bg-[#68cbf8] border-2 border-white rounded-2xl shadow-md flex items-center justify-center before:content-[''] before:absolute before:top-2 before:-left-5 before:w-6 before:h-full before:bg-[#46b3e3] before:-z-10 before:rounded-l-md before:[clip-path:polygon(100%_0,0_0,40%_50%,0_100%,100%_100%)] after:content-[''] after:absolute after:top-2 after:-right-5 after:w-6 after:h-full after:bg-[#46b3e3] after:-z-10 after:rounded-r-md after:[clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]"
+        >
+          <span
+            id="modal-ribbon-text"
+            class="font-display font-extrabold text-2xl md:text-3xl text-white tracking-wider uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]"
+            >BRAKE TIME</span
+          >
+        </div>
+
+        <div class="flex justify-center items-center my-3 h-28">
+          <img
+            id="modal-panda-img"
+            src="public/Alert/2.png"
+            alt="Panda Status"
+            onerror="this.style.display = 'none'"
+            class="h-full object-contain drop-shadow-md"
+          />
+        </div>
+
+        <h3
+          id="modal-title"
+          class="font-display font-extrabold text-2xl md:text-3xl text-[#4b4b4b] mb-2"
+        >
+          หยุดชั่วคราว
+        </h3>
+
+        <div class="flex justify-center mb-5">
+          <div
+            id="modal-subtitle-box"
+            class="bg-[#eef9ed] rounded-full px-5 py-1.5 inline-block"
+          >
+            <p
+              id="modal-subtitle"
+              class="font-thai text-xs md:text-sm text-[#618a66] font-semibold"
+            >
+              บางทีการพักก็ทำให้ดีขึ้น
+            </p>
+          </div>
+        </div>
+
+        <div
+          id="modal-stats"
+          class="bg-emerald-50 rounded-2xl py-1.5 px-4 mb-4 text-xs font-thai text-emerald-800 font-semibold hidden"
+        >
+          ปราบบอสได้ <span id="modal-boss-count">0/5</span> • คะแนน
+          <span id="modal-score">0</span>
+        </div>
+
+        <div id="modal-actions" class="flex gap-3 justify-center mt-2">
+          <button
+            id="modal-btn-home"
+            class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#58cbf5] hover:bg-[#45bce7] active:translate-y-0.5 shadow-[0_4px_0_#3aa1c7] transition text-sm md:text-base"
+          >
+            กลับหน้าแรก
           </button>
-          <span id="item-hint-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-amber-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">3</span>
-        </div>
-
-        <div class="relative">
-          <button data-item="skip" aria-label="ข้าม" class="icon-btn w-7 h-7 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-xs">
-            <i class="fa-solid fa-forward font-bold"></i>
+          <button
+            id="modal-btn-primary"
+            class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#ff6f9f] hover:bg-[#f05a8c] active:translate-y-0.5 shadow-[0_4px_0_#d84674] transition text-sm md:text-base"
+          >
+            เล่นต่อ
           </button>
-          <span id="item-skip-count" class="absolute -top-1 -right-1 font-display text-[9px] bg-sky-400 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center font-bold">3</span>
         </div>
       </div>
     </div>
 
-    <!-- Player HP Bar -->
-    <div class="flex items-center gap-2">
-      <i class="fa-solid fa-heart text-playerHp text-sm"></i>
-      <div class="relative w-full h-6 bg-gray-200 border-2 border-gray-700 rounded-full overflow-hidden">
-        <div id="player-hp-bar" class="h-full bg-playerHp rounded-full" style="width:100%"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <span id="player-hp-text" class="font-display font-bold text-white text-[11px] drop-shadow">100/100</span>
-        </div>
-      </div>
-    </div>
-  </div>
+    <script>
+      /* BOSS & QUESTION DATA (15 QUESTIONS PER BOSS) */
+      const bossData = [
+        {
+          id: 1,
+          name: "จอมเวลา ปีศาจนาฬิกา",
+          themeColor: "#9871FA",
+          questions: [
+            {
+              qHanzi: "图片上问什么？",
+              qPinyin: "túpiàn shàng wèn shénme?",
+              aHanzi: "现在几点",
+              aPinyin: "xiànzài jǐ diǎn",
+              meaning: "ตอนนี้กี่โมง",
+              image: "public/Clock/what_time.png",
+            },
+            {
+              qHanzi: "这是什么时候？",
+              qPinyin: "zhè shì shénme shíhou?",
+              aHanzi: "早上六点",
+              aPinyin: "zǎoshang liù diǎn",
+              meaning: "หกโมงเช้า",
+              image: "public/Clock/6am.png",
+            },
+            {
+              qHanzi: "这是什么时候？",
+              qPinyin: "zhè shì shénme shíhou?",
+              aHanzi: "晚上九点",
+              aPinyin: "wǎnshang jiǔ diǎn",
+              meaning: "สามทุ่ม",
+              image: "public/Clock/9pm.png",
+            },
+            {
+              qHanzi: "这是什么时候？",
+              qPinyin: "zhè shì shénme shíhou?",
+              aHanzi: "下午两点",
+              aPinyin: "xiàwǔ liǎng diǎn",
+              meaning: "บ่ายสองโมง",
+              image: "public/Clock/2pm.png",
+            },
+            {
+              qHanzi: "这是什么时候？",
+              qPinyin: "zhè shì shénme shíhou?",
+              aHanzi: "中午十二点",
+              aPinyin: "zhōngwǔ shí'èr diǎn",
+              meaning: "เที่ยงตรง",
+              image: "public/Clock/12pm.png",
+            },
+            {
+              qHanzi: "现在几点？(差)",
+              qPinyin: "xiànzài jǐ diǎn?",
+              aHanzi: "差十分八点",
+              aPinyin: "chà shí fēn bā diǎn",
+              meaning: "อีกสิบนาทีแปดโมง",
+              image: "public/Clock/07_50.png",
+            },
+            {
+              qHanzi: "现在几点？(刻)",
+              qPinyin: "xiànzài jǐ diǎn?",
+              aHanzi: "两点一刻",
+              aPinyin: "liǎng diǎn yī kè",
+              meaning: "สองโมงสิบห้านาที",
+              image: "public/Clock/02_15.png",
+            },
+            {
+              qHanzi: "现在几点？(刻)",
+              qPinyin: "xiànzài jǐ diǎn?",
+              aHanzi: "十点三刻",
+              aPinyin: "shí diǎn sān kè",
+              meaning: "สิบโมงสี่สิบห้านาที",
+              image: "public/Clock/10_45.png",
+            },
+            {
+              qHanzi: "这是什么？",
+              qPinyin: "zhè shì shénme?",
+              aHanzi: "时间",
+              aPinyin: "shíjiān",
+              meaning: "เวลา",
+              image: "public/Clock/time.png",
+            },
+            {
+              qHanzi: "这是什么词？",
+              qPinyin: "zhè shì shénme cí?",
+              aHanzi: "每天",
+              aPinyin: "měitiān",
+              meaning: "ทุกวัน",
+              image: "public/Clock/everyday.png",
+            },
+            {
+              qHanzi: "他说了什么？",
+              qPinyin: "tā shuō le shénme?",
+              aHanzi: "早上好",
+              aPinyin: "zǎoshang hǎo",
+              meaning: "อรุณสวัสดิ์",
+              image: "public/Clock/goodmorning.png",
+            },
+            {
+              qHanzi: "他说了什么？",
+              qPinyin: "tā shuō le shénme?",
+              aHanzi: "晚上好",
+              aPinyin: "wǎnshang hǎo",
+              meaning: "สวัสดีตอนเย็น",
+              image: "public/Clock/goodevening.png",
+            },
+            {
+              qHanzi: "什么词？(Time)",
+              qPinyin: "shénme cí?",
+              aHanzi: "时候",
+              aPinyin: "shíhou",
+              meaning: "ตอนที่/เวลา",
+              image: "public/Clock/moment.png",
+            },
+            {
+              qHanzi: "这是什么问题？",
+              qPinyin: "zhè shì shénme wèntí?",
+              aHanzi: "什么时候",
+              aPinyin: "shénme shíhou",
+              meaning: "เมื่อไหร่",
+              image: "public/Clock/when.png",
+            },
+            {
+              qHanzi: "这是什么意思？",
+              qPinyin: "zhè shì shénme yìsi?",
+              aHanzi: "准时",
+              aPinyin: "zhǔnshí",
+              meaning: "ตรงเวลา",
+              image: "public/Clock/ontime.png",
+            },
+          ],
+        },
+        {
+          id: 2,
+          name: "อสูรปฏิทิน",
+          themeColor: "#E53935",
+          questions: [
+            {
+              qHanzi: "今天怎么说？",
+              qPinyin: "jīntiān zěnme shuō?",
+              aHanzi: "今天星期一",
+              aPinyin: "jīntiān xīngqīyī",
+              meaning: "วันนี้วันจันทร์",
+              image: "public/Calendar/todaymon.png",
+            },
+            {
+              qHanzi: "明天怎么说？",
+              qPinyin: "míngtiān zěnme shuō?",
+              aHanzi: "明天星期二",
+              aPinyin: "míngtiān xīngqī'èr",
+              meaning: "พรุ่งนี้วันอังคาร",
+              image: "public/Calendar/tomortue.png",
+            },
+            {
+              qHanzi: "昨天怎么说？",
+              qPinyin: "zuótiān zěnme shuō?",
+              aHanzi: "昨天星期天",
+              aPinyin: "zuótiān xīngqītiān",
+              meaning: "เมื่อวานวันอาทิตย์",
+              image: "public/Calendar/yestsun.png",
+            },
+            {
+              qHanzi: "这是什么？",
+              qPinyin: "zhè shì shénme?",
+              aHanzi: "你的生日",
+              aPinyin: "nǐ de shēngrì",
+              meaning: "วันเกิดของคุณ",
+              image: "public/Calendar/yourbday.png",
+            },
+            {
+              qHanzi: "问日期怎么说？",
+              qPinyin: "wèn rìqī zěnme shuō?",
+              aHanzi: "今天几号",
+              aPinyin: "jīntiān jǐ hào",
+              meaning: "วันนี้วันที่เท่าไหร่",
+              image: "public/Calendar/whatdate.png",
+            },
+            {
+              qHanzi: "这是多长时间？",
+              qPinyin: "zhè shì duō cháng shíjiān?",
+              aHanzi: "一个星期",
+              aPinyin: "yī ge xīngqī",
+              meaning: "หนึ่งสัปดาห์",
+              image: "public/Calendar/1week.png",
+            },
+            {
+              qHanzi: "这是多长时间？",
+              qPinyin: "zhè shì duō cháng shíjiān?",
+              aHanzi: "两个星期",
+              aPinyin: "liǎng ge xīngqī",
+              meaning: "สองสัปดาห์",
+              image: "public/Calendar/2weeks.png",
+            },
+            {
+              qHanzi: "问时间长度怎么说？",
+              qPinyin: "wèn shíjiān chángdù zěnme shuō?",
+              aHanzi: "几个星期",
+              aPinyin: "jǐ ge xīngqī",
+              meaning: "กี่สัปดาห์",
+              image: "public/Calendar/howmanyweeks.png",
+            },
+            {
+              qHanzi: "这是什么时候？",
+              qPinyin: "zhè shì shénme shíhou?",
+              aHanzi: "上个周末",
+              aPinyin: "shàng ge zhōumò",
+              meaning: "สุดสัปดาห์ที่แล้ว",
+              image: "public/Calendar/lastweekend.png",
+            },
+            {
+              qHanzi: "这是什么时候？",
+              qPinyin: "zhè shì shénme shíhou?",
+              aHanzi: "下个周末",
+              aPinyin: "xià ge zhōumò",
+              meaning: "สุดสัปดาห์หน้า",
+              image: "public/Calendar/nextweekend.png",
+            },
+            {
+              qHanzi: "这是什么节日？",
+              qPinyin: "zhè shì shénme jiérì?",
+              aHanzi: "新年",
+              aPinyin: "xīnnián",
+              meaning: "ปีใหม่",
+              image: "public/Calendar/newyear.png",
+            },
+            {
+              qHanzi: "这是什么？",
+              qPinyin: "zhè shì shénme?",
+              aHanzi: "节日",
+              aPinyin: "jiérì",
+              meaning: "เทศกาล",
+              image: "public/Calendar/festival.png",
+            },
+            {
+              qHanzi: "这是什么日子？",
+              qPinyin: "zhè shì shénme rìzi?",
+              aHanzi: "工作日",
+              aPinyin: "gōngzuòrì",
+              meaning: "วันทำงาน",
+              image: "public/Calendar/workday.png",
+            },
+            {
+              qHanzi: "这是什么日子？",
+              qPinyin: "zhè shì shénme rìzi?",
+              aHanzi: "休息日",
+              aPinyin: "xiūxirì",
+              meaning: "วันพักผ่อน",
+              image: "public/Calendar/dayoff.png",
+            },
+            {
+              qHanzi: "告别怎么说？",
+              qPinyin: "gàobié zěnme shuō?",
+              aHanzi: "星期天见",
+              aPinyin: "xīngqītiān jiàn",
+              meaning: "เจอกันวันอาทิตย์",
+              image: "public/Calendar/seesunday.png",
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: "ปีศาจปฏิทิน (เดือนและเวลา)",
+          themeColor: "#1E88E5",
+          questions: [
+            {
+              qHanzi: "问生日怎么说？",
+              qPinyin: "wèn shēngrì zěnme shuō?",
+              aHanzi: "你的生日是几月几号",
+              aPinyin: "nǐ de shēngrì shì jǐ yuè jǐ hào",
+              meaning: "วันเกิดของคุณคือวันที่เท่าไหร่",
+              image: "public/Calendar/whenbirthday.png",
+            },
+            {
+              qHanzi: "元旦是哪一天？",
+              qPinyin: "yuándàn shì nǎ yī tiān?",
+              aHanzi: "今天是一月一号",
+              aPinyin: "jīntiān shì yī yuè yī hào",
+              meaning: "วันนี้คือวันที่ 1 มกราคม",
+              image: "public/Calendar/today1jan.png",
+            },
+            {
+              qHanzi: "现在什么时候？",
+              qPinyin: "xiànzài shénme shíhou?",
+              aHanzi: "现在是下午",
+              aPinyin: "xiànzài shì xiàwǔ",
+              meaning: "ตอนนี้คือตอนบ่าย",
+              image: "public/Time/nowafternoon.png",
+            },
+            {
+              qHanzi: "告别怎么说？",
+              qPinyin: "gàobié zěnme shuō?",
+              aHanzi: "晚上见",
+              aPinyin: "wǎnshang jiàn",
+              meaning: "เจอกันตอนเย็น",
+              image: "public/Time/seetonight.png",
+            },
+            {
+              qHanzi: "告别怎么说？",
+              qPinyin: "gàobié zěnme shuō?",
+              aHanzi: "早上见",
+              aPinyin: "zǎoshang jiàn",
+              meaning: "เจอกันตอนเช้า",
+              image: "public/Time/seemorning.png",
+            },
+            {
+              qHanzi: "这是几点？",
+              qPinyin: "zhè shì jǐ diǎn?",
+              aHanzi: "下午三点",
+              aPinyin: "xiàwǔ sān diǎn",
+              meaning: "บ่ายสามโมง",
+              image: "public/Time/3pm.png",
+            },
+            {
+              qHanzi: "这是几点？",
+              qPinyin: "zhè shì jǐ diǎn?",
+              aHanzi: "晚上八点半",
+              aPinyin: "wǎnshang bā diǎn bàn",
+              meaning: "สองทุ่มครึ่ง",
+              image: "public/Time/830pm.png",
+            },
+            {
+              qHanzi: "这是多长时间？",
+              qPinyin: "zhè shì duō cháng shíjiān?",
+              aHanzi: "一个月",
+              aPinyin: "yī ge yuè",
+              meaning: "หนึ่งเดือน",
+              image: "public/Calendar/1month.png",
+            },
+            {
+              qHanzi: "这是多长时间？",
+              qPinyin: "zhè shì duō cháng shíjiān?",
+              aHanzi: "半个月",
+              aPinyin: "bàn ge yuè",
+              meaning: "ครึ่งเดือน",
+              image: "public/Calendar/halfmonth.png",
+            },
+            {
+              qHanzi: "这是多长时间？",
+              qPinyin: "zhè shì duō cháng shíjiān?",
+              aHanzi: "两个月",
+              aPinyin: "liǎng ge yuè",
+              meaning: "สองเดือน",
+              image: "public/Calendar/2months.png",
+            },
+            {
+              qHanzi: "什么频率？",
+              qPinyin: "shénme pínlǜ?",
+              aHanzi: "每年",
+              aPinyin: "měinián",
+              meaning: "ทุกปี",
+              image: "public/Calendar/everyyear.png",
+            },
+            {
+              qHanzi: "什么频率？",
+              qPinyin: "shénme pínlǜ?",
+              aHanzi: "每月",
+              aPinyin: "měiyuè",
+              meaning: "ทุกเดือน",
+              image: "public/Calendar/everymonth.png",
+            },
+            {
+              qHanzi: "这是什么时间？",
+              qPinyin: "zhè shì shénme shíjiān?",
+              aHanzi: "上午",
+              aPinyin: "shàngwǔ",
+              meaning: "ช่วงเช้า/ก่อนเที่ยง",
+              image: "public/Time/am.png",
+            },
+            {
+              qHanzi: "这是什么？",
+              qPinyin: "zhè shì shénme?",
+              aHanzi: "季",
+              aPinyin: "jì",
+              meaning: "ฤดูกาล",
+              image: "public/Weather/season.png",
+            },
+            {
+              qHanzi: "这是什么节日？",
+              qPinyin: "zhè shì shénme jiérì?",
+              aHanzi: "春节",
+              aPinyin: "chūnjié",
+              meaning: "เทศกาลตรุษจีน",
+              image: "public/Calendar/cny.png",
+            },
+          ],
+        },
+        {
+          id: 4,
+          name: "ก็อบลินเส้นทาง",
+          themeColor: "#43A047",
+          questions: [
+            {
+              qHanzi: "这是什么方向？",
+              qPinyin: "zhè shì shénme fāngxiàng?",
+              aHanzi: "外面",
+              aPinyin: "wàimiàn",
+              meaning: "ด้านนอก",
+              image: "public/Locations/outside.png",
+            },
+            {
+              qHanzi: "这是什么方向？",
+              qPinyin: "zhè shì shénme fāngxiàng?",
+              aHanzi: "左边",
+              aPinyin: "zuǒbian",
+              meaning: "ฝั่งซ้าย",
+              image: "public/Locations/leftside.png",
+            },
+            {
+              qHanzi: "这是什么方向？",
+              qPinyin: "zhè shì shénme fāngxiàng?",
+              aHanzi: "右边",
+              aPinyin: "yòubian",
+              meaning: "ฝั่งขวา",
+              image: "public/Locations/rightside.png",
+            },
+            {
+              qHanzi: "问位置怎么说？",
+              qPinyin: "wèn wèizhì zěnme shuō?",
+              aHanzi: "在哪里",
+              aPinyin: "zài nǎlǐ",
+              meaning: "อยู่ที่ไหน",
+              image: "public/Locations/where.png",
+            },
+            {
+              qHanzi: "他去哪里？",
+              qPinyin: "tā qù nǎlǐ?",
+              aHanzi: "去学校",
+              aPinyin: "qù xuéxiào",
+              meaning: "ไปโรงเรียน",
+              image: "public/Locations/goschool.png",
+            },
+            {
+              qHanzi: "他去哪里？",
+              qPinyin: "tā qù nǎlǐ?",
+              aHanzi: "回家",
+              aPinyin: "huí jiā",
+              meaning: "กลับบ้าน",
+              image: "public/Locations/gohome.png",
+            },
+            {
+              qHanzi: "他在哪里？",
+              qPinyin: "tā zài nǎlǐ?",
+              aHanzi: "在家",
+              aPinyin: "zài jiā",
+              meaning: "อยู่ที่บ้าน",
+              image: "public/Locations/athome.png",
+            },
+            {
+              qHanzi: "这是哪里？",
+              qPinyin: "zhè shì nǎlǐ?",
+              aHanzi: "火车站",
+              aPinyin: "huǒchēzhàn",
+              meaning: "สถานีรถไฟ",
+              image: "public/Locations/trainstation.png",
+            },
+            {
+              qHanzi: "这是哪里？(口语)",
+              qPinyin: "zhè shì nǎlǐ?",
+              aHanzi: "飞机场",
+              aPinyin: "fēijīchǎng",
+              meaning: "สนามบิน(พูด)",
+              image: "public/Locations/airfield.png",
+            },
+            {
+              qHanzi: "这是哪里？",
+              qPinyin: "zhè shì nǎlǐ?",
+              aHanzi: "饭馆",
+              aPinyin: "fànguǎn",
+              meaning: "ร้านอาหาร",
+              image: "public/Locations/restaurant2.png",
+            },
+            {
+              qHanzi: "这是哪里？",
+              qPinyin: "zhè shì nǎlǐ?",
+              aHanzi: "银行",
+              aPinyin: "yínháng",
+              meaning: "ธนาคาร",
+              image: "public/Locations/bank.png",
+            },
+            {
+              qHanzi: "这是哪个国家？",
+              qPinyin: "zhè shì nǎ ge guójiā?",
+              aHanzi: "中国",
+              aPinyin: "Zhōngguó",
+              meaning: "ประเทศจีน",
+              image: "public/Locations/china.png",
+            },
+            {
+              qHanzi: "这是哪个国家？",
+              qPinyin: "zhè shì nǎ ge guójiā?",
+              aHanzi: "泰国",
+              aPinyin: "Tàiguó",
+              meaning: "ประเทศไทย",
+              image: "public/Locations/thailand.png",
+            },
+            {
+              qHanzi: "距离怎么样？",
+              qPinyin: "jùlí zěnmeyàng?",
+              aHanzi: "远",
+              aPinyin: "yuǎn",
+              meaning: "ไกล",
+              image: "public/Locations/far.png",
+            },
+            {
+              qHanzi: "距离怎么样？",
+              qPinyin: "jùlí zěnmeyàng?",
+              aHanzi: "近",
+              aPinyin: "jìn",
+              meaning: "ใกล้",
+              image: "public/Locations/near.png",
+            },
+          ],
+        },
+        {
+          id: 5,
+          name: "มังกรลมฟ้าอากาศ",
+          themeColor: "#00ACC1",
+          questions: [
+            {
+              qHanzi: "这是什么季节？",
+              qPinyin: "zhè shì shénme jìjié?",
+              aHanzi: "秋天",
+              aPinyin: "qiūtiān",
+              meaning: "ฤดูใบไม้ร่วง",
+              image: "public/Weather/autumn.png",
+            },
+            {
+              qHanzi: "感觉怎么样？",
+              qPinyin: "gǎnjué zěnmeyàng?",
+              aHanzi: "凉快",
+              aPinyin: "liángkuai",
+              meaning: "เย็นสบาย",
+              image: "public/Weather/cool.png",
+            },
+            {
+              qHanzi: "感觉怎么样？",
+              qPinyin: "gǎnjué zěnmeyàng?",
+              aHanzi: "暖和",
+              aPinyin: "nuǎnhuo",
+              meaning: "อบอุ่น",
+              image: "public/Weather/warm.png",
+            },
+            {
+              qHanzi: "问天气怎么说？",
+              qPinyin: "wèn tiānqì zěnme shuō?",
+              aHanzi: "天气怎么样",
+              aPinyin: "tiānqì zěnmeyàng",
+              meaning: "อากาศเป็นไง",
+              image: "public/Weather/howisweather.png",
+            },
+            {
+              qHanzi: "描述好天气？",
+              qPinyin: "miáoshù hǎo tiānqì?",
+              aHanzi: "今天天气很好",
+              aPinyin: "jīntiān tiānqì hěn hǎo",
+              meaning: "วันนี้อากาศดีมาก",
+              image: "public/Weather/goodweather.png",
+            },
+            {
+              qHanzi: "昨天发生什么事？",
+              qPinyin: "zuótiān fāshēng shénme shì?",
+              aHanzi: "昨天下雨了",
+              aPinyin: "zuótiān xià yǔ le",
+              meaning: "เมื่อวานฝนตก",
+              image: "public/Weather/rained.png",
+            },
+            {
+              qHanzi: "明天天气怎么样？",
+              qPinyin: "míngtiān tiānqì zěnmeyàng?",
+              aHanzi: "明天是晴天",
+              aPinyin: "míngtiān shì qíngtiān",
+              meaning: "พรุ่งนี้ฟ้าใส",
+              image: "public/Weather/tomorrowsunny.png",
+            },
+            {
+              qHanzi: "现在的天气？",
+              qPinyin: "xiànzài de tiānqì?",
+              aHanzi: "下大雨",
+              aPinyin: "xià dà yǔ",
+              meaning: "ฝนตกหนัก",
+              image: "public/Weather/heavyrain.png",
+            },
+            {
+              qHanzi: "现在的天气？",
+              qPinyin: "xiànzài de tiānqì?",
+              aHanzi: "下大雪",
+              aPinyin: "xià dà xuě",
+              meaning: "หิมะตกหนัก",
+              image: "public/Weather/heavysnow.png",
+            },
+            {
+              qHanzi: "这是什么？",
+              qPinyin: "zhè shì shénme?",
+              aHanzi: "雨伞",
+              aPinyin: "yǔsǎn",
+              meaning: "ร่ม",
+              image: "public/Weather/umbrella.png",
+            },
+            {
+              qHanzi: "这怎么样？",
+              qPinyin: "zhè zěnmeyàng?",
+              aHanzi: "漂亮",
+              aPinyin: "piàoliang",
+              meaning: "สวย",
+              image: "public/Weather/beautiful.png",
+            },
+            {
+              qHanzi: "心情怎么样？",
+              qPinyin: "xīnqíng zěnmeyàng?",
+              aHanzi: "高兴",
+              aPinyin: "gāoxìng",
+              meaning: "ดีใจ",
+              image: "public/Weather/happy.png",
+            },
+            {
+              qHanzi: "感觉怎么样？",
+              qPinyin: "gǎnjué zěnmeyàng?",
+              aHanzi: "舒服",
+              aPinyin: "shūfu",
+              meaning: "สบาย",
+              image: "public/Weather/comfortable.png",
+            },
+            {
+              qHanzi: "温度怎么样？",
+              qPinyin: "wēndù zěnmeyàng?",
+              aHanzi: "零下",
+              aPinyin: "língxià",
+              meaning: "ติดลบ",
+              image: "public/Weather/belowzero.png",
+            },
+            {
+              qHanzi: "这是什么？",
+              qPinyin: "zhè shì shénme?",
+              aHanzi: "气温",
+              aPinyin: "qìwēn",
+              meaning: "อุณหภูมิ",
+              image: "public/Weather/temp.png",
+            },
+          ],
+        },
+      ];
 
-</div>
+      /* GAME STATE & CONFIG */
+      const TOTAL_BOSSES = 5;
+      const QUESTIONS_PER_BOSS = 15; // 👈 กำหนดเป็น 15 คำถาม
+      const QUESTION_TIME = 8000; // 8 วินาที สำหรับพิมพ์
+      const WRONG_DAMAGE = 30;
+      const HEAL_AMOUNT = 20;
 
-<!-- ===================== OVERLAYS ===================== -->
-<div id="damage-overlay"></div>
-<div id="combo-container" class="fixed inset-0 flex items-center justify-center pointer-events-none z-[90] hidden">
-  <div id="combo-text" class="font-display font-black text-6xl md:text-7xl text-yellow-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.6)] text-center" style="-webkit-text-stroke: 2px #d97706;">
-    COMBO x3!
-  </div>
-</div>
+      let state = {
+        bossIndex: 0,
+        bossHP: 100,
+        bossMaxHP: 100,
+        playerHP: 100,
+        score: 0,
+        comboCount: 0,
+        scoreMultiplier: 1,
+        bossesDefeated: 0,
+        items: { heal: 2, hint: 3, skip: 3 }, // <--- แก้จำนวนการใช้ตัวช่วยตามที่ขอ
+        currentQuestions: [],
+        questionIndex: 0,
+        damagePerHit: 100 / QUESTIONS_PER_BOSS, // ดาเมจตอบถูก 15 ข้อบอสร่วงพอดี
+        answered: false,
+        hintUsedThisQuestion: false,
+        paused: false,
+      };
 
-<!-- ===================== CUSTOM POPUP MODAL ===================== -->
-<div id="game-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-  <div id="modal-card" class="relative w-full max-w-xs md:max-w-sm bg-white rounded-[36px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 border-[#68cbf8] transition-all duration-200 scale-100">
-    <div id="modal-ribbon" class="absolute -top-7 left-1/2 -translate-x-1/2 w-[82%] py-2 bg-[#68cbf8] border-2 border-white rounded-2xl shadow-md flex items-center justify-center
-      before:content-[''] before:absolute before:top-2 before:-left-5 before:w-6 before:h-full before:bg-[#46b3e3] before:-z-10 before:rounded-l-md before:[clip-path:polygon(100%_0,0_0,40%_50%,0_100%,100%_100%)]
-      after:content-[''] after:absolute after:top-2 after:-right-5 after:w-6 after:h-full after:bg-[#46b3e3] after:-z-10 after:rounded-r-md after:[clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]">
-      <span id="modal-ribbon-text" class="font-display font-extrabold text-2xl md:text-3xl text-white tracking-wider uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]">BRAKE TIME</span>
-    </div>
+      let timerState = {
+        reqFrame: null,
+        endTime: 0,
+        remaining: QUESTION_TIME,
+        isPlaying: false,
+      };
 
-    <div class="flex justify-center items-center my-3 h-28">
-      <img id="modal-panda-img" src="public/Alert/2.png" alt="Panda Status" 
-           onerror="this.style.display='none';" 
-           class="h-full object-contain drop-shadow-md">
-    </div>
+      const el = {
+        container: document.getElementById("game-container"),
+        bossProgress: document.getElementById("boss-progress"),
+        bossTotal: document.getElementById("boss-total"),
+        bossName: document.getElementById("boss-name"),
+        bossImage: document.getElementById("boss-image"),
+        bossHPBar: document.getElementById("boss-hp-bar"),
+        bossHPText: document.getElementById("boss-hp-text"),
+        playerHPBar: document.getElementById("player-hp-bar"),
+        playerHPText: document.getElementById("player-hp-text"),
+        timerBar: document.getElementById("timer-bar"),
+        questionImage: document.getElementById("question-image"),
+        questionHanzi: document.getElementById("question-hanzi"),
+        playSoundBtn: document.getElementById("play-sound-btn"),
+        answerForm: document.getElementById("answer-form"),
+        answerInput: document.getElementById("answer-input"),
+        feedbackBox: document.getElementById("feedback-box"),
+        scoreValue: document.getElementById("score-value"),
+        comboBadge: document.getElementById("combo-badge"),
+      };
 
-    <h3 id="modal-title" class="font-display font-extrabold text-2xl md:text-3xl text-[#4b4b4b] mb-2">หยุดชั่วคราว</h3>
-    
-    <div class="flex justify-center mb-5">
-      <div id="modal-subtitle-box" class="bg-[#eef9ed] rounded-full px-5 py-1.5 inline-block">
-        <p id="modal-subtitle" class="font-thai text-xs md:text-sm text-[#618a66] font-semibold">บางทีการพักก็ทำให้ดีขึ้น</p>
-      </div>
-    </div>
+      el.bossTotal.textContent = TOTAL_BOSSES;
 
-    <div id="modal-stats" class="bg-emerald-50 rounded-2xl py-1.5 px-4 mb-4 text-xs font-thai text-emerald-800 font-semibold hidden">
-      ปราบบอสได้ <span id="modal-boss-count">0/5</span> • คะแนน <span id="modal-score">0</span>
-    </div>
+      /* HELPER FUNCTIONS */
+      function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
 
-    <div id="modal-actions" class="flex gap-3 justify-center mt-2">
-      <button id="modal-btn-home" class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#58cbf5] hover:bg-[#45bce7] active:translate-y-0.5 shadow-[0_4px_0_#3aa1c7] transition text-sm md:text-base">
-        กลับหน้าแรก
-      </button>
-      <button id="modal-btn-primary" class="flex-1 py-2.5 px-4 rounded-2xl font-display font-extrabold text-white bg-[#ff6f9f] hover:bg-[#f05a8c] active:translate-y-0.5 shadow-[0_4px_0_#d84674] transition text-sm md:text-base">
-        เล่นต่อ
-      </button>
-    </div>
-  </div>
-</div>
+      function showDamageEffect() {
+        const overlay = document.getElementById("damage-overlay");
+        overlay.classList.add("active");
+        setTimeout(() => overlay.classList.remove("active"), 300);
+      }
 
-<script>
-  /* BOSS & QUESTION DATA (15 QUESTIONS PER BOSS) */
-  const bossData = [
-    {
-      id: 1,
-      name: "จอมเวลา ปีศาจนาฬิกา",
-      themeColor: "#9871FA",
-      questions: [
-      { qHanzi: "图片上问什么？", qPinyin: "túpiàn shàng wèn shénme?", aHanzi: "现在几点", aPinyin: "xiànzài jǐ diǎn", meaning: "ตอนนี้กี่โมง", image: "public/Clock/what_time.png" },
-      { qHanzi: "这是什么时候？", qPinyin: "zhè shì shénme shíhou?", aHanzi: "早上六点", aPinyin: "zǎoshang liù diǎn", meaning: "หกโมงเช้า", image: "public/Clock/6am.png" },
-      { qHanzi: "这是什么时候？", qPinyin: "zhè shì shénme shíhou?", aHanzi: "晚上九点", aPinyin: "wǎnshang jiǔ diǎn", meaning: "สามทุ่ม", image: "public/Clock/9pm.png" },
-      { qHanzi: "这是什么时候？", qPinyin: "zhè shì shénme shíhou?", aHanzi: "下午两点", aPinyin: "xiàwǔ liǎng diǎn", meaning: "บ่ายสองโมง", image: "public/Clock/2pm.png" },
-      { qHanzi: "这是什么时候？", qPinyin: "zhè shì shénme shíhou?", aHanzi: "中午十二点", aPinyin: "zhōngwǔ shí'èr diǎn", meaning: "เที่ยงตรง", image: "public/Clock/12pm.png" },
-      { qHanzi: "现在几点？(差)", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "差十分八点", aPinyin: "chà shí fēn bā diǎn", meaning: "อีกสิบนาทีแปดโมง", image: "public/Clock/07_50.png" },
-      { qHanzi: "现在几点？(刻)", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "两点一刻", aPinyin: "liǎng diǎn yī kè", meaning: "สองโมงสิบห้านาที", image: "public/Clock/02_15.png" },
-      { qHanzi: "现在几点？(刻)", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "十点三刻", aPinyin: "shí diǎn sān kè", meaning: "สิบโมงสี่สิบห้านาที", image: "public/Clock/10_45.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "时间", aPinyin: "shíjiān", meaning: "เวลา", image: "public/Clock/time.png" },
-      { qHanzi: "这是什么词？", qPinyin: "zhè shì shénme cí?", aHanzi: "每天", aPinyin: "měitiān", meaning: "ทุกวัน", image: "public/Clock/everyday.png" },
-      { qHanzi: "他说了什么？", qPinyin: "tā shuō le shénme?", aHanzi: "早上好", aPinyin: "zǎoshang hǎo", meaning: "อรุณสวัสดิ์", image: "public/Clock/goodmorning.png" },
-      { qHanzi: "他说了什么？", qPinyin: "tā shuō le shénme?", aHanzi: "晚上好", aPinyin: "wǎnshang hǎo", meaning: "สวัสดีตอนเย็น", image: "public/Clock/goodevening.png" },
-      { qHanzi: "什么词？(Time)", qPinyin: "shénme cí?", aHanzi: "时候", aPinyin: "shíhou", meaning: "ตอนที่/เวลา", image: "public/Clock/moment.png" },
-      { qHanzi: "这是什么问题？", qPinyin: "zhè shì shénme wèntí?", aHanzi: "什么时候", aPinyin: "shénme shíhou", meaning: "เมื่อไหร่", image: "public/Clock/when.png" },
-      { qHanzi: "这是什么意思？", qPinyin: "zhè shì shénme yìsi?", aHanzi: "准时", aPinyin: "zhǔnshí", meaning: "ตรงเวลา", image: "public/Clock/ontime.png" },
-      ]
-    },
-    {
-      id: 2,
-      name: "อสูรปฏิทิน",
-      themeColor: "#E53935",
-      questions: [
-      { qHanzi: "今天怎么说？", qPinyin: "jīntiān zěnme shuō?", aHanzi: "今天星期一", aPinyin: "jīntiān xīngqīyī", meaning: "วันนี้วันจันทร์", image: "public/Calendar/todaymon.png" },
-      { qHanzi: "明天怎么说？", qPinyin: "míngtiān zěnme shuō?", aHanzi: "明天星期二", aPinyin: "míngtiān xīngqī'èr", meaning: "พรุ่งนี้วันอังคาร", image: "public/Calendar/tomortue.png" },
-      { qHanzi: "昨天怎么说？", qPinyin: "zuótiān zěnme shuō?", aHanzi: "昨天星期天", aPinyin: "zuótiān xīngqītiān", meaning: "เมื่อวานวันอาทิตย์", image: "public/Calendar/yestsun.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "你的生日", aPinyin: "nǐ de shēngrì", meaning: "วันเกิดของคุณ", image: "public/Calendar/yourbday.png" },
-      { qHanzi: "问日期怎么说？", qPinyin: "wèn rìqī zěnme shuō?", aHanzi: "今天几号", aPinyin: "jīntiān jǐ hào", meaning: "วันนี้วันที่เท่าไหร่", image: "public/Calendar/whatdate.png" },
-      { qHanzi: "这是多长时间？", qPinyin: "zhè shì duō cháng shíjiān?", aHanzi: "一个星期", aPinyin: "yī ge xīngqī", meaning: "หนึ่งสัปดาห์", image: "public/Calendar/1week.png" },
-      { qHanzi: "这是多长时间？", qPinyin: "zhè shì duō cháng shíjiān?", aHanzi: "两个星期", aPinyin: "liǎng ge xīngqī", meaning: "สองสัปดาห์", image: "public/Calendar/2weeks.png" },
-      { qHanzi: "问时间长度怎么说？", qPinyin: "wèn shíjiān chángdù zěnme shuō?", aHanzi: "几个星期", aPinyin: "jǐ ge xīngqī", meaning: "กี่สัปดาห์", image: "public/Calendar/howmanyweeks.png" },
-      { qHanzi: "这是什么时候？", qPinyin: "zhè shì shénme shíhou?", aHanzi: "上个周末", aPinyin: "shàng ge zhōumò", meaning: "สุดสัปดาห์ที่แล้ว", image: "public/Calendar/lastweekend.png" },
-      { qHanzi: "这是什么时候？", qPinyin: "zhè shì shénme shíhou?", aHanzi: "下个周末", aPinyin: "xià ge zhōumò", meaning: "สุดสัปดาห์หน้า", image: "public/Calendar/nextweekend.png" },
-      { qHanzi: "这是什么节日？", qPinyin: "zhè shì shénme jiérì?", aHanzi: "新年", aPinyin: "xīnnián", meaning: "ปีใหม่", image: "public/Calendar/newyear.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "节日", aPinyin: "jiérì", meaning: "เทศกาล", image: "public/Calendar/festival.png" },
-      { qHanzi: "这是什么日子？", qPinyin: "zhè shì shénme rìzi?", aHanzi: "工作日", aPinyin: "gōngzuòrì", meaning: "วันทำงาน", image: "public/Calendar/workday.png" },
-      { qHanzi: "这是什么日子？", qPinyin: "zhè shì shénme rìzi?", aHanzi: "休息日", aPinyin: "xiūxirì", meaning: "วันพักผ่อน", image: "public/Calendar/dayoff.png" },
-      { qHanzi: "告别怎么说？", qPinyin: "gàobié zěnme shuō?", aHanzi: "星期天见", aPinyin: "xīngqītiān jiàn", meaning: "เจอกันวันอาทิตย์", image: "public/Calendar/seesunday.png" },
-      ]
-    },
-    {
-      id: 3,
-      name: "ปีศาจสไลม์",
-      themeColor: "#1E88E5",
-      questions: [
-      { qHanzi: "问生日怎么说？", qPinyin: "wèn shēngrì zěnme shuō?", aHanzi: "你的生日是几月几号", aPinyin: "nǐ de shēngrì shì jǐ yuè jǐ hào", meaning: "วันเกิดของคุณคือวันที่เท่าไหร่", image: "public/Calendar/whenbirthday.png" },
-      { qHanzi: "元旦是哪一天？", qPinyin: "yuándàn shì nǎ yī tiān?", aHanzi: "今天是一月一号", aPinyin: "jīntiān shì yī yuè yī hào", meaning: "วันนี้คือวันที่ 1 มกราคม", image: "public/Calendar/today1jan.png" },
-      { qHanzi: "现在什么时候？", qPinyin: "xiànzài shénme shíhou?", aHanzi: "现在是下午", aPinyin: "xiànzài shì xiàwǔ", meaning: "ตอนนี้คือตอนบ่าย", image: "public/Time/nowafternoon.png" },
-      { qHanzi: "告别怎么说？", qPinyin: "gàobié zěnme shuō?", aHanzi: "晚上见", aPinyin: "wǎnshang jiàn", meaning: "เจอกันตอนเย็น", image: "public/Time/seetonight.png" },
-      { qHanzi: "告别怎么说？", qPinyin: "gàobié zěnme shuō?", aHanzi: "早上见", aPinyin: "zǎoshang jiàn", meaning: "เจอกันตอนเช้า", image: "public/Time/seemorning.png" },
-      { qHanzi: "这是几点？", qPinyin: "zhè shì jǐ diǎn?", aHanzi: "下午三点", aPinyin: "xiàwǔ sān diǎn", meaning: "บ่ายสามโมง", image: "public/Time/3pm.png" },
-      { qHanzi: "这是几点？", qPinyin: "zhè shì jǐ diǎn?", aHanzi: "晚上八点半", aPinyin: "wǎnshang bā diǎn bàn", meaning: "สองทุ่มครึ่ง", image: "public/Time/830pm.png" },
-      { qHanzi: "这是多长时间？", qPinyin: "zhè shì duō cháng shíjiān?", aHanzi: "一个月", aPinyin: "yī ge yuè", meaning: "หนึ่งเดือน", image: "public/Calendar/1month.png" },
-      { qHanzi: "这是多长时间？", qPinyin: "zhè shì duō cháng shíjiān?", aHanzi: "半个月", aPinyin: "bàn ge yuè", meaning: "ครึ่งเดือน", image: "public/Calendar/halfmonth.png" },
-      { qHanzi: "这是多长时间？", qPinyin: "zhè shì duō cháng shíjiān?", aHanzi: "两个月", aPinyin: "liǎng ge yuè", meaning: "สองเดือน", image: "public/Calendar/2months.png" },
-      { qHanzi: "什么频率？", qPinyin: "shénme pínlǜ?", aHanzi: "每年", aPinyin: "měinián", meaning: "ทุกปี", image: "public/Calendar/everyyear.png" },
-      { qHanzi: "什么频率？", qPinyin: "shénme pínlǜ?", aHanzi: "每月", aPinyin: "měiyuè", meaning: "ทุกเดือน", image: "public/Calendar/everymonth.png" },
-      { qHanzi: "这是什么时间？", qPinyin: "zhè shì shénme shíjiān?", aHanzi: "上午", aPinyin: "shàngwǔ", meaning: "ช่วงเช้า/ก่อนเที่ยง", image: "public/Time/am.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "季", aPinyin: "jì", meaning: "ฤดูกาล", image: "public/Weather/season.png" },
-      { qHanzi: "这是什么节日？", qPinyin: "zhè shì shénme jiérì?", aHanzi: "春节", aPinyin: "chūnjié", meaning: "เทศกาลตรุษจีน", image: "public/Calendar/cny.png" },
-      ]
-    },
-    {
-      id: 4,
-      name: "ก็อบลินเส้นทาง",
-      themeColor: "#43A047",
-      questions: [
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "外面", aPinyin: "wàimiàn", meaning: "ด้านนอก", image: "public/Locations/outside.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "左边", aPinyin: "zuǒbian", meaning: "ฝั่งซ้าย", image: "public/Locations/leftside.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "右边", aPinyin: "yòubian", meaning: "ฝั่งขวา", image: "public/Locations/rightside.png" },
-      { qHanzi: "问位置怎么说？", qPinyin: "wèn wèizhì zěnme shuō?", aHanzi: "在哪里", aPinyin: "zài nǎlǐ", meaning: "อยู่ที่ไหน", image: "public/Locations/where.png" },
-      { qHanzi: "他去哪里？", qPinyin: "tā qù nǎlǐ?", aHanzi: "去学校", aPinyin: "qù xuéxiào", meaning: "ไปโรงเรียน", image: "public/Locations/goschool.png" },
-      { qHanzi: "他去哪里？", qPinyin: "tā qù nǎlǐ?", aHanzi: "回家", aPinyin: "huí jiā", meaning: "กลับบ้าน", image: "public/Locations/gohome.png" },
-      { qHanzi: "他在哪里？", qPinyin: "tā zài nǎlǐ?", aHanzi: "在家", aPinyin: "zài jiā", meaning: "อยู่ที่บ้าน", image: "public/Locations/athome.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "火车站", aPinyin: "huǒchēzhàn", meaning: "สถานีรถไฟ", image: "public/Locations/trainstation.png" },
-      { qHanzi: "这是哪里？(口语)", qPinyin: "zhè shì nǎlǐ?", aHanzi: "飞机场", aPinyin: "fēijīchǎng", meaning: "สนามบิน(พูด)", image: "public/Locations/airfield.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "饭馆", aPinyin: "fànguǎn", meaning: "ร้านอาหาร", image: "public/Locations/restaurant2.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "银行", aPinyin: "yínháng", meaning: "ธนาคาร", image: "public/Locations/bank.png" },
-      { qHanzi: "这是哪个国家？", qPinyin: "zhè shì nǎ ge guójiā?", aHanzi: "中国", aPinyin: "Zhōngguó", meaning: "ประเทศจีน", image: "public/Locations/china.png" },
-      { qHanzi: "这是哪个国家？", qPinyin: "zhè shì nǎ ge guójiā?", aHanzi: "泰国", aPinyin: "Tàiguó", meaning: "ประเทศไทย", image: "public/Locations/thailand.png" },
-      { qHanzi: "距离怎么样？", qPinyin: "jùlí zěnmeyàng?", aHanzi: "远", aPinyin: "yuǎn", meaning: "ไกล", image: "public/Locations/far.png" },
-      { qHanzi: "距离怎么样？", qPinyin: "jùlí zěnmeyàng?", aHanzi: "近", aPinyin: "jìn", meaning: "ใกล้", image: "public/Locations/near.png" },
-      ]
-    },
-    {
-      id: 5,
-      name: "มังกรลมฟ้าอากาศ",
-      themeColor: "#00ACC1",
-      questions: [
-      { qHanzi: "这是什么季节？", qPinyin: "zhè shì shénme jìjié?", aHanzi: "秋天", aPinyin: "qiūtiān", meaning: "ฤดูใบไม้ร่วง", image: "public/Weather/autumn.png" },
-      { qHanzi: "感觉怎么样？", qPinyin: "gǎnjué zěnmeyàng?", aHanzi: "凉快", aPinyin: "liángkuai", meaning: "เย็นสบาย", image: "public/Weather/cool.png" },
-      { qHanzi: "感觉怎么样？", qPinyin: "gǎnjué zěnmeyàng?", aHanzi: "暖和", aPinyin: "nuǎnhuo", meaning: "อบอุ่น", image: "public/Weather/warm.png" },
-      { qHanzi: "问天气怎么说？", qPinyin: "wèn tiānqì zěnme shuō?", aHanzi: "天气怎么样", aPinyin: "tiānqì zěnmeyàng", meaning: "อากาศเป็นไง", image: "public/Weather/howisweather.png" },
-      { qHanzi: "描述好天气？", qPinyin: "miáoshù hǎo tiānqì?", aHanzi: "今天天气很好", aPinyin: "jīntiān tiānqì hěn hǎo", meaning: "วันนี้อากาศดีมาก", image: "public/Weather/goodweather.png" },
-      { qHanzi: "昨天发生什么事？", qPinyin: "zuótiān fāshēng shénme shì?", aHanzi: "昨天下雨了", aPinyin: "zuótiān xià yǔ le", meaning: "เมื่อวานฝนตก", image: "public/Weather/rained.png" },
-      { qHanzi: "明天天气怎么样？", qPinyin: "míngtiān tiānqì zěnmeyàng?", aHanzi: "明天是晴天", aPinyin: "míngtiān shì qíngtiān", meaning: "พรุ่งนี้ฟ้าใส", image: "public/Weather/tomorrowsunny.png" },
-      { qHanzi: "现在的天气？", qPinyin: "xiànzài de tiānqì?", aHanzi: "下大雨", aPinyin: "xià dà yǔ", meaning: "ฝนตกหนัก", image: "public/Weather/heavyrain.png" },
-      { qHanzi: "现在的天气？", qPinyin: "xiànzài de tiānqì?", aHanzi: "下大雪", aPinyin: "xià dà xuě", meaning: "หิมะตกหนัก", image: "public/Weather/heavysnow.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "雨伞", aPinyin: "yǔsǎn", meaning: "ร่ม", image: "public/Weather/umbrella.png" },
-      { qHanzi: "这怎么样？", qPinyin: "zhè zěnmeyàng?", aHanzi: "漂亮", aPinyin: "piàoliang", meaning: "สวย", image: "public/Weather/beautiful.png" },
-      { qHanzi: "心情怎么样？", qPinyin: "xīnqíng zěnmeyàng?", aHanzi: "高兴", aPinyin: "gāoxìng", meaning: "ดีใจ", image: "public/Weather/happy.png" },
-      { qHanzi: "感觉怎么样？", qPinyin: "gǎnjué zěnmeyàng?", aHanzi: "舒服", aPinyin: "shūfu", meaning: "สบาย", image: "public/Weather/comfortable.png" },
-      { qHanzi: "温度怎么样？", qPinyin: "wēndù zěnmeyàng?", aHanzi: "零下", aPinyin: "língxià", meaning: "ติดลบ", image: "public/Weather/belowzero.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "气温", aPinyin: "qìwēn", meaning: "อุณหภูมิ", image: "public/Weather/temp.png" },
-      ]
-    }
-  ];
+      function showComboEffect(combo) {
+        const container = document.getElementById("combo-container");
+        const text = document.getElementById("combo-text");
+        text.textContent = `COMBO x${combo}!`;
+        container.classList.remove("hidden");
+        text.classList.remove("combo-animate");
+        void text.offsetWidth;
+        text.classList.add("combo-animate");
+        setTimeout(() => container.classList.add("hidden"), 1200);
+      }
 
-  /* GAME STATE & CONFIG */
-  const TOTAL_BOSSES = 5;
-  const QUESTIONS_PER_BOSS = 15; // 👈 กำหนดเป็น 15 คำถาม
-  const QUESTION_TIME = 8000; // 8 วินาที สำหรับพิมพ์
-  const WRONG_DAMAGE = 30;
-  const HEAL_AMOUNT = 20;
+      function updatePlayerHP(delta) {
+        const hp = Math.max(0, state.playerHP);
+        el.playerHPBar.style.width = hp + "%";
+        el.playerHPText.textContent = `${Math.round(hp)}/100`;
 
-  let state = {
-    bossIndex: 0,
-    bossHP: 100,
-    bossMaxHP: 100,
-    playerHP: 100,
-    score: 0,
-    comboCount: 0,
-    scoreMultiplier: 1,
-    bossesDefeated: 0,
-    items: { heal: 2, hint: 3, skip: 3 }, // <--- แก้จำนวนการใช้ตัวช่วยตามที่ขอ
-    currentQuestions: [],
-    questionIndex: 0,
-    damagePerHit: 100 / QUESTIONS_PER_BOSS, // ดาเมจตอบถูก 15 ข้อบอสร่วงพอดี
-    answered: false,
-    hintUsedThisQuestion: false,
-    paused: false,
-  };
+        if (delta && delta < 0) {
+          el.container.classList.add("shake");
+          setTimeout(() => el.container.classList.remove("shake"), 400);
+        }
+      }
 
-  let timerState = {
-    reqFrame: null,
-    endTime: 0,
-    remaining: QUESTION_TIME,
-    isPlaying: false,
-  };
+      function updateBossHP() {
+        const hp = Math.max(0, state.bossHP);
+        const percent = (hp / state.bossMaxHP) * 100;
+        el.bossHPBar.style.width = percent + "%";
+        el.bossHPText.textContent = `${Math.round(hp)}/${state.bossMaxHP}`;
+      }
 
-  const el = {
-    container: document.getElementById("game-container"),
-    bossProgress: document.getElementById("boss-progress"),
-    bossTotal: document.getElementById("boss-total"),
-    bossName: document.getElementById("boss-name"),
-    bossImage: document.getElementById("boss-image"),
-    bossHPBar: document.getElementById("boss-hp-bar"),
-    bossHPText: document.getElementById("boss-hp-text"),
-    playerHPBar: document.getElementById("player-hp-bar"),
-    playerHPText: document.getElementById("player-hp-text"),
-    timerBar: document.getElementById("timer-bar"),
-    questionImage: document.getElementById("question-image"),
-    questionHanzi: document.getElementById("question-hanzi"),
-    playSoundBtn: document.getElementById("play-sound-btn"),
-    answerForm: document.getElementById("answer-form"),
-    answerInput: document.getElementById("answer-input"),
-    feedbackBox: document.getElementById("feedback-box"),
-    scoreValue: document.getElementById("score-value"),
-    comboBadge: document.getElementById("combo-badge"),
-  };
+      function updateScoreUI() {
+        el.scoreValue.textContent = state.score;
+        el.comboBadge.textContent = `x${state.scoreMultiplier}`;
+      }
 
-  el.bossTotal.textContent = TOTAL_BOSSES;
+      function updateItemUI() {
+        document.getElementById("item-heal-count").textContent =
+          state.items.heal;
+        document.getElementById("item-hint-count").textContent =
+          state.items.hint;
+        document.getElementById("item-skip-count").textContent =
+          state.items.skip;
 
-  /* HELPER FUNCTIONS */
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
+        ["heal", "hint", "skip"].forEach((type) => {
+          const btn = document.querySelector(`[data-item="${type}"]`);
+          if (btn) btn.disabled = state.items[type] <= 0 || state.answered;
+        });
+      }
 
-  function showDamageEffect() {
-    const overlay = document.getElementById('damage-overlay');
-    overlay.classList.add('active');
-    setTimeout(() => overlay.classList.remove('active'), 300);
-  }
+      let currentLocalAudio = null;
+      function speak(text) {
+        if (!text) return;
 
-  function showComboEffect(combo) {
-    const container = document.getElementById('combo-container');
-    const text = document.getElementById('combo-text');
-    text.textContent = `COMBO x${combo}!`;
-    container.classList.remove('hidden');
-    text.classList.remove('combo-animate');
-    void text.offsetWidth;
-    text.classList.add('combo-animate');
-    setTimeout(() => container.classList.add('hidden'), 1200);
-  }
+        // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
+        if ("speechSynthesis" in window) {
+          // ยกเลิกเสียงที่กำลังพูดอยู่ (ถ้ามีการกดรัวๆ)
+          window.speechSynthesis.cancel();
 
-  function updatePlayerHP(delta) {
-    const hp = Math.max(0, state.playerHP);
-    el.playerHPBar.style.width = hp + "%";
-    el.playerHPText.textContent = `${Math.round(hp)}/100`;
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "zh-CN"; // ตั้งค่าเป็นภาษาจีน (จีนแผ่นดินใหญ่)
+          utterance.rate = 0.85; // ปรับความเร็ว (1 คือปกติ, < 1 คือช้าลงเพื่อให้ฟังง่ายขึ้น)
+          utterance.pitch = 1; // ระดับเสียง
 
-    if (delta && delta < 0) {
-      el.container.classList.add("shake");
-      setTimeout(() => el.container.classList.remove("shake"), 400);
-    }
-  }
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.warn("เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
+          alert("ขออภัย เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
+        }
+      }
 
-  function updateBossHP() {
-    const hp = Math.max(0, state.bossHP);
-    const percent = (hp / state.bossMaxHP) * 100;
-    el.bossHPBar.style.width = percent + "%";
-    el.bossHPText.textContent = `${Math.round(hp)}/${state.bossMaxHP}`;
-  }
+      function hitBoss() {
+        el.bossImage.classList.add("hit");
+        setTimeout(() => el.bossImage.classList.remove("hit"), 350);
+      }
 
-  function updateScoreUI() {
-    el.scoreValue.textContent = state.score;
-    el.comboBadge.textContent = `x${state.scoreMultiplier}`;
-  }
+      function showFeedback(correct, correctAnswerHanzi) {
+        el.feedbackBox.classList.remove(
+          "hidden",
+          "bg-emerald-100",
+          "text-emerald-800",
+          "bg-rose-100",
+          "text-rose-800",
+        );
+        if (correct) {
+          el.feedbackBox.classList.add(
+            "flex",
+            "bg-emerald-100",
+            "text-emerald-800",
+          );
+          el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง! (${correctAnswerHanzi})`;
+        } else {
+          el.feedbackBox.classList.add("flex", "bg-rose-100", "text-rose-800");
+          el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctAnswerHanzi}"`;
+        }
+      }
 
-  function updateItemUI() {
-    document.getElementById("item-heal-count").textContent = state.items.heal;
-    document.getElementById("item-hint-count").textContent = state.items.hint;
-    document.getElementById("item-skip-count").textContent = state.items.skip;
+      function hideFeedback() {
+        el.feedbackBox.classList.add("hidden");
+        el.feedbackBox.classList.remove("flex");
+        el.feedbackBox.innerHTML = "";
+      }
 
-    ["heal", "hint", "skip"].forEach((type) => {
-      const btn = document.querySelector(`[data-item="${type}"]`);
-      if (btn) btn.disabled = state.items[type] <= 0 || state.answered;
-    });
-  }
+      function loadBoss(index) {
+        const boss = bossData[index];
+        state.bossIndex = index;
+        state.bossHP = 100;
+        state.bossMaxHP = 100;
+        state.playerHP = 100;
+        state.questionIndex = 0;
 
-  let currentLocalAudio = null;
-  function speak(text) {
-    if (!text) return;
-    
-    // ตรวจสอบว่าเบราว์เซอร์รองรับหรือไม่
-    if ('speechSynthesis' in window) {
-      // ยกเลิกเสียงที่กำลังพูดอยู่ (ถ้ามีการกดรัวๆ)
-      window.speechSynthesis.cancel();
+        if (boss.themeColor) {
+          document.body.style.backgroundColor = boss.themeColor;
+        }
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN'; // ตั้งค่าเป็นภาษาจีน (จีนแผ่นดินใหญ่)
-      utterance.rate = 0.85;     // ปรับความเร็ว (1 คือปกติ, < 1 คือช้าลงเพื่อให้ฟังง่ายขึ้น)
-      utterance.pitch = 1;      // ระดับเสียง
-      
-      window.speechSynthesis.speak(utterance);
-    } else {
-      console.warn("เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
-      alert("ขออภัย เบราว์เซอร์ของคุณไม่รองรับระบบอ่านออกเสียง");
-    }
-  }
+        el.bossName.textContent = boss.name;
+        el.bossProgress.textContent = index + 1;
+        el.bossImage.src = `public/${boss.id}.png?v=${Date.now()}`;
 
-  function hitBoss() {
-    el.bossImage.classList.add("hit");
-    setTimeout(() => el.bossImage.classList.remove("hit"), 350);
-  }
+        // สุ่มคำถามทั้ง 15 ข้อ
+        state.currentQuestions = shuffle(boss.questions);
+        state.damagePerHit = 100 / state.currentQuestions.length;
 
-  function showFeedback(correct, correctAnswerHanzi) {
-    el.feedbackBox.classList.remove("hidden", "bg-emerald-100", "text-emerald-800", "bg-rose-100", "text-rose-800");
-    if (correct) {
-      el.feedbackBox.classList.add("flex", "bg-emerald-100", "text-emerald-800");
-      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> ถูกต้อง! (${correctAnswerHanzi})`;
-    } else {
-      el.feedbackBox.classList.add("flex", "bg-rose-100", "text-rose-800");
-      el.feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500"></i> เฉลย: "${correctAnswerHanzi}"`;
-    }
-  }
+        updatePlayerHP();
+        updateBossHP();
+        updateItemUI();
+        updateScoreUI();
+        loadQuestion();
+      }
 
-  function hideFeedback() {
-    el.feedbackBox.classList.add("hidden");
-    el.feedbackBox.classList.remove("flex");
-    el.feedbackBox.innerHTML = "";
-  }
+      function loadQuestion() {
+        state.answered = false;
+        state.hintUsedThisQuestion = false;
+        hideFeedback();
 
-  function loadBoss(index) {
-    const boss = bossData[index];
-    state.bossIndex = index;
-    state.bossHP = 100;
-    state.bossMaxHP = 100;
-    state.playerHP = 100;
-    state.questionIndex = 0;
+        const q = state.currentQuestions[state.questionIndex];
 
-    if (boss.themeColor) {
-      document.body.style.backgroundColor = boss.themeColor;
-    }
+        // HARD MODE: แสดงเฉพาะ Hanzi (ตัวจีน) เท่านั้น!
+        el.questionHanzi.textContent = q.qHanzi;
 
-    el.bossName.textContent = boss.name;
-    el.bossProgress.textContent = index + 1;
-    el.bossImage.src = `public/${boss.id}.png?v=${Date.now()}`;
-    
-    // สุ่มคำถามทั้ง 15 ข้อ
-    state.currentQuestions = shuffle(boss.questions);
-    state.damagePerHit = 100 / state.currentQuestions.length;
+        // แสดง/ซ่อนรูปภาพ
+        if (q.image && q.image.trim() !== "") {
+          el.questionImage.src = `${q.image}?v=${Date.now()}`;
+          el.questionImage.classList.remove("hidden");
+        } else {
+          el.questionImage.classList.add("hidden");
+        }
 
-    updatePlayerHP();
-    updateBossHP();
-    updateItemUI();
-    updateScoreUI();
-    loadQuestion();
-  }
+        el.answerInput.value = "";
+        el.answerInput.disabled = false;
+        el.answerInput.classList.remove("ring-correct", "ring-wrong");
+        el.answerInput.focus();
 
-  function loadQuestion() {
-    state.answered = false;
-    state.hintUsedThisQuestion = false;
-    hideFeedback();
+        updateItemUI();
+        startTimer();
+      }
 
-    const q = state.currentQuestions[state.questionIndex];
+      function updateClockDisplay() {
+        let percent = (timerState.remaining / QUESTION_TIME) * 100;
+        if (percent < 0) percent = 0;
+        el.timerBar.style.width = percent + "%";
+      }
 
-    // HARD MODE: แสดงเฉพาะ Hanzi (ตัวจีน) เท่านั้น!
-    el.questionHanzi.textContent = q.qHanzi;
-
-    // แสดง/ซ่อนรูปภาพ
-    if (q.image && q.image.trim() !== "") { 
-      el.questionImage.src = `${q.image}?v=${Date.now()}`;
-      el.questionImage.classList.remove("hidden");
-    } else {
-      el.questionImage.classList.add("hidden");
-    }
-
-    el.answerInput.value = "";
-    el.answerInput.disabled = false;
-    el.answerInput.classList.remove("ring-correct", "ring-wrong");
-    el.answerInput.focus();
-
-    updateItemUI();
-    startTimer();
-  }
-
-  function updateClockDisplay() {
-    let percent = (timerState.remaining / QUESTION_TIME) * 100;
-    if (percent < 0) percent = 0;
-    el.timerBar.style.width = percent + "%";
-  }
-
-  function startTimer(isResume = false) {
-    if (!isResume) {
-      timerState.remaining = QUESTION_TIME;
-    }
-    timerState.endTime = Date.now() + timerState.remaining;
-    timerState.isPlaying = true;
-    cancelAnimationFrame(timerState.reqFrame);
-
-    function tick() {
-      if (!timerState.isPlaying || state.paused) return;
-      timerState.remaining = timerState.endTime - Date.now();
-      updateClockDisplay();
-
-      if (timerState.remaining <= 0) {
-        timerState.remaining = 0;
-        timerState.isPlaying = false;
+      function startTimer(isResume = false) {
+        if (!isResume) {
+          timerState.remaining = QUESTION_TIME;
+        }
+        timerState.endTime = Date.now() + timerState.remaining;
+        timerState.isPlaying = true;
         cancelAnimationFrame(timerState.reqFrame);
-        updateClockDisplay();
 
-        handleTimeout();
-      } else {
+        function tick() {
+          if (!timerState.isPlaying || state.paused) return;
+          timerState.remaining = timerState.endTime - Date.now();
+          updateClockDisplay();
+
+          if (timerState.remaining <= 0) {
+            timerState.remaining = 0;
+            timerState.isPlaying = false;
+            cancelAnimationFrame(timerState.reqFrame);
+            updateClockDisplay();
+
+            handleTimeout();
+          } else {
+            timerState.reqFrame = requestAnimationFrame(tick);
+          }
+        }
         timerState.reqFrame = requestAnimationFrame(tick);
       }
-    }
-    timerState.reqFrame = requestAnimationFrame(tick);
-  }
 
-  function stopTimer() {
-    timerState.isPlaying = false;
-    cancelAnimationFrame(timerState.reqFrame);
-  }
-
-  function handleTimeout() {
-    const q = state.currentQuestions[state.questionIndex];
-    state.answered = true;
-    el.answerInput.disabled = true;
-    el.answerInput.classList.add("ring-wrong");
-    
-    state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
-    state.comboCount = 0;
-    state.scoreMultiplier = 1;
-    
-    updateScoreUI();
-    updatePlayerHP(-WRONG_DAMAGE);
-    showFeedback(false, q.aHanzi); // เปลี่ยนเฉลยเป็นอักษรจีน
-    updateItemUI();
-    showDamageEffect();
-
-    setTimeout(checkOutcome, 1200);
-  }
-
-  function submitAnswer(typed) {
-    if (state.answered) return;
-    const q = state.currentQuestions[state.questionIndex];
-    state.answered = true;
-    stopTimer();
-    el.answerInput.disabled = true;
-
-    // ตรวจสอบว่าคำตอบที่พิมพ์มาตรงกับตัวอักษรจีนหรือไม่
-    const isCorrect = (typed.trim() === q.aHanzi);
-
-    if (isCorrect) {
-      el.answerInput.classList.add("ring-correct");
-      state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
-      
-      state.comboCount++;
-      if (state.comboCount >= 3) {
-        showComboEffect(state.comboCount);
+      function stopTimer() {
+        timerState.isPlaying = false;
+        cancelAnimationFrame(timerState.reqFrame);
       }
 
-      state.scoreMultiplier = state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
-      state.score += 100 * state.scoreMultiplier;
-      hitBoss();
-      updateBossHP();
-      showFeedback(true, q.aHanzi); // แสดงเฉลยอักษรจีน
-    } else {
-      el.answerInput.classList.add("ring-wrong");
-      state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
-      state.comboCount = 0;
-      state.scoreMultiplier = 1;
-      updatePlayerHP(-WRONG_DAMAGE);
-      showFeedback(false, q.aHanzi); // แสดงเฉลยอักษรจีน
-      showDamageEffect();
-    }
-
-    updateScoreUI();
-    updateItemUI();
-    setTimeout(checkOutcome, 1200);
-  }
-
-  el.answerForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    submitAnswer(el.answerInput.value);
-  });
-
-  function checkOutcome() {
-    if (state.playerHP <= 0) return gameOver();
-    if (state.bossHP <= 0) return bossDefeated();
-
-    state.questionIndex++;
-    
-    // เมื่อเล่นครบทั้ง 15 ข้อ ให้สุ่มสลับตำแหน่งทั้ง 15 คำถามใหม่อีกรอบ
-    if (state.questionIndex >= state.currentQuestions.length) {
-      const originalQuestions = bossData[state.bossIndex].questions;
-      state.currentQuestions = shuffle(originalQuestions);
-      state.questionIndex = 0;
-    }
-
-    loadQuestion();
-  }
-
-  /* POPUP MODAL SYSTEM */
-  function showGameModal(config) {
-    const modal = document.getElementById('game-modal');
-    const card = document.getElementById('modal-card');
-    const ribbon = document.getElementById('modal-ribbon');
-    const ribbonText = document.getElementById('modal-ribbon-text');
-    const pandaImg = document.getElementById('modal-panda-img');
-    const title = document.getElementById('modal-title');
-    const subtitle = document.getElementById('modal-subtitle');
-    const statsBox = document.getElementById('modal-stats');
-    const btnHome = document.getElementById('modal-btn-home');
-    const btnPrimary = document.getElementById('modal-btn-primary');
-
-    const themes = {
-      pause: {
-        ribbonClass: 'bg-sky-400 border-sky-200',
-        cardBorder: 'border-sky-300',
-        ribbonText: 'BRAKE TIME',
-        pandaImg: 'public/Alert/2.png',
-        title: 'หยุดชั่วคราว',
-        subtitle: 'บางทีการพักก็ทำให้ดีขึ้น',
-        showStats: false,
-        btnPrimaryText: 'เล่นต่อ',
-        btnPrimaryBg: 'bg-pink-400 hover:bg-pink-500 shadow-[0_4px_0_#db2777]',
-        btnHomeShow: true
-      },
-      gameover: {
-        ribbonClass: 'bg-rose-500 border-rose-300',
-        cardBorder: 'border-rose-400',
-        ribbonText: 'GAME OVER',
-        pandaImg: 'public/Alert/1.png',
-        title: 'พ่ายแพ้!',
-        subtitle: 'พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!',
-        showStats: true,
-        btnPrimaryText: 'ลองอีกครั้ง',
-        btnPrimaryBg: 'bg-pink-400 hover:bg-pink-500 shadow-[0_4px_0_#db2777]',
-        btnHomeShow: true
-      },
-      win: {
-        ribbonClass: 'bg-emerald-500 border-emerald-300',
-        cardBorder: 'border-emerald-400',
-        ribbonText: 'YOU WIN',
-        pandaImg: 'public/Alert/3.png',
-        title: 'ชนะแล้ว',
-        subtitle: 'คุณคือแชมป์คำศัพท์จีน Mode Hard!',
-        showStats: true,
-        btnPrimaryText: 'กลับหน้าแรก',
-        btnPrimaryBg: 'bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_#15803d]',
-        btnHomeShow: false
-      },
-      defeated: {
-        ribbonClass: 'bg-emerald-500 border-emerald-300',
-        cardBorder: 'border-emerald-400',
-        ribbonText: 'Boss defeated',
-        pandaImg: 'public/Alert/4.png',
-        title: 'ผ่านแล้ว',
-        subtitle: 'ไปสู้ต่อที่ด่านต่อไป',
-        showStats: true,
-        btnPrimaryText: 'ไปต่อ',
-        btnPrimaryBg: 'bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_#15803d]',
-        btnHomeShow: false
-      }
-    };
-
-    const theme = themes[config.type];
-
-    ribbon.className = `absolute -top-6 left-1/2 -translate-x-1/2 w-[85%] py-2 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
-    card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-10 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100`;
-    ribbonText.textContent = theme.ribbonText;
-    pandaImg.src = `${theme.pandaImg}?v=${Date.now()}`;
-    title.textContent = theme.title;
-    subtitle.textContent = theme.subtitle;
-
-    if (theme.showStats) {
-      statsBox.classList.remove('hidden');
-      document.getElementById('modal-boss-count').textContent = `${state.bossesDefeated}/${TOTAL_BOSSES}`;
-      document.getElementById('modal-score').textContent = `${state.score}`;
-    } else {
-      statsBox.classList.add('hidden');
-    }
-
-    btnPrimary.textContent = theme.btnPrimaryText;
-    btnPrimary.className = `flex-1 py-2.5 px-4 rounded-2xl font-display font-bold text-white transition text-sm active:translate-y-0.5 ${theme.btnPrimaryBg}`;
-    
-    if (theme.btnHomeShow) {
-      btnHome.classList.remove('hidden');
-    } else {
-      btnHome.classList.add('hidden');
-    }
-
-    btnHome.onclick = () => {
-      window.location.href = 'index.html';
-    };
-
-    btnPrimary.onclick = () => {
-      modal.classList.add('hidden');
-      if (config.onPrimary) config.onPrimary();
-    };
-
-    modal.classList.remove('hidden');
-  }
-
-  function pauseGame() {
-    state.paused = true;
-    stopTimer();
-    showGameModal({
-      type: 'pause',
-      onPrimary: () => {
-        state.paused = false;
-        startTimer(true);
-      }
-    });
-  }
-
-  function gameOver() {
-    stopTimer();
-    showGameModal({
-      type: 'gameover',
-      onPrimary: () => {
-        loadBoss(state.bossIndex);
-      }
-    });
-  }
-
-  function bossDefeated() {
-    stopTimer();
-    state.bossesDefeated++;
-    const next = state.bossIndex + 1;
-    const isWin = next >= TOTAL_BOSSES;
-
-    showGameModal({
-      type: isWin ? 'win' : 'defeated',
-      onPrimary: () => {
-        if (isWin) {
-          window.location.reload();
-        } else {
-          loadBoss(next);
-        }
-      }
-    });
-  }
-
-  document.getElementById("stop-btn").addEventListener("click", pauseGame);
-
-  /* HELPERS / ITEMS */
-  document.querySelectorAll("[data-item]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const type = btn.getAttribute("data-item");
-      if (state.items[type] <= 0 || state.answered) return;
-      state.items[type]--;
-
-      if (type === "heal") {
-        state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
-        updatePlayerHP(0);
-      } else if (type === "hint" && !state.hintUsedThisQuestion) {
-        state.hintUsedThisQuestion = true;
+      function handleTimeout() {
         const q = state.currentQuestions[state.questionIndex];
-        const hanziAnswer = q.aHanzi;
-        
-       // คำนวณความยาวครึ่งหนึ่งของตัวอักษรจีน (ปัดเศษขึ้น)
-        const halfLength = Math.ceil(hanziAnswer.length / 2); 
-        
-        // นำตัวอักษรจีนครึ่งแรกไปใส่ในช่องพิมพ์
-        el.answerInput.value = hanziAnswer.substring(0, halfLength); 
-        el.answerInput.focus();
-        
-        // เลื่อนเคอร์เซอร์ไปรอพิมพ์ต่อท้าย
-        const len = el.answerInput.value.length;
-        el.answerInput.setSelectionRange(len, len);
-      } else if (type === "skip") {
+        state.answered = true;
+        el.answerInput.disabled = true;
+        el.answerInput.classList.add("ring-wrong");
+
+        state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+        state.comboCount = 0;
+        state.scoreMultiplier = 1;
+
+        updateScoreUI();
+        updatePlayerHP(-WRONG_DAMAGE);
+        showFeedback(false, q.aHanzi); // เปลี่ยนเฉลยเป็นอักษรจีน
+        updateItemUI();
+        showDamageEffect();
+
+        setTimeout(checkOutcome, 1200);
+      }
+
+      function submitAnswer(typed) {
+        if (state.answered) return;
+        const q = state.currentQuestions[state.questionIndex];
         state.answered = true;
         stopTimer();
         el.answerInput.disabled = true;
-        setTimeout(checkOutcome, 500);
+
+        // ตรวจสอบว่าคำตอบที่พิมพ์มาตรงกับตัวอักษรจีนหรือไม่
+        const isCorrect = typed.trim() === q.aHanzi;
+
+        if (isCorrect) {
+          el.answerInput.classList.add("ring-correct");
+          state.bossHP = Math.max(0, state.bossHP - state.damagePerHit);
+
+          state.comboCount++;
+          if (state.comboCount >= 3) {
+            showComboEffect(state.comboCount);
+          }
+
+          state.scoreMultiplier =
+            state.comboCount >= 5 ? 3 : state.comboCount >= 3 ? 2 : 1;
+          state.score += 100 * state.scoreMultiplier;
+          hitBoss();
+          updateBossHP();
+          showFeedback(true, q.aHanzi); // แสดงเฉลยอักษรจีน
+        } else {
+          el.answerInput.classList.add("ring-wrong");
+          state.playerHP = Math.max(0, state.playerHP - WRONG_DAMAGE);
+          state.comboCount = 0;
+          state.scoreMultiplier = 1;
+          updatePlayerHP(-WRONG_DAMAGE);
+          showFeedback(false, q.aHanzi); // แสดงเฉลยอักษรจีน
+          showDamageEffect();
+        }
+
+        updateScoreUI();
+        updateItemUI();
+        setTimeout(checkOutcome, 1200);
       }
-      updateItemUI();
-    });
-  });
 
-  document.getElementById("play-sound-btn").addEventListener("click", () => {
-    speak(el.questionHanzi.textContent);
-  });
+      el.answerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        submitAnswer(el.answerInput.value);
+      });
 
-  loadBoss(0);
-</script>
-<script>window.GAME_LEVEL = 'Hardcore';</script>
-<script src="game-enhancements.js"></script>
-</body>
+      function checkOutcome() {
+        if (state.playerHP <= 0) return gameOver();
+        if (state.bossHP <= 0) return bossDefeated();
+
+        state.questionIndex++;
+
+        // เมื่อเล่นครบทั้ง 15 ข้อ ให้สุ่มสลับตำแหน่งทั้ง 15 คำถามใหม่อีกรอบ
+        if (state.questionIndex >= state.currentQuestions.length) {
+          const originalQuestions = bossData[state.bossIndex].questions;
+          state.currentQuestions = shuffle(originalQuestions);
+          state.questionIndex = 0;
+        }
+
+        loadQuestion();
+      }
+
+      /* POPUP MODAL SYSTEM */
+      function showGameModal(config) {
+        const modal = document.getElementById("game-modal");
+        const card = document.getElementById("modal-card");
+        const ribbon = document.getElementById("modal-ribbon");
+        const ribbonText = document.getElementById("modal-ribbon-text");
+        const pandaImg = document.getElementById("modal-panda-img");
+        const title = document.getElementById("modal-title");
+        const subtitle = document.getElementById("modal-subtitle");
+        const statsBox = document.getElementById("modal-stats");
+        const btnHome = document.getElementById("modal-btn-home");
+        const btnPrimary = document.getElementById("modal-btn-primary");
+
+        const themes = {
+          pause: {
+            ribbonClass: "bg-sky-400 border-sky-200",
+            cardBorder: "border-sky-300",
+            ribbonText: "BRAKE TIME",
+            pandaImg: "public/Alert/2.png",
+            title: "หยุดชั่วคราว",
+            subtitle: "บางทีการพักก็ทำให้ดีขึ้น",
+            showStats: false,
+            btnPrimaryText: "เล่นต่อ",
+            btnPrimaryBg:
+              "bg-pink-400 hover:bg-pink-500 shadow-[0_4px_0_#db2777]",
+            btnHomeShow: true,
+          },
+          gameover: {
+            ribbonClass: "bg-rose-500 border-rose-300",
+            cardBorder: "border-rose-400",
+            ribbonText: "GAME OVER",
+            pandaImg: "public/Alert/1.png",
+            title: "พ่ายแพ้!",
+            subtitle: "พลังชีวิตหมดแล้ว ลองอีกครั้งนะ!",
+            showStats: true,
+            btnPrimaryText: "ลองอีกครั้ง",
+            btnPrimaryBg:
+              "bg-pink-400 hover:bg-pink-500 shadow-[0_4px_0_#db2777]",
+            btnHomeShow: true,
+          },
+          win: {
+            ribbonClass: "bg-emerald-500 border-emerald-300",
+            cardBorder: "border-emerald-400",
+            ribbonText: "YOU WIN",
+            pandaImg: "public/Alert/3.png",
+            title: "ชนะแล้ว",
+            subtitle: "คุณคือแชมป์คำศัพท์จีน Mode Hard!",
+            showStats: true,
+            btnPrimaryText: "กลับหน้าแรก",
+            btnPrimaryBg:
+              "bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_#15803d]",
+            btnHomeShow: false,
+          },
+          defeated: {
+            ribbonClass: "bg-emerald-500 border-emerald-300",
+            cardBorder: "border-emerald-400",
+            ribbonText: "Boss defeated",
+            pandaImg: "public/Alert/4.png",
+            title: "ผ่านแล้ว",
+            subtitle: "ไปสู้ต่อที่ด่านต่อไป",
+            showStats: true,
+            btnPrimaryText: "ไปต่อ",
+            btnPrimaryBg:
+              "bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_#15803d]",
+            btnHomeShow: false,
+          },
+        };
+
+        const theme = themes[config.type];
+
+        ribbon.className = `absolute -top-7 left-1/2 -translate-x-1/2 w-[85%] py-2.5 px-4 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
+        card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100`;
+        ribbonText.textContent = theme.ribbonText;
+        pandaImg.src = `${theme.pandaImg}?v=${Date.now()}`;
+        title.textContent = theme.title;
+        subtitle.textContent = theme.subtitle;
+
+        if (theme.showStats) {
+          statsBox.classList.remove("hidden");
+          document.getElementById("modal-boss-count").textContent =
+            `${state.bossesDefeated}/${TOTAL_BOSSES}`;
+          document.getElementById("modal-score").textContent = `${state.score}`;
+        } else {
+          statsBox.classList.add("hidden");
+        }
+
+        btnPrimary.textContent = theme.btnPrimaryText;
+        btnPrimary.className = `flex-1 py-2.5 px-4 rounded-2xl font-display font-bold text-white transition text-sm active:translate-y-0.5 ${theme.btnPrimaryBg}`;
+
+        if (theme.btnHomeShow) {
+          btnHome.classList.remove("hidden");
+        } else {
+          btnHome.classList.add("hidden");
+        }
+
+        btnHome.onclick = () => {
+          window.location.href = "index.html";
+        };
+
+        btnPrimary.onclick = () => {
+          modal.classList.add("hidden");
+          if (config.onPrimary) config.onPrimary();
+        };
+
+        modal.classList.remove("hidden");
+      }
+
+      function pauseGame() {
+        state.paused = true;
+        stopTimer();
+        showGameModal({
+          type: "pause",
+          onPrimary: () => {
+            state.paused = false;
+            startTimer(true);
+          },
+        });
+      }
+
+      function gameOver() {
+        stopTimer();
+        showGameModal({
+          type: "gameover",
+          onPrimary: () => {
+            loadBoss(state.bossIndex);
+          },
+        });
+      }
+
+      function bossDefeated() {
+        stopTimer();
+        state.bossesDefeated++;
+        const next = state.bossIndex + 1;
+        const isWin = next >= TOTAL_BOSSES;
+
+        showGameModal({
+          type: isWin ? "win" : "defeated",
+          onPrimary: () => {
+            if (isWin) {
+              window.location.reload();
+            } else {
+              loadBoss(next);
+            }
+          },
+        });
+      }
+
+      document.getElementById("stop-btn").addEventListener("click", pauseGame);
+
+      /* HELPERS / ITEMS */
+      document.querySelectorAll("[data-item]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const type = btn.getAttribute("data-item");
+          if (state.items[type] <= 0 || state.answered) return;
+          state.items[type]--;
+
+          if (type === "heal") {
+            state.playerHP = Math.min(state.playerHP + HEAL_AMOUNT, 100);
+            updatePlayerHP(0);
+          } else if (type === "hint" && !state.hintUsedThisQuestion) {
+            state.hintUsedThisQuestion = true;
+            const q = state.currentQuestions[state.questionIndex];
+            const hanziAnswer = q.aHanzi;
+
+            // คำนวณความยาวครึ่งหนึ่งของตัวอักษรจีน (ปัดเศษขึ้น)
+            const halfLength = Math.ceil(hanziAnswer.length / 2);
+
+            // นำตัวอักษรจีนครึ่งแรกไปใส่ในช่องพิมพ์
+            el.answerInput.value = hanziAnswer.substring(0, halfLength);
+            el.answerInput.focus();
+
+            // เลื่อนเคอร์เซอร์ไปรอพิมพ์ต่อท้าย
+            const len = el.answerInput.value.length;
+            el.answerInput.setSelectionRange(len, len);
+          } else if (type === "skip") {
+            state.answered = true;
+            stopTimer();
+            el.answerInput.disabled = true;
+            setTimeout(checkOutcome, 500);
+          }
+          updateItemUI();
+        });
+      });
+
+      document
+        .getElementById("play-sound-btn")
+        .addEventListener("click", () => {
+          speak(el.questionHanzi.textContent);
+        });
+
+      loadBoss(0);
+    </script>
+    <script>
+      window.GAME_LEVEL = "Hardcore";
+    </script>
+    <script src="game-enhancements.js"></script>
+  </body>
 </html>

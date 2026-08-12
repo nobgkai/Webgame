@@ -167,12 +167,30 @@
   .combo-animate {
     animation: comboPop 1.2s ease-out forwards;
   }
+
+  /* Keep the complete game board visible at every viewport size. */
+  html, body { width: 100%; height: 100%; min-height: 100%; overflow: hidden !important; }
+  body { min-height: 100dvh; padding: clamp(8px, 1.5vh, 24px); align-items: center !important; }
+  #game-container {
+    --board-zoom: clamp(.72, calc(100dvh / 800px), .98);
+    zoom: var(--board-zoom);
+    width: min(100%, 32rem);
+    max-height: calc(100dvh / var(--board-zoom));
+  }
+  @media (max-width: 420px) {
+    #game-container { width: min(100%, 30rem); }
+    #boss-name { max-width: 38%; font-size: .95rem; }
+  }
+  @media (max-height: 540px) {
+    #game-container { --board-zoom: clamp(.52, calc(100dvh / 760px), .75); }
+  }
+  #game-modal { overflow-y: auto; padding: clamp(16px, 3vh, 24px); }
+  #modal-card { max-height: calc(100dvh - 32px); overflow: visible; }
 </style>
 </head>
-<!-- เปลี่ยนให้เป็น overflow-y-auto และ items-start บนจอเล็ก เพื่อให้เลื่อนจอได้ -->
-<body class="min-h-screen bg-pattern flex items-start sm:items-center justify-center p-4 md:p-6 relative overflow-x-hidden overflow-y-auto">
+<body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 relative overflow-hidden">
 
-<div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-4 pb-8 my-4 sm:my-auto">
+<div id="game-container" class="w-full max-w-lg mx-auto relative select-none pt-2">
 
   <!-- ZONE: BOSS HEADER & IMAGE -->
   <!-- ปรับ min-h ให้เล็กลงบนจอมือถือ -->
@@ -305,8 +323,7 @@
 </div>
 
 <!-- ===================== CUSTOM POPUP MODAL ===================== -->
-<!-- เพิ่ม overflow-y-auto ให้รองรับแนวนอนจอเล็ก -->
-<div id="game-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+<div id="game-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
   
   <div id="modal-card" class="relative w-full max-w-xs md:max-w-sm bg-white rounded-[36px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 border-[#68cbf8] transition-all duration-200 scale-100 my-auto">
     
@@ -371,7 +388,7 @@
       name: "จอมเวลา ปีศาจนาฬิกา",
       hp: 100,
       bossImage: "public/1.png",
-      themeColor: "#9871FA",
+      themeColor: "#1E88E5",
       questions: [
       { qHanzi: "现在几点？", qPinyin: "xiànzài jǐ diǎn?", aHanzi: "一点", aPinyin: "yī diǎn", meaning: "1:00", image: "public/Clock/01_00.png" },
       { qHanzi: "钟表上是几点？", qPinyin: "zhōngbiǎo shàng shì jǐ diǎn?", aHanzi: "两点", aPinyin: "liǎng diǎn", meaning: "2:00", image: "public/Clock/02_00.png" },
@@ -416,10 +433,10 @@
     },
     {
       id: 3,
-      name: "ปีศาจสไลม์",
+      name: "ปีศาจปฏิทิน (เดือน)",
       hp: 100,
       bossImage: "public/3.png",
-      themeColor: "#4FC3F7",
+      themeColor: "#E53935",
       questions: [
       { qHanzi: "这是几月份？", qPinyin: "zhè shì jǐ yuèfèn?", aHanzi: "一月", aPinyin: "yī yuè", meaning: "เดือนมกราคม", image: "public/Calendar/January.png" },
       { qHanzi: "日历上是几月？", qPinyin: "rìlì shàng shì jǐ yuè?", aHanzi: "二月", aPinyin: "èr yuè", meaning: "เดือนกุมภาพันธ์", image: "public/Calendar/February.png" },
@@ -442,48 +459,48 @@
       id: 4,
       name: "ปีศาจสภาพอากาศ",
       hp: 100,
-      bossImage: "public/5.png",
+      bossImage: "public/4.png",
       themeColor: "#00ACC1",
       questions: [
-      { qHanzi: "他觉得怎么样？", qPinyin: "tā juéde zěnmeyàng?", aHanzi: "热", aPinyin: "rè", meaning: "ร้อน", image: "public/Ezmode/waeter/hot.png" },
-      { qHanzi: "这是什么感觉？", qPinyin: "zhè shì shénme gǎnjué?", aHanzi: "冷", aPinyin: "lěng", meaning: "หนาว", image: "public/Ezmode/waeter/cold.png" },
-      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "水", aPinyin: "shuǐ", meaning: "น้ำ", image: "public/Ezmode/waeter/water.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "风", aPinyin: "fēng", meaning: "ลม", image: "public/Ezmode/waeter/wind.png" },
-      { qHanzi: "天空中有什么？", qPinyin: "tiānkōng zhōng yǒu shénme?", aHanzi: "云", aPinyin: "yún", meaning: "เมฆ", image: "public/Ezmode/waeter/cloud.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "雪", aPinyin: "xuě", meaning: "หิมะ", image: "public/Ezmode/waeter/snow.png" },
-      { qHanzi: "这是什么东西？", qPinyin: "zhè shì shénme dōngxi?", aHanzi: "冰", aPinyin: "bīng", meaning: "น้ำแข็ง", image: "public/Ezmode/waeter/ice.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "太阳", aPinyin: "tàiyáng", meaning: "พระอาทิตย์", image: "public/Ezmode/waeter/sun.png" },
-      { qHanzi: "晚上的天空有什么？", qPinyin: "wǎnshang de tiānkōng yǒu shénme?", aHanzi: "月亮", aPinyin: "yuèliang", meaning: "พระจันทร์", image: "public/Ezmode/waeter/Moon.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "星星", aPinyin: "xīngxing", meaning: "ดวงดาว", image: "public/Ezmode/waeter/star.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "天", aPinyin: "tiān", meaning: "ท้องฟ้า", image: "public/Ezmode/waeter/sky.png" },
-      { qHanzi: "正在下什么？", qPinyin: "zhèngzài xià shénme?", aHanzi: "雨", aPinyin: "yǔ", meaning: "ฝน", image: "public/Ezmode/waeter/rain.png" },
-      { qHanzi: "这怎么样？", qPinyin: "zhè zěnmeyàng?", aHanzi: "好", aPinyin: "hǎo", meaning: "ดี", image: "public/Ezmode/waeter/good.png" },
-      { qHanzi: "情况好吗？", qPinyin: "qíngkuàng hǎo ma?", aHanzi: "坏", aPinyin: "huài", meaning: "แย่", image: "public/Ezmode/waeter/bad.png" },
-      { qHanzi: "这是什么词？", qPinyin: "zhè shì shénme cí?", aHanzi: "气", aPinyin: "qì", meaning: "อากาศ", image: "public/Ezmode/waeter/weather.png" }
+      { qHanzi: "他觉得怎么样？", qPinyin: "tā juéde zěnmeyàng?", aHanzi: "热", aPinyin: "rè", meaning: "ร้อน", image: "public/Weather/hot.png" },
+      { qHanzi: "这是什么感觉？", qPinyin: "zhè shì shénme gǎnjué?", aHanzi: "冷", aPinyin: "lěng", meaning: "หนาว", image: "public/Weather/cold.png" },
+      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "水", aPinyin: "shuǐ", meaning: "น้ำ", image: "public/Weather/water.png" },
+      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "风", aPinyin: "fēng", meaning: "ลม", image: "public/Weather/wind.png" },
+      { qHanzi: "天空中有什么？", qPinyin: "tiānkōng zhōng yǒu shénme?", aHanzi: "云", aPinyin: "yún", meaning: "เมฆ", image: "public/Weather/cloud.png" },
+      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "雪", aPinyin: "xuě", meaning: "หิมะ", image: "public/Weather/snow.png" },
+      { qHanzi: "这是什么东西？", qPinyin: "zhè shì shénme dōngxi?", aHanzi: "冰", aPinyin: "bīng", meaning: "น้ำแข็ง", image: "public/Weather/ice.png" },
+      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "太阳", aPinyin: "tàiyáng", meaning: "พระอาทิตย์", image: "public/Weather/sun.png" },
+      { qHanzi: "晚上的天空有什么？", qPinyin: "wǎnshang de tiānkōng yǒu shénme?", aHanzi: "月亮", aPinyin: "yuèliang", meaning: "พระจันทร์", image: "public/Weather/moon.png" },
+      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "星星", aPinyin: "xīngxing", meaning: "ดวงดาว", image: "public/Weather/star.png" },
+      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "天", aPinyin: "tiān", meaning: "ท้องฟ้า", image: "public/Weather/sky.png" },
+      { qHanzi: "正在下什么？", qPinyin: "zhèngzài xià shénme?", aHanzi: "雨", aPinyin: "yǔ", meaning: "ฝน", image: "public/Weather/rain.png" },
+      { qHanzi: "这怎么样？", qPinyin: "zhè zěnmeyàng?", aHanzi: "好", aPinyin: "hǎo", meaning: "ดี", image: "public/Weather/good.png" },
+      { qHanzi: "情况好吗？", qPinyin: "qíngkuàng hǎo ma?", aHanzi: "坏", aPinyin: "huài", meaning: "แย่", image: "public/Weather/bad.png" },
+      { qHanzi: "这是什么词？", qPinyin: "zhè shì shénme cí?", aHanzi: "气", aPinyin: "qì", meaning: "อากาศ", image: "public/Weather/air.png" },
       ],
     },
     {
       id: 5,
       name: "ปีศาจสถานที่",
       hp: 100,
-      bossImage: "public/4.png",
+      bossImage: "public/5.png",
       themeColor: "#43A047",
       questions: [
-      { qHanzi: "箭头指着哪儿？", qPinyin: "jiàntóu zhǐ zhe nǎ'er?", aHanzi: "上", aPinyin: "shàng", meaning: "บน", image: "public/Ezmode/location/on.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "下", aPinyin: "xià", meaning: "ล่าง", image: "public/Ezmode/location/lower.png" },
-      { qHanzi: "箭头指着哪儿？", qPinyin: "jiàntóu zhǐ zhe nǎ'er?", aHanzi: "左", aPinyin: "zuǒ", meaning: "ซ้าย", image: "public/Ezmode/location/left.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "右", aPinyin: "yòu", meaning: "ขวา", image: "public/Ezmode/location/right.png" },
-      { qHanzi: "看图，这是什么？", qPinyin: "kàn tú, zhè shì shénme?", aHanzi: "前", aPinyin: "qián", meaning: "หน้า", image: "public/Ezmode/location/front.png" },
-      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "后", aPinyin: "hòu", meaning: "หลัง", image: "public/Ezmode/location/behind.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "里", aPinyin: "lǐ", meaning: "ใน", image: "public/Ezmode/location/insite.png" },
-      { qHanzi: "小狗在哪里？", qPinyin: "xiǎogǒu zài nǎlǐ?", aHanzi: "外", aPinyin: "wài", meaning: "นอก", image: "public/Ezmode/location/outside.png" },
-      { qHanzi: "他做什么？", qPinyin: "tā zuò shénme?", aHanzi: "去", aPinyin: "qù", meaning: "ไป", image: "public/Ezmode/location/go.png" },
-      { qHanzi: "这个动作是？", qPinyin: "zhè ge dòngzuò shì...?", aHanzi: "来", aPinyin: "lái", meaning: "มา", image: "public/Ezmode/location/come.png" },
-      { qHanzi: "他做什么？", qPinyin: "tā zuò shénme?", aHanzi: "回", aPinyin: "huí", meaning: "กลับ", image: "public/Ezmode/location/goback.png" },
-      { qHanzi: "这是什么地方？", qPinyin: "zhè shì shénme dìfang?", aHanzi: "家", aPinyin: "jiā", meaning: "บ้าน", image: "public/Ezmode/location/house.png" },
-      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "国", aPinyin: "guó", meaning: "ประเทศ", image: "public/Ezmode/location/country.png" },
-      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "人", aPinyin: "rén", meaning: "คน", image: "public/Ezmode/location/human.png" },
-      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "车", aPinyin: "chē", meaning: "รถ", image: "public/Ezmode/location/car.png" },
+      { qHanzi: "箭头指着哪儿？", qPinyin: "jiàntóu zhǐ zhe nǎ'er?", aHanzi: "上", aPinyin: "shàng", meaning: "บน", image: "public/Locations/up.png" },
+      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "下", aPinyin: "xià", meaning: "ล่าง", image: "public/Locations/down.png" },
+      { qHanzi: "箭头指着哪儿？", qPinyin: "jiàntóu zhǐ zhe nǎ'er?", aHanzi: "左", aPinyin: "zuǒ", meaning: "ซ้าย", image: "public/Locations/left.png" },
+      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "右", aPinyin: "yòu", meaning: "ขวา", image: "public/Locations/right.png" },
+      { qHanzi: "看图，这是什么？", qPinyin: "kàn tú, zhè shì shénme?", aHanzi: "前", aPinyin: "qián", meaning: "หน้า", image: "public/Locations/front_char.png" },
+      { qHanzi: "这是什么方向？", qPinyin: "zhè shì shénme fāngxiàng?", aHanzi: "后", aPinyin: "hòu", meaning: "หลัง", image: "public/Locations/back_char.png" },
+      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "里", aPinyin: "lǐ", meaning: "ใน", image: "public/Locations/in.png" },
+      { qHanzi: "小狗在哪里？", qPinyin: "xiǎogǒu zài nǎlǐ?", aHanzi: "外", aPinyin: "wài", meaning: "นอก", image: "public/Locations/out.png" },
+      { qHanzi: "他做什么？", qPinyin: "tā zuò shénme?", aHanzi: "去", aPinyin: "qù", meaning: "ไป", image: "public/Locations/go.png" },
+      { qHanzi: "这个动作是？", qPinyin: "zhè ge dòngzuò shì...?", aHanzi: "来", aPinyin: "lái", meaning: "มา", image: "public/Locations/come.png" },
+      { qHanzi: "他做什么？", qPinyin: "tā zuò shénme?", aHanzi: "回", aPinyin: "huí", meaning: "กลับ", image: "public/Locations/return.png" },
+      { qHanzi: "这是什么地方？", qPinyin: "zhè shì shénme dìfang?", aHanzi: "家", aPinyin: "jiā", meaning: "บ้าน", image: "public/Locations/home.png" },
+      { qHanzi: "这是哪里？", qPinyin: "zhè shì nǎlǐ?", aHanzi: "国", aPinyin: "guó", meaning: "ประเทศ", image: "public/Locations/country.png" },
+      { qHanzi: "这是什么？", qPinyin: "zhè shì shénme?", aHanzi: "人", aPinyin: "rén", meaning: "คน", image: "public/Locations/person.png" },
+      { qHanzi: "图片里是什么？", qPinyin: "túpiàn lǐ shì shénme?", aHanzi: "车", aPinyin: "chē", meaning: "รถ", image: "public/Locations/car.png" },
       ],
     },
   ];
@@ -858,8 +875,8 @@
 
     const theme = themes[config.type];
 
-    ribbon.className = `absolute -top-6 left-1/2 -translate-x-1/2 w-[85%] py-2 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
-    card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-10 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100 my-auto`;
+    ribbon.className = `absolute -top-7 left-1/2 -translate-x-1/2 w-[85%] py-2.5 px-4 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
+    card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100 my-auto`;
     ribbonText.textContent = theme.ribbonText;
     pandaImg.src = `${theme.pandaImg}?v=${Date.now()}`;
     title.textContent = theme.title;
