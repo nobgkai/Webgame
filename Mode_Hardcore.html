@@ -154,6 +154,25 @@
   .combo-animate {
     animation: comboPop 1.2s ease-out forwards;
   }
+
+  /* Keep the complete game board visible at every viewport size. */
+  html, body { width: 100%; height: 100%; min-height: 100%; overflow: hidden !important; }
+  body { min-height: 100dvh; padding: clamp(8px, 1.5vh, 24px); align-items: center !important; }
+  #game-container {
+    --board-zoom: clamp(.72, calc(100dvh / 800px), .98);
+    zoom: var(--board-zoom);
+    width: min(100%, 32rem);
+    max-height: calc(100dvh / var(--board-zoom));
+  }
+  @media (max-width: 420px) {
+    #game-container { width: min(100%, 30rem); }
+    #boss-name { max-width: 38%; font-size: .95rem; }
+  }
+  @media (max-height: 540px) {
+    #game-container { --board-zoom: clamp(.52, calc(100dvh / 760px), .75); }
+  }
+  #game-modal { overflow: hidden; padding: clamp(8px, 2vh, 16px); }
+  #modal-card { max-height: calc(100dvh - 16px); overflow: hidden; }
 </style>
 </head>
 <body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 overflow-hidden">
@@ -404,7 +423,7 @@
     },
     {
       id: 3,
-      name: "ปีศาจสไลม์",
+      name: "ปีศาจปฏิทิน (เดือนและเวลา)",
       themeColor: "#1E88E5",
       questions: [
       { qHanzi: "问生日怎么说？", qPinyin: "wèn shēngrì zěnme shuō?", aHanzi: "你的生日是几月几号", aPinyin: "nǐ de shēngrì shì jǐ yuè jǐ hào", meaning: "วันเกิดของคุณคือวันที่เท่าไหร่", image: "public/Calendar/whenbirthday.png" },
