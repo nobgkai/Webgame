@@ -29,6 +29,7 @@
               playerHp: "#F33B6D",
               mintDeep: "#53D797",
               skyLight: "#90E2FF",
+              skyDeep: "#6FCBE8",
               yellowBar: "#F3CE38",
               ink: "#3A3355",
             },
@@ -277,11 +278,75 @@
       .combo-animate {
         animation: comboPop 1.2s ease-out forwards;
       }
+
+      /* Mute Button Animations */
+      .audio-btn-hover:hover {
+        transform: scale(1.1) rotate(-5deg);
+      }
+      .audio-btn-active:active {
+        transform: scale(0.95);
+      }
+
+      /* Music Note Animation */
+      @keyframes float-note {
+        0% {
+          transform: translateY(0) scale(0.8);
+          opacity: 0;
+        }
+        20% {
+          opacity: 1;
+        }
+        80% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-20px) scale(1.2);
+          opacity: 0;
+        }
+      }
+      .playing-music::before,
+      .playing-music::after {
+        content: "♪";
+        position: absolute;
+        color: #ff9fc3;
+        font-size: 14px;
+        top: -5px;
+        animation: float-note 2s infinite;
+      }
+      .playing-music::before {
+        left: 5px;
+        animation-delay: 0s;
+      }
+      .playing-music::after {
+        right: 5px;
+        animation-delay: 1s;
+        content: "♫";
+        color: #6fcbe8;
+      }
     </style>
   </head>
   <body
     class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 relative overflow-hidden"
   >
+    <!-- =========================================
+     AUDIO ELEMENT
+========================================= -->
+    <audio id="bgm" loop>
+      <source src="./public/audio/bluelike.mp3" type="audio/ogg" />
+    </audio>
+
+    <!-- =========================================
+     FLOATING AUDIO BUTTON
+========================================= -->
+    <button
+      id="audio-toggle-btn"
+      class="fixed bottom-6 left-6 z-50 bg-white border-4 border-mintDeep text-ink w-14 h-14 rounded-full flex items-center justify-center shadow-btn transition-all duration-300 audio-btn-hover audio-btn-active"
+    >
+      <i
+        id="audio-icon"
+        class="fa-solid fa-volume-xmark text-2xl text-rose-400"
+      ></i>
+    </button>
     <div
       id="game-container"
       class="w-full max-w-lg mx-auto relative select-none pt-2"
@@ -1776,6 +1841,35 @@
         .addEventListener("click", () => {
           speak(el.questionHanzi.textContent);
         });
+
+      /* ========== AUDIO CONTROL SYSTEM ========== */
+      const audioBtn = document.getElementById("audio-toggle-btn");
+      const audioIcon = document.getElementById("audio-icon");
+      const bgm = document.getElementById("bgm");
+
+      let isPlaying = false;
+
+      // ตั้งค่าระดับเสียงเริ่มต้น (0.0 ถึง 1.0)
+      bgm.volume = 0.3;
+
+      if (audioBtn && audioIcon && bgm) {
+        audioBtn.addEventListener("click", () => {
+          if (isPlaying) {
+            bgm.pause();
+            audioIcon.className =
+              "fa-solid fa-volume-xmark text-2xl text-rose-400";
+            audioBtn.classList.remove("playing-music", "border-skyDeep");
+            audioBtn.classList.add("border-mintDeep");
+          } else {
+            bgm.play();
+            audioIcon.className =
+              "fa-solid fa-volume-high text-2xl text-skyDeep";
+            audioBtn.classList.add("playing-music", "border-skyDeep");
+            audioBtn.classList.remove("border-mintDeep");
+          }
+          isPlaying = !isPlaying;
+        });
+      }
 
       loadBoss(0);
     </script>

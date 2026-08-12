@@ -294,7 +294,7 @@
           padding-left: 1rem;
           padding-right: 1rem;
           padding-top: calc(1.25rem + env(safe-area-inset-top));
-          padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+          padding-bottom: calc(2rem + env(safe-area-bottom));
           width: 100%;
           overflow-x: hidden;
           box-sizing: border-box;
@@ -376,7 +376,7 @@
 ========================================= -->
     <!-- เปลี่ยน src เป็นลิงก์เพลงประกอบน่ารักๆ ที่คุณต้องการ -->
     <audio id="bgm" loop>
-      <source src="https://www.w3schools.com/html/horse.mp3" type="audio/ogg" />
+      <source src="./public/audio/bluelike.mp3" type="audio/ogg" />
     </audio>
 
     <!-- =========================================
@@ -504,7 +504,6 @@
               <ul
                 class="font-thai text-xs text-plum/80 space-y-2 mb-6 bg-bamboo/50 p-3 rounded-2xl"
               >
-                <!-- <li><i class="fa-solid fa-book-bookmark text-mintDeep mr-2"></i><b>เนื้อหา:</b> HSK 1 - ศัพท์พื้นฐาน</li> -->
                 <li>
                   <i class="fa-solid fa-clock text-mintDeep mr-2"></i
                   ><b>เวลา:</b> 15 วินาที / ข้อ
@@ -560,7 +559,6 @@
               <ul
                 class="font-thai text-xs text-plum/80 space-y-2 mb-6 bg-yellow/30 p-3 rounded-2xl"
               >
-                <!-- <li><i class="fa-solid fa-book-bookmark text-amber-500 mr-2"></i><b>เนื้อหา:</b> HSK 2 - ศัพท์ชีวิตประจำวัน</li> -->
                 <li>
                   <i class="fa-solid fa-clock text-amber-500 mr-2"></i
                   ><b>เวลา:</b> 10 วินาที / ข้อ
@@ -616,7 +614,6 @@
               <ul
                 class="font-thai text-xs text-plum/80 space-y-2 mb-6 bg-pink/30 p-3 rounded-2xl"
               >
-                <!-- <li><i class="fa-solid fa-book-bookmark text-pinkDeep mr-2"></i><b>เนื้อหา:</b> HSK 3 - ศัพท์ซับซ้อน/ประโยค</li> -->
                 <li>
                   <i class="fa-solid fa-clock text-pinkDeep mr-2"></i
                   ><b>เวลา:</b> 5 วินาที / ข้อ (สปีดรัน)
@@ -692,7 +689,7 @@
     <!-- =========================================
      ABOUT & GAME DESCRIPTION
 ========================================= -->
-    <section class="py-14 sm:py-20 px-4 bg-white">
+    <section class="py-14 sm:py-20 px-4 bg-white overflow-hidden">
       <div class="max-w-4xl mx-auto" data-aos="fade-up">
         <div
           class="bg-pink/40 rounded-3xl sm:rounded-4xl p-6 sm:p-8 md:p-12 shadow-card border-4 border-white relative"
@@ -759,9 +756,9 @@
     </section>
 
     <!-- =========================================
-     HOW TO PLAY
+     HOW TO PLAY (เพิ่มคลาส overflow-hidden แก้ปัญหาเลื่อนแนวนอน)
 ========================================= -->
-    <section class="py-14 sm:py-20 px-4 bg-gradient-to-b from-bamboo to-white">
+    <section class="py-14 sm:py-20 px-4 bg-gradient-to-b from-bamboo to-white overflow-hidden">
       <div
         class="max-w-5xl mx-auto text-center mb-10 sm:mb-14"
         data-aos="fade-up"
@@ -1069,9 +1066,53 @@
     </section>
 
     <!-- =========================================
+     VOCABULARY CATEGORIES (ส่วนที่เพิ่มใหม่)
+========================================= -->
+    <section class="py-14 sm:py-20 px-4 bg-white overflow-hidden">
+      <div class="max-w-5xl mx-auto text-center mb-10 sm:mb-14" data-aos="fade-up">
+        <h2 class="font-display font-700 text-2xl sm:text-3xl md:text-4xl text-ink">
+          📚 หมวดหมู่คำศัพท์ในการผจญภัย
+        </h2>
+        <p class="font-thai text-plum mt-2 text-sm sm:text-base">
+          เตรียมตัวให้พร้อม! นี่คือหมวดหมู่คำศัพท์ที่คุณจะได้เจอในเกมนี้
+        </p>
+      </div>
+
+      <div class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card 1: Time -->
+        <div class="bg-sky/20 rounded-3xl p-6 shadow-card border-2 border-skyDeep text-center hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="0">
+          <div class="text-4xl mb-4 text-skyDeep"><i class="fa-solid fa-clock"></i></div>
+          <h3 class="font-display font-600 text-lg text-ink mb-2">การบอกเวลา</h3>
+          <p class="font-thai text-sm text-plum">ฝึกฝนคำศัพท์เกี่ยวกับการบอกเวลา ชั่วโมง นาที และช่วงเวลาต่างๆ เช่น 早上 (ตอนเช้า), 几点 (กี่โมง)</p>
+        </div>
+        
+        <!-- Card 2: Places -->
+        <div class="bg-mint/20 rounded-3xl p-6 shadow-card border-2 border-mintDeep text-center hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+          <div class="text-4xl mb-4 text-mintDeep"><i class="fa-solid fa-location-dot"></i></div>
+          <h3 class="font-display font-600 text-lg text-ink mb-2">สถานที่</h3>
+          <p class="font-thai text-sm text-plum">รู้จักสถานที่สำคัญต่างๆ ในชีวิตประจำวัน เช่น 学校 (โรงเรียน), 医院 (โรงพยาบาล), 饭店 (ร้านอาหาร)</p>
+        </div>
+
+        <!-- Card 3: Directions -->
+        <div class="bg-yellow/20 rounded-3xl p-6 shadow-card border-2 border-yellowDeep text-center hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-4xl mb-4 text-yellowDeep"><i class="fa-solid fa-compass"></i></div>
+          <h3 class="font-display font-600 text-lg text-ink mb-2">การบอกทิศทาง</h3>
+          <p class="font-thai text-sm text-plum">เรียนรู้คำศัพท์ทิศทางและตำแหน่งที่ตั้ง เช่น 左 (ซ้าย), 右 (ขวา), 前面 (ด้านหน้า)</p>
+        </div>
+
+        <!-- Card 4: HSK 1 -->
+        <div class="bg-pink/20 rounded-3xl p-6 shadow-card border-2 border-pinkDeep text-center hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="300">
+          <div class="text-4xl mb-4 text-pinkDeep"><i class="fa-solid fa-book-open"></i></div>
+          <h3 class="font-display font-600 text-lg text-ink mb-2">พื้นฐาน HSK 1</h3>
+          <p class="font-thai text-sm text-plum">ครอบคลุมคำศัพท์ที่จำเป็นสำหรับการสอบ HSK ระดับ 1 เช่น สรรพนาม และคำกริยาพื้นฐานทั่วไป</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
      KEYBOARD INSTALLATION GUIDE
 ========================================= -->
-    <section class="py-14 sm:py-20 px-4 bg-sky/30">
+    <section class="py-14 sm:py-20 px-4 bg-sky/30 overflow-hidden">
       <div
         class="max-w-5xl mx-auto text-center mb-10 sm:mb-14"
         data-aos="fade-up"
@@ -1178,7 +1219,7 @@
      FINAL CTA
 ========================================= -->
     <section
-      class="py-16 sm:py-24 px-4 bg-gradient-to-b from-white to-mint text-center"
+      class="py-16 sm:py-24 px-4 bg-gradient-to-b from-white to-mint text-center overflow-hidden"
     >
       <div class="max-w-2xl mx-auto" data-aos="zoom-in">
         <div class="text-5xl sm:text-6xl mb-4 float-slow">⚔️🐼</div>
@@ -1206,7 +1247,7 @@
     </section>
 
     <footer
-      class="bg-ink text-white/80 text-center py-5 sm:py-6 font-thai text-xs sm:text-sm px-4"
+      class="bg-ink text-white/80 text-center py-5 sm:py-6 font-thai text-xs sm:text-sm px-4 overflow-hidden"
     >
       <p>
         Made with 🐼🎋 for Chinese vocabulary adventurers · Panda's Chinese
