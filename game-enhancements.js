@@ -160,7 +160,7 @@
     controls.innerHTML = `
       <div id="test-answer-panel" class="hidden rounded-xl bg-violet-50 px-3 py-2 text-center"></div>
       <div class="mt-2 grid grid-cols-2 gap-2">
-        <button id="test-reveal-btn" type="button" disabled class="cursor-not-allowed rounded-xl bg-violet-100 py-2 text-xs font-thai font-bold text-violet-400 opacity-50">เฉลย (ปิดใช้งาน)</button>
+        <button id="test-reveal-btn" type="button" class="rounded-xl bg-violet-500 py-2 text-xs font-thai font-bold text-white shadow-sm transition hover:bg-violet-600">เฉลย</button>
         <button id="test-next-btn" type="button" disabled class="rounded-xl bg-sky-500 py-2 text-xs font-thai font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">ตอบถูกแล้วจะไปข้อต่อไป</button>
       </div>`;
     card.appendChild(controls);
@@ -176,8 +176,8 @@
         if (panel) panel.classList.add('hidden');
         const revealButton = document.getElementById('test-reveal-btn');
         if (revealButton) {
-          revealButton.disabled = true;
-          revealButton.textContent = 'เฉลย (ปิดใช้งาน)';
+          revealButton.disabled = false;
+          revealButton.textContent = 'เฉลย';
         }
         const nextButton = document.getElementById('test-next-btn');
         if (nextButton) nextButton.textContent = 'ตอบถูกแล้วจะไปข้อต่อไป';
