@@ -184,8 +184,8 @@
   @media (max-height: 540px) {
     #game-container { --board-zoom: clamp(.52, calc(100dvh / 760px), .75); }
   }
-  #game-modal { overflow: hidden; padding: clamp(8px, 2vh, 16px); }
-  #modal-card { max-height: calc(100dvh - 16px); overflow: hidden; }
+  #game-modal { overflow-y: auto; padding: clamp(16px, 3vh, 24px); }
+  #modal-card { max-height: calc(100dvh - 32px); overflow: visible; }
 </style>
 </head>
 <body class="min-h-screen bg-pattern flex items-center justify-center p-3 md:p-6 relative overflow-hidden">
@@ -875,8 +875,8 @@
 
     const theme = themes[config.type];
 
-    ribbon.className = `absolute -top-6 left-1/2 -translate-x-1/2 w-[85%] py-2 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
-    card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-10 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100 my-auto`;
+    ribbon.className = `absolute -top-7 left-1/2 -translate-x-1/2 w-[85%] py-2.5 px-4 rounded-2xl shadow-lg flex items-center justify-center border-2 ${theme.ribbonClass}`;
+    card.className = `relative w-full max-w-xs md:max-w-sm bg-white rounded-[32px] pt-12 pb-6 px-5 text-center shadow-2xl border-4 ${theme.cardBorder} transition-all duration-200 scale-100 my-auto`;
     ribbonText.textContent = theme.ribbonText;
     pandaImg.src = `${theme.pandaImg}?v=${Date.now()}`;
     title.textContent = theme.title;
